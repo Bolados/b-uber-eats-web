@@ -85,13 +85,12 @@ export class DatastoreDialogComponent implements OnInit {
         return alert;
     }
 
-    save(value) {
+    send(value) {
         for (const key in value) {
             if (value.hasOwnProperty(key) && this.data.data.hasOwnProperty(key)) {
                 this.data.data[key] = value[key];
             }
         }
-        console.log('submit', this.data.kind, value, this.data.data);
     }
 
 
