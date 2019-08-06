@@ -1,7 +1,8 @@
 import {AfterViewInit, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
-import {BreadcrumbService} from 'angular-crumbs';
+import {BreadcrumbService, Breadcrumb} from 'angular-crumbs';
 import {FullscreenService} from '../../services/fullscreen';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-workspace',
@@ -10,11 +11,12 @@ import {FullscreenService} from '../../services/fullscreen';
 })
 export class WorkspaceComponent implements OnInit, AfterViewInit {
 
-    @Input() title = this.titleService.getTitle();
-    private lastExcecution = new Date();
-    private fullscreen: boolean = this.fullscreenService.isFullscreen();
+    @Input() title;
+    fullscreen: boolean = this.fullscreenService.isFullscreen();
 
+    private lastExcecution = new Date();
     constructor(
+        private router: Router,
         private titleService: Title,
         private changeDetectorRef: ChangeDetectorRef,
         private breadcrumbService: BreadcrumbService,
@@ -27,7 +29,7 @@ export class WorkspaceComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.initialize()
+        this.initialize();
         this.breadcrumbService.breadcrumbChanged.subscribe((crumbs) => {
             // this.titleService.setTitle(this.currentPage(crumbs));
         });
@@ -39,16 +41,12 @@ export class WorkspaceComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
     }
 
-    // private currentPage(routesCollection: Breadcrumb[]){
-    //     const title = 'BGIS Web';
-    //     const titles = routesCollection.filter((route) => route.terminal == true);
-
-    //     if (!titles.length) { return title; }
-
-    //     const routeTitle = titles.reduce((prev, curr) => {
-    //         return `${curr.displayName}`;
+    // private currentPage(routesCollection: Breadcrumb[]) {
+    //     const titles = routesCollection.filter((route) => route.terminal === true);
+    //     const routeTitle = titles.reduce( (prev, curr) => {
+    //         return curr.displayName;
     //     }, '');
-    //     return `${routeTitle} `;
+    //     return routeTitle;
     // }
 
     // private createTitle(routesCollection: Breadcrumb[]) {

@@ -1,0 +1,8 @@
+
+@import '~@angular/material/theming';
+@import './datastore/datastore.component.scss-theme.scss';
+
+@mixin app-store-component-theme($theme) {
+    @include app-datastore-component-theme($theme);
+
+}

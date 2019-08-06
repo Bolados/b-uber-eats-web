@@ -1,0 +1,148 @@
+<div class="container">
+
+    <h3 mat-dialog-title>{{data.kind}} {{data.title}}</h3>
+
+    <form
+        [formGroup]="formGroup"
+        #ngform="ngForm"
+        (ngSubmit)="submit()"
+        novalidate
+        mat-dialog-content
+    >
+        <div *ngFor="let fieldDef of data.tableDefinition">
+
+            <!-- save fields -->
+            <div *ngIf="isSaveDialog()">
+                <div *ngIf="fieldDef.field?.add?.input">
+                    <mat-form-field color="primary">
+                        <input matInput #input
+                            name="{{fieldDef.columnDef}}"
+                            formControlName="{{fieldDef.columnDef}}"
+                            placeholder="{{fieldDef.columnDef}}"
+                        >
+                        <mat-hint></mat-hint>
+                        <mat-error *ngIf="fieldDef.field?.control.invalid">
+                            {{
+                                getErrorMessage(
+                                    fieldDef.field?.error,
+                                    fieldDef.field?.control
+                                    )
+                            }}
+                        </mat-error>
+
+                    </mat-form-field>
+
+                </div>
+            </div>
+
+            <!-- update fields -->
+            <div *ngIf="isUpdateDialog()">
+                <div *ngIf="fieldDef.field?.update?.input">
+                    <mat-form-field color="primary">
+                        <input matInput #input
+                            name="{{fieldDef.columnDef}}"
+                            formControlName="{{fieldDef.columnDef}}"
+                            placeholder="{{fieldDef.columnDef}}"
+                        >
+                        <mat-hint></mat-hint>
+                        <mat-error *ngIf="fieldDef.field?.control.invalid">
+                            {{
+                                getErrorMessage(
+                                    fieldDef.field?.error,
+                                    fieldDef.field?.control
+                                )
+                            }}
+                        </mat-error>
+
+                    </mat-form-field>
+
+                </div>
+            </div>
+
+            <!-- details fields -->
+            <div *ngIf="isDetailsDialog()">
+                <div *ngIf="fieldDef.field?.details?.input">
+                    <mat-form-field color="primary">
+                        <input matInput #input
+                            name="{{fieldDef.columnDef}}"
+                            formControlName="{{fieldDef.columnDef}}"
+                            placeholder="{{fieldDef.columnDef}}"
+                        >
+                        <mat-hint></mat-hint>
+                        <mat-error *ngIf="fieldDef.field?.control.invalid">
+                            {{
+                                getErrorMessage(
+                                    fieldDef.field?.error,
+                                    fieldDef.field?.control
+                                )
+                            }}
+                        </mat-error>
+
+                    </mat-form-field>
+
+                </div>
+            </div>
+        </div>
+
+        <!--Textarea for demo purposes-->
+        <!-- <div class="form">
+            <mat-form-field color="accent">
+                <textarea #input [(ngModel)]="data.title" class="form-control" matInput name="title" placeholder="Title"
+                          required></textarea>
+                <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
+        </div> -->
+
+        <!--Contains mat-hint for characters count and has maxLengt set-->
+        <!-- <div class="form">
+            <mat-form-field color="accent">
+                <input #inputstate [(ngModel)]="data.state" class="form-control" matInput maxlength="10" name="state"
+                       placeholder="State" required>
+                <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+                <mat-hint align="end">{{inputstate.value?.length || 0}}/10</mat-hint>
+            </mat-form-field>
+        </div> -->
+
+        <!-- <div class="form">
+            <mat-form-field color="accent">
+                <input [(ngModel)]="data.url" matInput name="url" placeholder="Url">
+            </mat-form-field>
+        </div>
+
+        <div class="form">
+            <mat-form-field color="accent">
+                <input [(ngModel)]="data.created_at" matInput name="created_at" placeholder="Created at">
+            </mat-form-field>
+        </div>
+
+        <div class="form">
+            <mat-form-field color="accent">
+                <input [(ngModel)]="data.updated_at" matInput name="updated_at" placeholder="Updated at">
+            </mat-form-field>
+        </div> -->
+
+        <div mat-dialog-actions>
+            <button
+                mat-raised-button
+                (click)="save(formGroup.value)"
+                color="accent"
+                [disabled]="!formGroup.valid"
+                [mat-dialog-close]="1"
+                type="submit"
+            >
+                <div *ngIf="isSaveDialog()"> Save </div>
+                <div *ngIf="isUpdateDialog()"> Update </div>
+            </button>
+            <button
+                mat-raised-button
+                color="warn"
+                (click)="close()"
+                type="button"
+                tabindex="-1"
+            >
+                <div *ngIf="isDetailsDialog()"> Close </div>
+                <div *ngIf="!isDetailsDialog()"> Cancel </div>
+            </button>
+        </div>
+    </form>
+</div>

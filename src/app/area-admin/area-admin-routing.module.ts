@@ -25,12 +25,12 @@ const routes: Routes = [
                 // canLoad: [AuthGuardService]
                 data: {breadcrumb: 'Dashboard'}
             },
-            // {
-            //     path: 'store',
-            //     loadChildren: () => import('./store/store.module').then(m => m.StoreModule),
-            //     // canLoad: [AuthGuardService]
-            //     data: {breadcrumb: 'Store'}
-            // },
+            {
+                path: 'store',
+                loadChildren: () => import('./store/store.module').then(m => m.StoreModule),
+                // canLoad: [AuthGuardService]
+                data: {breadcrumb: 'Store'}
+            },
             {
                 path: 'about',
                 component: DashboardLayoutComponent,

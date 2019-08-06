@@ -1,8 +1,8 @@
 
 @import '~@angular/material/theming';
-// @import './store/store.component.scss-theme.scss';
+@import './store/store.components.scss-theme.scss';
 
 @mixin app-area-admin-components-theme($theme) {
-    // @include app-area-admin-store-components-theme($theme);
+    @include  app-store-components-theme($theme);
 
 }

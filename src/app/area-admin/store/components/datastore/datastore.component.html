@@ -1,0 +1,143 @@
+<mat-card class="mat-elevation-z2 card">
+    <mat-card-subtitle class="title">
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px" fxLayout.xs="column">
+            <div fxLayout="column" fxLayoutAlign="space-between start" fxLayoutGap="2px" class="form">
+                <mat-form-field floatPlaceholder="never" color="primary">
+                    <input
+                        matInput #filter placeholder="Filter"
+                    >
+                </mat-form-field>
+            </div>
+            <button
+                fxLayout="column" fxLayoutAlign="space-between start" fxLayoutGap="2px"
+                mat-icon-button mat-raise-button disableRipple
+                class="iconbutton" color="accent"
+                matTooltip="refresh data"
+                (click)="refreshStore()"
+            >
+                <mat-icon aria-label="Delete">update</mat-icon>
+                Refresh
+            </button>
+            <button
+                fxLayout="column" fxLayoutAlign="space-between start" fxLayoutGap="2px"
+                mat-icon-button mat-raise-button disableRipple
+                class="iconbutton"
+                color="warn"
+                matTooltip="delete selected data"
+                [disabled]="countSelectedRow() === 0"
+            >
+                <mat-icon aria-label="Delete">delete</mat-icon>
+                Delete
+            </button>
+
+        </div>
+
+
+
+
+    </mat-card-subtitle>
+    <mat-card-content>
+        <div class="table">
+            <mat-table [dataSource]="dataSource" matSort >
+                <ng-container matColumnDef="checkbox">
+                    <mat-header-cell *matHeaderCellDef >
+                        <mat-checkbox #rowSelections
+                            matTooltip="check / uncheck all"
+                            [(ngModel)]="rowsSelectionSelected"
+                            [(indeterminate)]="rowsSelectionIndeterminate"
+                            (change)="rowsSelection_change()"
+                            [disableRipple]="true"
+                        >
+                        </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element;">
+                        <mat-checkbox
+                            #rowSelection
+                            matTooltip="check / uncheck row"
+                            [checked] = "element.selected "
+                            (change)="rowSelection_change()"
+                            (click)="rowSelection_click()"
+                            [disableRipple]="true"
+                        >
+
+                        </mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+                <ng-container *ngFor="let column of columns"
+                    [cdkColumnDef]="column.columnDef"
+                >
+
+                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>
+                        {{column.columnDef}}
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row">
+                        {{column.cell(row)}}
+                    </mat-cell>
+
+                </ng-container>
+
+                <!-- datastore Action Column -->
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef class="action">
+                        <button
+                            mat-raise-button
+                            mat-icon-button
+                            matTooltip="add"
+                            color="white"
+                            (click)="add()"
+                        >
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let j=index;" class="action">
+
+                        <button
+                            mat-icon-button
+                            matTooltip="details"
+                            color="accent"
+                            (click)="details(element)"
+                        >
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+                        <button
+                            mat-icon-button
+                            matTooltip="edit"
+                            color="primary"
+                            (click)="edit(element)"
+                        >
+                            <mat-icon>border_color</mat-icon>
+                        </button>
+                        <button
+                            mat-icon-button
+                            matTooltip="delete"
+                            color="warn"
+                            (click)="delete(element)"
+                        >
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row
+                    *matRowDef="let row; columns: displayedColumns;"
+                    [ngClass]="{hovered: row.hovered}"
+                    (click)="rowClicked(row)"
+                    (mouseover)="row.hovered = true"
+                    (mouseout)="row.hovered = false"
+                ></mat-row>
+            </mat-table>
+
+            <mat-paginator #paginator
+                [pageSizeOptions]="[5, 10, 50, 100]"
+                showFirstLastButtons>
+            </mat-paginator>
+
+
+
+
+        </div>
+    </mat-card-content>
+</mat-card>

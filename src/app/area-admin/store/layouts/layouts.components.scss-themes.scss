@@ -1,0 +1,6 @@
+@import '~@angular/material/theming';
+@import './region-layout/region-layout.component.scss-theme.scss';
+
+@mixin app-layouts-components-theme($theme) {
+    @include app-region-layout-component-theme($theme);
+}

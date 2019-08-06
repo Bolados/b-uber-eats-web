@@ -18,7 +18,7 @@ import {Title} from '@angular/platform-browser';
 })
 export class BaseAreaAdminComponent implements OnInit, AfterViewInit {
 
-    @Input() title = ' Dashboard ';
+    @Input() title;
 
     sidebarConfig: SidebarConfig = new SidebarConfig();
     toolbarConfig: ToolbarConfig = new ToolbarConfig();
