@@ -18,7 +18,7 @@
                 <mat-icon aria-label="Delete">update</mat-icon>
                 Refresh
             </button>
-            <button
+            <!-- <button
                 fxLayout="column" fxLayoutAlign="space-between start" fxLayoutGap="2px"
                 mat-icon-button mat-raise-button disableRipple
                 class="iconbutton"
@@ -29,7 +29,7 @@
             >
                 <mat-icon aria-label="Delete">delete</mat-icon>
                 Delete
-            </button>
+            </button> -->
 
         </div>
 
@@ -125,7 +125,6 @@
                 <mat-row
                     *matRowDef="let row; columns: displayedColumns;"
                     [ngClass]="{hovered: row.hovered}"
-                    (click)="rowClicked(row)"
                     (mouseover)="row.hovered = true"
                     (mouseout)="row.hovered = false"
                 ></mat-row>

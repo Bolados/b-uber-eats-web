@@ -5,7 +5,7 @@
     <form
         [formGroup]="formGroup"
         #ngform="ngForm"
-        (ngSubmit)="submit()"
+        (ngSubmit)="submit(formGroup.value)"
         novalidate
         mat-dialog-content
     >

@@ -7,6 +7,7 @@ import {fromEvent} from 'rxjs';
 import {DatastoreService} from '../../services';
 import {TableDefinition} from '../../models/table-definition.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Region } from '../../models';
 
 @Component({
   selector: 'app-datastore',
@@ -18,6 +19,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     @Input() title;
     @Input() datastore: DatastoreService<any>;
     @Input() entity: new () => void;
+    @Input() adapter: (item: any) => any;
     @Input() tableDefinition: TableDefinition<any>;
     @Input() dataSource: MatTableDataSource<any> | null ;
 
@@ -27,42 +29,44 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     @ViewChildren('rowSelection') rowSelections: Array<MatCheckbox>;
     @ViewChildren('rowSelectionIds') rowSelectionsIds: Array<ElementRef>;
 
+    private dialogRef = null;
+
     rowsSelectionSelected = false;
     rowsSelectionIndeterminate = false;
     isSelectionClicked = true;
 
-    removeList(elements: Array<any>) {
-        console.log('remove list', elements);
-        elements.forEach(data => {
-            // const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
-            // this.datastore.data.value.splice(foundIndex, 1);
-            // this.datastore.data.next(this.datastore.data.value);
-            // this.refreshTable();
-            // Swal.fire({
-            //     title: 'Successfully deleted',
-            //     type: 'success',
-            //     timer: 1000,
-            //     showConfirmButton: false,
-            // });
-            this.datastore.delete(data).subscribe(
-                result => {
-                    console.log('deleted result', result);
-                    // for delete we use splice in order to remove single object from DataService
-                    const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
-                    this.datastore.data.value.splice(foundIndex, 1);
-                    this.datastore.data.next(this.datastore.data.value);
-                    this.refreshTable();
-                },
-                (err: HttpErrorResponse) => {
-                    Swal.fire({
-                        title: 'Error occurred ',
-                        text: 'Details: ' + err,
-                        type: 'error',
-                        showConfirmButton: true,
-                    });
-            });
-        });
-    }
+    // removeList(elements: Array<any>) {
+    //     console.log('remove list', elements);
+    //     elements.forEach(data => {
+    //         // const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
+    //         // this.datastore.data.value.splice(foundIndex, 1);
+    //         // this.datastore.data.next(this.datastore.data.value);
+    //         // this.refreshTable();
+    //         // Swal.fire({
+    //         //     title: 'Successfully deleted',
+    //         //     type: 'success',
+    //         //     timer: 1000,
+    //         //     showConfirmButton: false,
+    //         // });
+    //         this.datastore.delete(data).subscribe(
+    //             result => {
+    //                 console.log('deleted result', result);
+    //                 // for delete we use splice in order to remove single object from DataService
+    //                 const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
+    //                 this.datastore.data.value.splice(foundIndex, 1);
+    //                 this.datastore.data.next(this.datastore.data.value);
+    //                 this.refreshTable();
+    //             },
+    //             (err: HttpErrorResponse) => {
+    //                 Swal.fire({
+    //                     title: 'Error occurred ',
+    //                     text: 'Details: ' + err,
+    //                     type: 'error',
+    //                     showConfirmButton: true,
+    //                 });
+    //         });
+    //     });
+    // }
 
     remove(data) {
         console.log('remove', data);
@@ -116,10 +120,10 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         // this.refreshTable();
         this.datastore.update(data).subscribe(result => {
             console.log('update result', result);
-            // for delete we use splice in order to remove single object from DataService
+            result = this.adapter(result);
             const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
             this.datastore.data.value.splice(foundIndex, 1);
-            this.datastore.data.value.push(data);
+            this.datastore.data.value.push(result);
             this.datastore.data.next(this.datastore.data.value);
             Swal.fire({
                 title: 'Successfully add',
@@ -151,6 +155,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         this.datastore.create(data).subscribe(result => {
             console.log('saved result', result);
             // for delete we use splice in order to remove single object from DataService
+            result = this.adapter(result);
             this.datastore.data.value.push(result);
             this.datastore.data.next(this.datastore.data.value);
             Swal.fire({
@@ -196,57 +201,66 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
             DatastoreDialogType.SAVE,
             new this.entity()
         );
-        const dialogRef = this.dialog.open(DatastoreDialogComponent, {
-            panelClass: 'dialog',
-            data,
-            scrollStrategy: this.overlay.scrollStrategies.noop(),
-            hasBackdrop: false,
-        });
-        dialogRef.afterClosed().subscribe(() => {
-            if (data.data) {
-                console.log('after close', data.data);
-                this.save(data.data);
-                this.refreshTable();
-            }
-        });
+        if (!this.dialogRef) {
+            this.dialogRef = this.dialog.open(DatastoreDialogComponent, {
+                panelClass: 'dialog',
+                data,
+                scrollStrategy: this.overlay.scrollStrategies.noop(),
+                hasBackdrop: false,
+            });
+            this.dialogRef.afterClosed().subscribe(() => {
+                if (data.data) {
+                    console.log('after close', data.data);
+                    this.save(data.data);
+                    this.refreshTable();
+                }
+                this.dialogRef = null;
+            });
+        }
     }
 
     details(element) {
         this.isSelectionClicked = false;
         console.log('details: ', element);
         const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.DETAILS, element);
-        const dialogRef = this.dialog.open(DatastoreDialogComponent, {
-            panelClass: 'dialog',
-            data,
-            scrollStrategy: this.overlay.scrollStrategies.noop(),
-            hasBackdrop: false,
-        });
-        dialogRef.afterClosed().subscribe(() => {
-            if (data.data) {
-                console.log('after close', data.data);
-                this.save(data.data);
-                this.refreshTable();
-            }
-        });
+        if (!this.dialogRef) {
+            this.dialogRef = this.dialog.open(DatastoreDialogComponent, {
+                panelClass: 'dialog',
+                data,
+                scrollStrategy: this.overlay.scrollStrategies.noop(),
+                hasBackdrop: false,
+            });
+            this.dialogRef.afterClosed().subscribe(() => {
+                if (data.data) {
+                    console.log('after close', data.data);
+                    this.save(data.data);
+                    this.refreshTable();
+                }
+                this.dialogRef = null;
+            });
+        }
     }
 
     edit(element) {
         this.isSelectionClicked = false;
         console.log('edit: ', element);
         const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.UPDATE, element);
-        const dialogRef = this.dialog.open(DatastoreDialogComponent, {
-            panelClass: 'dialog',
-            data,
-            scrollStrategy: this.overlay.scrollStrategies.noop(),
-            hasBackdrop: false,
-        });
-        dialogRef.afterClosed().subscribe(() => {
-            if (data.data) {
-                console.log('after close', data.data);
-                this.update(data.data);
-                this.refreshTable();
-            }
-        });
+        if (!this.dialogRef) {
+            this.dialogRef = this.dialog.open(DatastoreDialogComponent, {
+                panelClass: 'dialog',
+                data,
+                scrollStrategy: this.overlay.scrollStrategies.noop(),
+                hasBackdrop: false,
+            });
+            this.dialogRef.afterClosed().subscribe(() => {
+                if (data.data) {
+                    console.log('after close', data.data);
+                    this.update(data.data);
+                    this.refreshTable();
+                }
+                this.dialogRef = null;
+            });
+        }
     }
 
     delete(element) {
@@ -265,24 +279,24 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         });
     }
 
-    deleteSelection() {
-        const elements: Array<any> = this.selectedData();
-        console.log('deletings ', elements);
-        if ( elements.length > 0) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'Once deleted, you will not be able to recover it!',
-                type: 'warning',
-                showConfirmButton: true,
-                showCancelButton: true
-            })
-            .then((willDelete) => {
-                if (willDelete.value) {
-                    this.removeList(elements);
-                }
-            });
-        }
-    }
+    // deleteSelection() {
+    //     const elements: Array<any> = this.selectedData();
+    //     console.log('deletings ', elements);
+    //     if ( elements.length > 0) {
+    //         Swal.fire({
+    //             title: 'Are you sure?',
+    //             text: 'Once deleted, you will not be able to recover it!',
+    //             type: 'warning',
+    //             showConfirmButton: true,
+    //             showCancelButton: true
+    //         })
+    //         .then((willDelete) => {
+    //             if (willDelete.value) {
+    //                 this.removeList(elements);
+    //             }
+    //         });
+    //     }
+    // }
 
     selectedIds(): number[] {
         const result = [];
@@ -347,17 +361,17 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         this.isSelectionClicked = true;
       }
 
-    rowClicked(row) {
-        if (this.isSelectionClicked) {
-            this.rowSelections.forEach((element, index) => {
-                if ( (index + 1) === +row.id) {
-                    element.checked = !element.checked;
-                    this.rowSelection_change();
-                }
-            });
-        }
+    // rowClicked(row) {
+    //     if (this.isSelectionClicked) {
+    //         this.rowSelections.forEach((element, index) => {
+    //             if ( (index + 1) === +row.id) {
+    //                 element.checked = !element.checked;
+    //                 this.rowSelection_change();
+    //             }
+    //         });
+    //     }
 
-    }
+    // }
 
     constructor(
         private dialog: MatDialog,

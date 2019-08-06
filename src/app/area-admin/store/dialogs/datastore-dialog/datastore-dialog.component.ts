@@ -38,6 +38,7 @@ export class DatastoreDialogComponent implements OnInit {
         this.dialogRef.backdropClick().subscribe(() => {
             this.close();
         });
+        console.log('receive data :' , data.data);
         if (data && data.tableDefinition && data.tableDefinition.table) {
             const config = {};
             data.tableDefinition.table.forEach(field => {
@@ -86,15 +87,27 @@ export class DatastoreDialogComponent implements OnInit {
     }
 
     send(value) {
-        for (const key in value) {
-            if (value.hasOwnProperty(key) && this.data.data.hasOwnProperty(key)) {
-                this.data.data[key] = value[key];
+        if (this.isUpdateDialog()) {
+            for (const key in value) {
+                if (value.hasOwnProperty(key)) {
+                    this.data.data[key] = value[key];
+                }
             }
         }
+
+        if (this.isSaveDialog()) {
+            this.data.data = value;
+        }
+
+        console.log('form data: ', value);
+        console.log('send ', this.data.kind, ' data: ', this.data.data);
     }
 
 
-    submit() {
+    submit(value) {
+        if (this.formGroup.valid) {
+            this.send(value);
+        }
     }
 
     isSaveDialog() {

@@ -39,3 +39,9 @@ export abstract class TableExtension extends Resource {
     highlighted = false;
     hovered = false;
 }
+
+export function setTableExtentionFields(entity: any) {
+    entity.selected = false;
+    entity.highlighted = false;
+    entity.hovered = false;
+}

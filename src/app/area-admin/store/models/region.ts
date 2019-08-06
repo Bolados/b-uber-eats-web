@@ -1,25 +1,48 @@
 import {Resource} from '@lagoshny/ngx-hal-client';
 import {FormControl, Validators} from '@angular/forms';
-import {TableDefinition, TableExtension} from './table-definition.model';
+import {TableDefinition, TableExtension, setTableExtentionFields} from './table-definition.model';
+import { idFromHref } from '../helpers/store.helpers';
 
 
-export class Region extends TableExtension {
+export class Region extends Resource {
 
-    code: string;
-    name: string;
-    countries: Array<any>;
+    selected = false;
+    highlighted = false;
+    hovered = false;
+
+    localId: string = null;
+    code: string = null;
+    name: string = null;
+    countries: Array<any> = [];
 
     constructor() {
         super();
     }
 
     get id() {
-        if (this._links) {
-            const link = this._links.self.href;
-            const splitter: string[] = link.split('/');
-            return splitter[splitter.length - 1];
+        if ( this._links && this._links.self) {
+            const id = idFromHref(this._links.self.href);
+            if (id) {
+                this.localId = id;
+            }
         }
-        return null;
+        return this.localId;
+    }
+
+    set id(id: string) {
+        this.localId = id;
+    }
+
+    public static adapter(item: any ) {
+        console.log('dto', item);
+        const entity: Region = item;
+        if ( item && item._links && item._links.self) {
+            entity.id = idFromHref(item._links.self.href);
+        }
+        setTableExtentionFields(entity);
+        console.log('entity', entity);
+        return entity;
+
     }
 
     public static get TABLE_DEFINITION(): TableDefinition<Region> {
