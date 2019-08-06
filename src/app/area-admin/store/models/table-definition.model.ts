@@ -13,18 +13,27 @@ export interface FieldDefinition<T> {
 }
 
 export interface FieldElementDefinition {
-    add: FieldElementType | false;
-    update: FieldElementType | false;
-    details: FieldElementType | false;
+    add: Input | Area | Check | Select | false;
+    update: Input | Area | Check | Select | false;
+    details: Input | Area | Check | Select | false;
     control: (start, disabled?) => FormControl;
     error: ErrorElementType | object;
 }
 
-export interface FieldElementType {
-    input?: boolean;
-    area?: boolean;
-    check?: boolean;
-    select?: boolean;
+export interface Input {
+    input: boolean;
+}
+
+export interface Area {
+    area: boolean;
+}
+
+export interface Check {
+    check: boolean;
+}
+
+export interface Select {
+    select: boolean;
 }
 
 export interface ErrorElementType {
