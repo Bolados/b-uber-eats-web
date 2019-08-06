@@ -66,8 +66,8 @@ export class Region extends Resource implements TableExtension {
                             {value: start, disabled},
                             [
                                 Validators.required,
-                                Validators.minLength(2),
-                                Validators.maxLength(2)
+                                // Validators.minLength(2),
+                                // Validators.maxLength(2)
                             ]
                         ),
                         error: {

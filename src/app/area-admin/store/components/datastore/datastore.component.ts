@@ -6,6 +6,7 @@ import {Overlay} from '@angular/cdk/overlay';
 import {fromEvent} from 'rxjs';
 import {DatastoreService} from '../../services';
 import {TableDefinition} from '../../models/table-definition.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-datastore',
@@ -29,71 +30,110 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     rowsSelectionIndeterminate = false;
     isSelectionClicked = true;
 
+    remove(data) {
+        console.log('remove', data);
+        this.datastore.delete(data).subscribe(result => {
+            console.log('deleted result', result);
+            // for delete we use splice in order to remove single object from DataService
+            const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
+            this.datastore.data.value.splice(foundIndex, 1);
+            this.datastore.data.next(this.datastore.data.value);
+            this.refreshTable();
+            Swal.fire({
+                title: 'Successfully deleted',
+                type: 'success',
+                showConfirmButton: false,
+                timer: 1000,
+            });
+            this.refreshTable();
+        },
+        (err: HttpErrorResponse) => {
+            Swal.fire({
+                title: 'Error occurred ',
+                text: 'Details: ' + err,
+                type: 'error',
+                showConfirmButton: true,
+            });
+        });
+        // const foundIndex = this.datastore.data.value.findIndex(x => x.id === element.id);
+        // this.datastore.data.value.splice(foundIndex, 1);
+        // this.datastore.data.next(this.datastore.data.value);
+        // this.refreshTable();
+        // Swal.fire({
+        //     title: 'Successfully deleted',
+        //     type: 'success',
+        //     timer: 1000,
+        //     showConfirmButton: false,
+        // });
+    }
+
 
     update(data) {
         console.log('update', data);
-        const foundIndex = this.datastore.data.value.findIndex(x => x.code === data.code);
-        this.datastore.data.value.splice(foundIndex, 1);
-        this.datastore.data.value.push(data);
-        this.datastore.data.next(this.datastore.data.value);
-        Swal.fire({
-            title: 'Successfully updated',
-            type: 'success',
-            showConfirmButton: false,
-        });
-        this.refreshTable();
-        // this.datastoreRegionService.update(this.data.data).subscribe(data => {
-        //     console.log('deleted', data);
-        //     // for delete we use splice in order to remove single object from DataService
-        //     const foundIndex = this.datastoreRegionService.data.value.findIndex(x => x.id === data.id);
-        // this.datastoreRegionService.data.value.splice(foundIndex, 1);
-        // this.datastoreRegionService.data.value.push(data);
-        //     this.datastoreRegionService.data.next(datastoreRegionService.data.value);
-        //     Swal.fire({
-        //         title: 'Successfully add',
-        //         type: 'success',
-        //         showConfirmButton: false,
-        //     });
-        // },
-        // (err: HttpErrorResponse) => {
-        //     Swal.fire({
-        //         title: 'Error occurred',
-        //         text: 'Details: ' + err.name + ' ' + err.message,
-        //         type: 'error',
-        //         showConfirmButton: false,
-        //     });
+        // const foundIndex = this.datastore.data.value.findIndex(x => x.code === data.code);
+        // this.datastore.data.value.splice(foundIndex, 1);
+        // this.datastore.data.value.push(data);
+        // this.datastore.data.next(this.datastore.data.value);
+        // Swal.fire({
+        //     title: 'Successfully updated',
+        //     type: 'success',
+        //     showConfirmButton: false,
         // });
+        // this.refreshTable();
+        this.datastore.update(data).subscribe(result => {
+            console.log('update result', result);
+            // for delete we use splice in order to remove single object from DataService
+            const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
+            this.datastore.data.value.splice(foundIndex, 1);
+            this.datastore.data.value.push(data);
+            this.datastore.data.next(this.datastore.data.value);
+            Swal.fire({
+                title: 'Successfully add',
+                type: 'success',
+                timer: 1000,
+                showConfirmButton: false,
+            });
+        },
+        (err: HttpErrorResponse) => {
+            Swal.fire({
+                title: 'Error occurred ',
+                text: 'Details: ' + err,
+                type: 'error',
+                showConfirmButton: true,
+            });
+        });
     }
 
     save(data) {
         console.log('save', data);
-        this.datastore.data.value.push(data);
-        this.datastore.data.next(this.datastore.data.value);
-        Swal.fire({
-            title: 'Successfully add',
-            type: 'success',
-            showConfirmButton: false,
-        });
-        this.refreshTable();
-        // this.datastoreRegionService.create(this.data.data).subscribe(data => {
-        //     console.log('deleted', data);
-        //     // for delete we use splice in order to remove single object from DataService
-        //     this.datastoreRegionService.data.value.push(data);
-        //     this.datastoreRegionService.data.next(datastoreRegionService.data.value);
-        //     Swal.fire({
-        //         title: 'Successfully add',
-        //         type: 'success',
-        //         showConfirmButton: false,
-        //     });
-        // },
-        // (err: HttpErrorResponse) => {
-        //     Swal.fire({
-        //         title: 'Error occurred',
-        //         text: 'Details: ' + err.name + ' ' + err.message,
-        //         type: 'error',
-        //         showConfirmButton: false,
-        //     });
+        // this.datastore.data.value.push(data);
+        // this.datastore.data.next(this.datastore.data.value);
+        // Swal.fire({
+        //     title: 'Successfully add',
+        //     type: 'success',
+        //     showConfirmButton: false,
         // });
+        // this.refreshTable();
+        this.datastore.create(data).subscribe(result => {
+            console.log('saved result', result);
+            // for delete we use splice in order to remove single object from DataService
+            this.datastore.data.value.push(result);
+            this.datastore.data.next(this.datastore.data.value);
+            Swal.fire({
+                title: 'Successfully add',
+                type: 'success',
+                timer: 1000,
+                showConfirmButton: false,
+            });
+        },
+        (err: HttpErrorResponse) => {
+            Swal.fire({
+                title: 'Error occurred ',
+                text: 'Details: ' + err,
+                type: 'error',
+                showConfirmButton: true,
+            });
+        });
     }
 
     data(kind: DatastoreDialogType, example: any): DatastoreDialogInputData<any>  {
@@ -148,40 +188,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         })
         .then((willDelete) => {
             if (willDelete.value) {
-                // this.datastoreRegionService.delete(element).subscribe(data => {
-                //     console.log('deleted', data);
-                //     // for delete we use splice in order to remove single object from DataService
-                //     const foundIndex = this.datastoreRegionService.data.value.findIndex(x => x.id === element.id);
-                //     this.datastoreRegionService.data.value.splice(foundIndex, 1);
-                //     this.datastoreRegionService.data.next(this.datastoreRegionService.data.value);
-                //     this.refreshTable();
-                //     swal.fire({
-                //         title: 'Successfully deleted',
-                //         text: 'Successfully deleted',
-                //         type: 'success'
-                // showConfirmButton: false,
-                        // timer: 1000,
-                //     });
-                //     this.refreshTable();
-                // },
-                // (err: HttpErrorResponse) => {
-                //     swal.fire({
-                //         title: 'Error occurred',
-                //         text: 'Details: ' + err.name + ' ' + err.message,
-                //         type: 'error',
-                //         showConfirmButton: true,
-                //     });
-                // });
-                const foundIndex = this.datastore.data.value.findIndex(x => x.id === element.id);
-                this.datastore.data.value.splice(foundIndex, 1);
-                this.datastore.data.next(this.datastore.data.value);
-                this.refreshTable();
-                Swal.fire({
-                    title: 'Successfully deleted',
-                    type: 'success',
-                    timer: 1000,
-                    showConfirmButton: false,
-                });
+                this.remove(element);
             }
         });
     }

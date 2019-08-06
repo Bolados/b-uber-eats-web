@@ -38,7 +38,7 @@
 
             <!-- update fields -->
             <div *ngIf="isUpdateDialog()">
-                <div *ngIf="field?.el?.add?.input">
+                <div *ngIf="field?.el?.update?.input">
                     <mat-form-field color="primary">
                         <input matInput #input
                                formControlName="{{field?.def}}"
@@ -63,7 +63,7 @@
 
             <!-- details fields -->
             <div *ngIf="isDetailsDialog()">
-                <div *ngIf="field?.el?.add?.input">
+                <div *ngIf="field?.el?.details?.input">
                     <mat-form-field color="primary">
                         <input matInput #input
                                formControlName="{{field?.def}}"
