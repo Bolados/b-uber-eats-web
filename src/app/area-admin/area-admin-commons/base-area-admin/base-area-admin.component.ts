@@ -3,13 +3,13 @@ import {Search, SidebarConfig, Toolbar, ToolbarConfig} from '../../../core/domai
 import {SidebarKind, Theme, ToolbarDisplay, ToolbarMode} from '../../../core/domains/enums';
 import {ToolbarComponent} from '../../../core/components/toolbar';
 import {SidebarComponent} from '../../../core/components/sidebar';
-import {menus} from '../../configuration/sidebar.menu-elements';
 import {ThemeService} from '../../../core/services/theme';
 import {FullscreenService} from '../../../core/services/fullscreen';
 import {OverlayContainer} from '@angular/cdk/overlay';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {SidemenuService} from '../../../core/services/sidemenu';
 import {Title} from '@angular/platform-browser';
+import {menus} from '../../configuration';
 
 @Component({
     selector: 'app-base-area-admin',

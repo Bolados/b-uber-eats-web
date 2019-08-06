@@ -1,14 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, ViewChildren, AfterViewInit } from '@angular/core';
-import { DatastoreService } from '../../services/datastore.service';
-import { MatTableDataSource, MatPaginator, MatSort, MatCheckbox, MatDialog } from '@angular/material';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
+import {MatCheckbox, MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import Swal from 'sweetalert2';
-import {
-    DatastoreDialogInputData,
-    DatastoreDialogType,
-    DatastoreDialogComponent
-} from '../../dialogs/datastore-dialog/datastore-dialog.component';
-import { Overlay } from '@angular/cdk/overlay';
-import { fromEvent } from 'rxjs';
+import {DatastoreDialogComponent, DatastoreDialogInputData, DatastoreDialogType} from '../../dialogs/datastore-dialog';
+import {Overlay} from '@angular/cdk/overlay';
+import {fromEvent} from 'rxjs';
+import {DatastoreService} from '../../services';
+import {TableDefinition} from '../../models/table-definition.model';
 
 @Component({
   selector: 'app-datastore',
@@ -18,9 +15,9 @@ import { fromEvent } from 'rxjs';
 export class DatastoreComponent implements OnInit, AfterViewInit {
 
     @Input() title;
-    @Input() datastore: DatastoreService<any> | null;
+    @Input() datastore: DatastoreService<any>;
     @Input() entity: new () => void;
-    @Input() tableDefinition;
+    @Input() tableDefinition: TableDefinition<any>;
     @Input() dataSource: MatTableDataSource<any> | null ;
 
     @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -108,6 +105,17 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         };
     }
 
+    get columns() {
+        return this.tableDefinition.table;
+    }
+
+    get displayedColumns() {
+        const prev = ['checkbox'];
+        const post = ['actions'];
+        return prev.concat(
+            this.columns.map(c => c.def)
+        ).concat(post);
+    }
 
     add() {
         const data: DatastoreDialogInputData<any> = this.data(
@@ -120,48 +128,10 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
             scrollStrategy: this.overlay.scrollStrategies.noop(),
             hasBackdrop: false,
         });
-        dialogRef.afterClosed().subscribe(value => {
+        dialogRef.afterClosed().subscribe(() => {
             if (data.data) {
                 console.log('after close', data.data);
                 this.save(data.data);
-                this.refreshTable();
-            }
-        });
-    }
-
-    details(element) {
-        this.isSelectionClicked = false;
-        console.log('details: ', element);
-        const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.DETAILS, element);
-        const dialogRef = this.dialog.open(DatastoreDialogComponent, {
-            panelClass: 'dialog',
-            data,
-            scrollStrategy: this.overlay.scrollStrategies.noop(),
-            hasBackdrop: false,
-        });
-        dialogRef.afterClosed().subscribe(value => {
-            if (data.data) {
-                console.log('after close', data.data);
-                this.save(data.data);
-                this.refreshTable();
-            }
-        });
-    }
-
-    edit(element) {
-        this.isSelectionClicked = false;
-        console.log('edit: ', element);
-        const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.UPDATE, element);
-        const dialogRef = this.dialog.open(DatastoreDialogComponent, {
-            panelClass: 'dialog',
-            data,
-            scrollStrategy: this.overlay.scrollStrategies.noop(),
-            hasBackdrop: false,
-        });
-        dialogRef.afterClosed().subscribe(value => {
-            if (data.data) {
-                console.log('after close', data.data);
-                this.update(data.data);
                 this.refreshTable();
             }
         });
@@ -263,16 +233,43 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         }
 
     }
-    get columns() {
-        return this.tableDefinition;
+
+    details(element) {
+        this.isSelectionClicked = false;
+        console.log('details: ', element);
+        const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.DETAILS, element);
+        const dialogRef = this.dialog.open(DatastoreDialogComponent, {
+            panelClass: 'dialog',
+            data,
+            scrollStrategy: this.overlay.scrollStrategies.noop(),
+            hasBackdrop: false,
+        });
+        dialogRef.afterClosed().subscribe(() => {
+            if (data.data) {
+                console.log('after close', data.data);
+                this.save(data.data);
+                this.refreshTable();
+            }
+        });
     }
 
-    get displayedColumns() {
-        const prev = ['checkbox'];
-        const post = ['actions'];
-        return prev.concat(
-            this.columns.map(c => c.columnDef)
-        ).concat(post);
+    edit(element) {
+        this.isSelectionClicked = false;
+        console.log('edit: ', element);
+        const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.UPDATE, element);
+        const dialogRef = this.dialog.open(DatastoreDialogComponent, {
+            panelClass: 'dialog',
+            data,
+            scrollStrategy: this.overlay.scrollStrategies.noop(),
+            hasBackdrop: false,
+        });
+        dialogRef.afterClosed().subscribe(() => {
+            if (data.data) {
+                console.log('after close', data.data);
+                this.update(data.data);
+                this.refreshTable();
+            }
+        });
     }
 
     constructor(
@@ -281,11 +278,6 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     ) {
     }
 
-    applyFilter(filterValue: string) {
-        filterValue = filterValue.trim(); // Remove whitespace
-        filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-        this.dataSource.filter = filterValue;
-      }
 
     ngOnInit() {
         this.datastore.initData();
@@ -303,7 +295,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
             .subscribe(
                 () => {
                 if (this.dataSource) {
-                    this.dataSource.filter = this.filter.nativeElement.value;
+                    this.dataSource.filter = this.filter.nativeElement.value.trim();
                 }
             })
         ;

@@ -9,24 +9,25 @@
         novalidate
         mat-dialog-content
     >
-        <div *ngFor="let fieldDef of data.tableDefinition">
+        <div *ngFor="let field of data?.tableDefinition?.table">
 
             <!-- save fields -->
             <div *ngIf="isSaveDialog()">
-                <div *ngIf="fieldDef.field?.add?.input">
+                <div *ngIf="field?.el?.add?.input">
                     <mat-form-field color="primary">
                         <input matInput #input
-                            name="{{fieldDef.columnDef}}"
-                            formControlName="{{fieldDef.columnDef}}"
-                            placeholder="{{fieldDef.columnDef}}"
+                               formControlName="{{field?.def}}"
+                               name="{{field?.def}}"
+                               placeholder="{{field?.def}}"
                         >
                         <mat-hint></mat-hint>
-                        <mat-error *ngIf="fieldDef.field?.control.invalid">
+                        <mat-error
+                            *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
                             {{
                                 getErrorMessage(
-                                    fieldDef.field?.error,
-                                    fieldDef.field?.control
-                                    )
+                                    field?.el?.error,
+                                    field?.def
+                                )
                             }}
                         </mat-error>
 
@@ -37,20 +38,21 @@
 
             <!-- update fields -->
             <div *ngIf="isUpdateDialog()">
-                <div *ngIf="fieldDef.field?.update?.input">
+                <div *ngIf="field?.el?.add?.input">
                     <mat-form-field color="primary">
                         <input matInput #input
-                            name="{{fieldDef.columnDef}}"
-                            formControlName="{{fieldDef.columnDef}}"
-                            placeholder="{{fieldDef.columnDef}}"
+                               formControlName="{{field?.def}}"
+                               name="{{field?.def}}"
+                               placeholder="{{field?.def}}"
                         >
                         <mat-hint></mat-hint>
-                        <mat-error *ngIf="fieldDef.field?.control.invalid">
+                        <mat-error
+                            *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
                             {{
-                                getErrorMessage(
-                                    fieldDef.field?.error,
-                                    fieldDef.field?.control
-                                )
+                            getErrorMessage(
+                                field?.el?.error,
+                                field.def
+                            )
                             }}
                         </mat-error>
 
@@ -61,20 +63,21 @@
 
             <!-- details fields -->
             <div *ngIf="isDetailsDialog()">
-                <div *ngIf="fieldDef.field?.details?.input">
+                <div *ngIf="field?.el?.add?.input">
                     <mat-form-field color="primary">
                         <input matInput #input
-                            name="{{fieldDef.columnDef}}"
-                            formControlName="{{fieldDef.columnDef}}"
-                            placeholder="{{fieldDef.columnDef}}"
+                               formControlName="{{field?.def}}"
+                               name="{{field?.def}}"
+                               placeholder="{{field?.def}}"
                         >
                         <mat-hint></mat-hint>
-                        <mat-error *ngIf="fieldDef.field?.control.invalid">
+                        <mat-error
+                            *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
                             {{
-                                getErrorMessage(
-                                    fieldDef.field?.error,
-                                    fieldDef.field?.control
-                                )
+                            getErrorMessage(
+                                field?.el?.error,
+                                field?.def
+                            )
                             }}
                         </mat-error>
 
@@ -130,8 +133,8 @@
                 [mat-dialog-close]="1"
                 type="submit"
             >
-                <div *ngIf="isSaveDialog()"> Save </div>
-                <div *ngIf="isUpdateDialog()"> Update </div>
+                <span *ngIf="isSaveDialog()"> Save </span>
+                <span *ngIf="isUpdateDialog()"> Update </span>
             </button>
             <button
                 mat-raised-button
@@ -140,8 +143,8 @@
                 type="button"
                 tabindex="-1"
             >
-                <div *ngIf="isDetailsDialog()"> Close </div>
-                <div *ngIf="!isDetailsDialog()"> Cancel </div>
+                <span *ngIf="isDetailsDialog()"> Close </span>
+                <span *ngIf="!isDetailsDialog()"> Cancel </span>
             </button>
         </div>
     </form>

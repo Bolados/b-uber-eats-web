@@ -1,9 +1,9 @@
-import { Component, OnInit, Injector } from '@angular/core';
-import { DatastoreService } from '../../services/datastore.service';
-import { Region } from '../../models/region';
-import { MatTableDataSource } from '@angular/material';
-import { API_RESOURCES_REGION } from 'src/app/area-admin/configuration/api.configuration';
-import { Router } from '@angular/router';
+import {Component, Injector, OnInit} from '@angular/core';
+import {MatTableDataSource} from '@angular/material';
+import {API_RESOURCES_REGION} from 'src/app/area-admin/configuration/api.configuration';
+import {DatastoreService} from '../../services';
+import {Region} from '../../models';
+import {TableDefinition} from '../../models/table-definition.model';
 
 @Component({
   selector: 'app-region-layout',
@@ -17,7 +17,7 @@ export class RegionLayoutComponent implements OnInit {
     storeTitle = 'Region';
     datastore: DatastoreService<Region> | null;
     entity = Region;
-    tableDefinition = Region.TABLE_DEFINITION;
+    tableDefinition: TableDefinition<Region> = Region.TABLE_DEFINITION;
     dataSource: MatTableDataSource<Region> | null ;
 
     constructor(

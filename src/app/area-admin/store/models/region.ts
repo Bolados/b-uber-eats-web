@@ -1,20 +1,14 @@
-import { Resource } from '@lagoshny/ngx-hal-client';
-import { FormControl, Validators } from '@angular/forms';
-
-export interface TableExtenxion {
-    selected?: boolean;
-    highlighted?: boolean;
-    hovered?: boolean;
-
-    start();
-}
+import {Resource} from '@lagoshny/ngx-hal-client';
+import {FormControl, Validators} from '@angular/forms';
+import {TableDefinition, TableExtension} from './table-definition.model';
 
 
-export class Region extends Resource implements TableExtenxion  {
+export class Region extends Resource implements TableExtension {
 
     code: string;
     name: string;
     countries: Array<any>;
+
     constructor() {
         super();
     }
@@ -30,82 +24,84 @@ export class Region extends Resource implements TableExtenxion  {
 
     start() {}
 
-    public static get TABLE_DEFINITION() {
-        return [
-            {
-                columnDef: 'id',
-                cell: (element: Region) => `${element.id}`,
-                field: {
-                    add: false,
-                    update: {
-                        input: true,
-                    },
-                    details: {
-                        input: true,
-                    },
-                    control: (start, disabled = true) => new FormControl(
-                        {value: start, disabled},
-                        [
-                            // Validators.required
-                        ]
-                    ),
-                    error: {
-                        required: 'required',
+    public static get TABLE_DEFINITION(): TableDefinition<Region> {
+        return {
+            table: [
+                {
+                    def: 'id',
+                    cell: (element: Region) => `${element.id}`,
+                    el: {
+                        add: false,
+                        update: {
+                            input: true,
+                        },
+                        details: {
+                            input: true,
+                        },
+                        control: (start, disabled = true) => new FormControl(
+                            {value: start, disabled},
+                            [
+                                // Validators.required
+                            ]
+                        ),
+                        error: {
+                            required: 'required'
+                        }
                     }
-                }
-            },
-            {
-                columnDef: 'code',
-                cell: (element: Region) => `${element.code}`,
-                field: {
-                    add: {
-                        input: true,
-                    },
-                    update: {
-                        input: true,
-                    },
-                    details: {
-                        input: true,
-                    },
-                    control: (start, disabled = false) => new FormControl(
-                        {value: start, disabled},
-                        [
-                            Validators.required,
-                            Validators.minLength(2),
-                            Validators.maxLength(2)
-                        ]
-                    ),
-                    error: {
-                        required: 'required',
-                        minlength: 'least than 2',
-                        maxlength: 'greater than 2'
+                },
+                {
+                    def: 'code',
+                    cell: (element: Region) => `${element.code}`,
+                    el: {
+                        add: {
+                            input: true,
+                        },
+                        update: {
+                            input: true,
+                        },
+                        details: {
+                            input: true,
+                        },
+                        control: (start, disabled = false) => new FormControl(
+                            {value: start, disabled},
+                            [
+                                Validators.required,
+                                Validators.minLength(2),
+                                Validators.maxLength(2)
+                            ]
+                        ),
+                        error: {
+                            required: 'required',
+                            minlength: 'least than 2',
+                            maxlength: 'greater than 2'
+                        }
                     }
-                }
-            },
-            {
-                columnDef: 'name',
-                cell: (element: Region) => `${element.name}`,
-                field: {
-                    add: {
-                        input: true,
-                    },
-                    update: {
-                        input: true,
-                    },
-                    details: {
-                        input: true,
-                    },
-                    control: (start, disabled = false) => new FormControl(
-                        {value: start, disabled},
-                        [
-                            Validators.required,
-                        ]
-                    ),
-                    error: {
-                        required: 'required',
+                },
+                {
+                    def: 'name',
+                    cell: (element: Region) => `${element.name}`,
+                    el: {
+                        add: {
+                            input: true,
+                        },
+                        update: {
+                            input: true,
+                        },
+                        details: {
+                            input: true,
+                        },
+                        control: (start, disabled = false) => new FormControl(
+                            {value: start, disabled},
+                            [
+                                Validators.required,
+                            ]
+                        ),
+                        error: {
+                            required: 'required',
+                        }
                     }
-                }
-            },
-        ];
+                },
+            ]
+        };
     }
 }

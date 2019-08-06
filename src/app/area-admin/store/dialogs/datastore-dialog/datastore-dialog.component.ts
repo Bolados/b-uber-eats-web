@@ -1,8 +1,9 @@
-import { Component, OnInit, HostListener, Inject } from '@angular/core';
-import { Resource } from '@lagoshny/ngx-hal-client';
+import {Component, HostListener, Inject, OnInit} from '@angular/core';
+import {Resource} from '@lagoshny/ngx-hal-client';
 import Swal from 'sweetalert2';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {TableDefinition} from '../../models/table-definition.model';
 
 export enum DatastoreDialogType {
     UPDATE = 'Update',
@@ -14,7 +15,7 @@ export interface DatastoreDialogInputData<T extends Resource> {
     title: string;
     kind: DatastoreDialogType;
     data: T;
-    tableDefinition: any;
+    tableDefinition: TableDefinition<T>;
 }
 
 @Component({
@@ -34,19 +35,19 @@ export class DatastoreDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: DatastoreDialogInputData<any>
     ) {
         this.dialogRef.disableClose = true;
-        this.dialogRef.backdropClick().subscribe(_ => {
+        this.dialogRef.backdropClick().subscribe(() => {
             this.close();
         });
-        if (data && data.tableDefinition) {
+        if (data && data.tableDefinition && data.tableDefinition.table) {
             const config = {};
-            data.tableDefinition.forEach(element => {
+            data.tableDefinition.table.forEach(field => {
                 let start = '';
                 if (data.kind !== DatastoreDialogType.SAVE) {
-                    start = data.data[element.columnDef];
+                    start = data.data[field.def];
                 }
-                config[element.columnDef] = element.field.control(start);
+                config[field.def] = field.el.control(start);
                 if (data.kind === DatastoreDialogType.DETAILS) {
-                    config[element.columnDef] = element.field.control(start, true);
+                    config[field.def] = field.el.control(start, true);
                 }
 
             });
@@ -58,9 +59,9 @@ export class DatastoreDialogComponent implements OnInit {
     ngOnInit() {
     }
 
-    getErrorMessage(errorDefinition: any, formControl: FormControl) {
+    getErrorMessage(errorDefinition: any, fieldDef: string) {
         for (const key in errorDefinition) {
-            if (errorDefinition.hasOwnProperty(key) && formControl.hasError(key)) {
+            if (errorDefinition.hasOwnProperty(key) && this.formGroup.get(fieldDef).hasError(key)) {
                 return errorDefinition[key];
             }
         }
@@ -69,16 +70,18 @@ export class DatastoreDialogComponent implements OnInit {
 
     alertClose() {
         let alert = false;
-        this.data.tableDefinition.forEach(element => {
-            const current: string = this.data.data[element.columnDef];
-            const formData: string = this.formGroup.value[element.columnDef];
-            if ( this.isUpdateDialog() && current && formData && current.trim() !== formData.trim()) {
-                alert = true;
-            }
-            if (this.isSaveDialog() && !current && formData) {
-                alert = true;
-            }
-        });
+        if (this.data && this.data.tableDefinition && this.data.tableDefinition.table) {
+            this.data.tableDefinition.table.forEach(field => {
+                const current: string = this.data.data[field.def];
+                const formData: string = this.formGroup.value[field.def];
+                if (this.isUpdateDialog() && current && formData && current.trim() !== formData.trim()) {
+                    alert = true;
+                }
+                if (this.isSaveDialog() && !current && formData) {
+                    alert = true;
+                }
+            });
+        }
         return alert;
     }
 
@@ -90,15 +93,15 @@ export class DatastoreDialogComponent implements OnInit {
     submit() {
     }
 
-    isSaveDialog(){
+    isSaveDialog() {
         return this.data.kind === DatastoreDialogType.SAVE;
     }
 
-    isUpdateDialog(){
+    isUpdateDialog() {
         return this.data.kind === DatastoreDialogType.UPDATE;
     }
 
-    isDetailsDialog(){
+    isDetailsDialog() {
         return this.data.kind === DatastoreDialogType.DETAILS;
     }
 

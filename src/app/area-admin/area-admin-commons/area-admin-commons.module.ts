@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { BaseAreaAdminComponent } from './base-area-admin/base-area-admin.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {SharedModule} from '../../shared';
 import {CoreModule} from '../../core';
-
+import {BaseAreaAdminComponent} from './base-area-admin';
 
 
 @NgModule({
