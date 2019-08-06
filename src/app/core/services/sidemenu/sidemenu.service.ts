@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {SidemenuItemComponent} from '../../components';
-import {Menu} from '../../domains';
 import {menus} from '../../components/sidemenu/menu-element';
+import { MenuItem } from '../../domains';
 
 @Injectable({
     providedIn: 'root'
@@ -9,11 +9,11 @@ import {menus} from '../../components/sidemenu/menu-element';
 export class SidemenuService {
 
     @Output() hoverItemEmitter: EventEmitter<SidemenuItemComponent> = new EventEmitter();
-    @Output() menuEmitter: EventEmitter<Menu> = new EventEmitter();
+    @Output() menuEmitter: EventEmitter<Array<MenuItem>> = new EventEmitter();
     private menu = menus;
 
     constructor() {
-    };
+    }
 
     hoverItem(item: SidemenuItemComponent = null) {
         this.hoverItemEmitter.emit(item);

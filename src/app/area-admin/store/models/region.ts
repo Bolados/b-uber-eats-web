@@ -1,51 +1,21 @@
-import {Resource} from '@lagoshny/ngx-hal-client';
 import {FormControl, Validators} from '@angular/forms';
-import {TableDefinition, TableExtension, setTableExtentionFields} from './table-definition.model';
-import { idFromHref } from '../helpers/store.helpers';
+import {TableDefinition} from './table-definition.model';
+import { MetaEntity } from './entitiy.meta';
 
 
-export class Region extends Resource {
+export class Region extends MetaEntity<Region> {
 
-    selected = false;
-    highlighted = false;
-    hovered = false;
-
-    localId: string = null;
     code: string = null;
     name: string = null;
     countries: Array<any> = [];
 
-    constructor() {
-        super();
-    }
-
-    get id() {
-        if ( this._links && this._links.self) {
-            const id = idFromHref(this._links.self.href);
-            if (id) {
-                this.localId = id;
-            }
-        }
-        return this.localId;
-    }
-
-    set id(id: string) {
-        this.localId = id;
-    }
-
-    public static adapter(item: any ) {
-        console.log('dto', item);
-        const entity: Region = item;
-        if ( item && item._links && item._links.self) {
-            entity.id = idFromHref(item._links.self.href);
-        }
-        setTableExtentionFields(entity);
-        console.log('entity', entity);
+    adapter(item: any): Region {
+        const entity = super.adapter(item);
         return entity;
-
     }
 
-    public static get TABLE_DEFINITION(): TableDefinition<Region> {
+
+    table_definition(): TableDefinition<Region> {
         return {
             table: [
                 {

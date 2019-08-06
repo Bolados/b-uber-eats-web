@@ -17,8 +17,8 @@ export class RegionLayoutComponent implements OnInit {
     storeTitle = 'Region';
     datastore: DatastoreService<Region> | null;
     entity = Region;
-    adapter = Region.adapter;
-    tableDefinition: TableDefinition<Region> = Region.TABLE_DEFINITION;
+    adapter: (item: any) => Region = new Region().adapter;
+    tableDefinition: TableDefinition<Region> = new Region().table_definition();
     dataSource: MatTableDataSource<Region> | null ;
 
     constructor(

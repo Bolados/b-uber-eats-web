@@ -1,4 +1,7 @@
-export const menus = [
+import { MenuItem } from 'src/app/core/domains';
+
+
+const menuItems: MenuItem[] = [
     {
         translate: 'SIDEBAR.MENU.DASHBOARD',
         name: 'Dashboard',
@@ -31,6 +34,66 @@ export const menus = [
                 icon: {
                     mat: false,
                     fa: 'globe'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Media',
+                link: '/admin/store/media',
+                icon: {
+                    mat: false,
+                    fa: 'image'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Orders Status',
+                link: '/admin/store/orders/status',
+                icon: {
+                    mat: false,
+                    fa: 'question-circle'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Payment Mode',
+                link: '/admin/store/payments/mode',
+                icon: {
+                    mat: false,
+                    fa: 'question-circle'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Phone',
+                link: '/admin/store/phones',
+                icon: {
+                    mat: false,
+                    fa: 'phone'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Role',
+                link: '/admin/store/users/roles',
+                icon: {
+                    mat: false,
+                    fa: 'user-tag'
                 },
                 chip: false,
                 open: false,
@@ -77,36 +140,41 @@ export const menus = [
         sub: [
             {
                 translate: 'SIDEBAR.MENU.DASHBOARD',
-                name: 'Fixed',
+                name: 'Departments',
+                link: '/admin/store/departments',
                 icon: {
-                    mat: 'filter_list',
-                    fa: false,
+                    mat: 'indeterminate_check_box',
+                    fa: false
                 },
-                link: 'tables/fixed',
+                chip: false,
                 open: false,
+                sub: false
             },
             {
                 translate: 'SIDEBAR.MENU.DASHBOARD',
-                name: 'Feature',
+                name: 'List',
+                link: 'material-widgets/list',
                 icon: {
-                    mat: 'done_all',
-                    fa: false,
+                    mat: 'list',
+                    fa: false
                 },
-                link: 'tables/featured',
+                chip: false,
                 open: false,
             },
-            {
-                translate: 'SIDEBAR.MENU.DASHBOARD',
-                name: 'Responsive Tables',
-                icon: {
-                    mat: 'filter_center_focus',
-                    fa: false,
-                },
-                link: 'tables/responsive',
-                open: false,
-            }
         ]
 
     },
 
 ];
+
+export function menu(): MenuItem[] {
+    const items: MenuItem[] = menuItems;
+    items.sort((a, b) => (a.name > b.name) ? 1 : -1);
+    items.forEach(submenu => {
+        if (submenu.sub) {
+            submenu.sub.sort((a, b) => (a.name > b.name) ? 1 : -1);
+        }
+    });
+    return items;
+}
+

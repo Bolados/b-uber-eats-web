@@ -1,11 +1,15 @@
-export class Menu {
+export interface MenuItem {
+    translate: string;
     name: string;
-    icon: string = null;
-    link: string = null;
-    open: boolean = false;
-    chip: {
-        value: string;
+    icon: {
+        mat: string | false;
+        fa: string | false;
+    };
+    link: string | false;
+    open: boolean;
+    chip: false | {
+        value: number;
         color: string;
-    } = null;
-    sub: Array<Menu> = null;
+    };
+    sub?: Array<MenuItem> | false;
 }

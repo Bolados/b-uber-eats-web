@@ -9,7 +9,7 @@ import {OverlayContainer} from '@angular/cdk/overlay';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {SidemenuService} from '../../../core/services/sidemenu';
 import {Title} from '@angular/platform-browser';
-import {menus} from '../../configuration';
+import { menu } from '../../configuration';
 
 @Component({
     selector: 'app-base-area-admin',
@@ -32,7 +32,7 @@ export class BaseAreaAdminComponent implements OnInit, AfterViewInit {
     fixedOutToolbar = false;
     @ViewChild('toolbarOutside', {static: false}) toolbarOutside?: ToolbarComponent = null;
     @ViewChild('sidebar', {static: false}) sidebar?: SidebarComponent = null;
-    private sidebarMenuElements = menus;
+    private sidebarMenuElements = menu();
     private mobileQuery: MediaQueryList;
     private mobileQueryListener: () => void;
 
