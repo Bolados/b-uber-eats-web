@@ -159,6 +159,8 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
                 //         title: 'Successfully deleted',
                 //         text: 'Successfully deleted',
                 //         type: 'success'
+                // showConfirmButton: false,
+                        // timer: 1000,
                 //     });
                 //     this.refreshTable();
                 // },
@@ -167,7 +169,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
                 //         title: 'Error occurred',
                 //         text: 'Details: ' + err.name + ' ' + err.message,
                 //         type: 'error',
-                //         showConfirmButton: false,
+                //         showConfirmButton: true,
                 //     });
                 // });
                 const foundIndex = this.datastore.data.value.findIndex(x => x.id === element.id);
@@ -177,6 +179,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
                 Swal.fire({
                     title: 'Successfully deleted',
                     type: 'success',
+                    timer: 1000,
                     showConfirmButton: false,
                 });
             }

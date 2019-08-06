@@ -10,6 +10,8 @@
         height: var(--appToolbarHeight);
         background: mat-color($primary);
         color: var(--appToolbarComponentsColor);
+        position: fixed;
+        bottom: 0;
 
         .footer {
             height: var(--appToolbarHeight);
@@ -25,10 +27,18 @@
             align-content: center;
         }
 
-        &.fullscreen {
-            width: calc(100% - 10px);
-            position: sticky;
-            bottom: 0;
+        &.drawer {
+            width: calc(100% - var(--appSidebarMenuIconsWidth));
+            &.fullscreen {
+                width: calc(100% - var(--appSidebarMenuIconsWidth) - 10px);
+            }
+        }
+
+        &.side-nav {
+            width: calc(100% - var(--appSidebarMenuWidth));
+            &.fullscreen {
+                width: calc(100% - var(--appSidebarMenuWidth) - 10px);
+            }
         }
     }
 
