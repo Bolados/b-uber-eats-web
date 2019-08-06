@@ -1,6 +1,7 @@
 import { Resource } from '@lagoshny/ngx-hal-client';
 import { Entity } from './entity';
 import { TableDefinition } from './table-definition.model';
+import { FormControl } from '@angular/forms';
 
 function idFromHref(href: string) {
     if (href) {
@@ -52,7 +53,37 @@ export abstract class MetaEntity<T> extends Resource implements Entity<T> {
         return entity;
     }
 
-    abstract table_definition(): TableDefinition<T>;
+    table_definition(): TableDefinition<T> {
+
+        const idDef = 'id';
+
+        return {
+            table: [
+                {
+                    def: idDef,
+                    cell: (element: T) => element[idDef],
+                    el: {
+                        add: false,
+                        update: {
+                            input: true,
+                        },
+                        details: {
+                            input: true,
+                        },
+                        control: (start, disabled = true) => new FormControl(
+                            {value: start, disabled},
+                            [
+                                // Validators.required
+                            ]
+                        ),
+                        error: {
+                            required: 'required'
+                        }
+                    }
+                }
+            ]
+        };
+    }
 
 
 

@@ -39,7 +39,7 @@ export class DatastoreDialogComponent implements OnInit {
             this.close();
         });
         console.log('receive data :' , data.data);
-        if (data && data.tableDefinition && data.tableDefinition.table) {
+        if (data && data.tableDefinition && data.tableDefinition.table && data.tableDefinition.table.length > 1) {
             const config = {};
             data.tableDefinition.table.forEach(field => {
                 let start = '';
@@ -54,7 +54,6 @@ export class DatastoreDialogComponent implements OnInit {
             });
             this.formGroup = this.formBuilder.group(config);
         }
-
     }
 
     ngOnInit() {

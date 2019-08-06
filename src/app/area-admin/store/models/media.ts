@@ -14,7 +14,12 @@ export class Media extends MetaEntity<Media> {
     }
 
     table_definition(): TableDefinition<Media> {
-        throw new Error('Method not implemented.');
+        const definition = super.table_definition();
+
+        definition.table = [
+            ...definition.table,
+        ];
+        return definition;
     }
 
 

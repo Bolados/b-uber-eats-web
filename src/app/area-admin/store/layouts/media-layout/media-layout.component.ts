@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
+import { DatastoreService } from '../../services';
+import { Media } from '../../models';
+import { TableDefinition } from '../../models/table-definition.model';
+import { MatTableDataSource } from '@angular/material';
+import { API_RESOURCES_MEDIA } from 'src/app/area-admin/configuration';
 
 @Component({
   selector: 'app-media-layout',
@@ -7,9 +12,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MediaLayoutComponent implements OnInit {
 
-  constructor() { }
+    areaTitle = 'Media';
 
-  ngOnInit() {
-  }
+    storeTitle = 'Media';
+    datastore: DatastoreService<Media> | null;
+    entity = Media;
+    adapter: (item: any) => Media = new Media().adapter;
+    tableDefinition: TableDefinition<Media> = new Media().table_definition();
+    dataSource: MatTableDataSource<Media> | null ;
+
+    constructor(
+        private injector: Injector,
+    ) {
+    }
+
+    ngOnInit() {
+        this.datastore = new DatastoreService<Media>(
+            Media,
+            API_RESOURCES_MEDIA,
+            this.injector
+        );
+    }
 
 }

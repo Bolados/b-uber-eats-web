@@ -14,7 +14,12 @@ export class OrderStatus extends MetaEntity<OrderStatus> {
     }
 
     table_definition(): TableDefinition<OrderStatus> {
-        throw new Error('Method not implemented.');
+        const definition = super.table_definition();
+
+        definition.table = [
+            ...definition.table,
+        ];
+        return definition;
     }
 
 }

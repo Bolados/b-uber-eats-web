@@ -196,12 +196,22 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         ).concat(post);
     }
 
+    canOpenDialog(data: DatastoreDialogInputData<any>): boolean {
+        if (this.dialogRef ) {
+            return false;
+        }
+        if (data && data.tableDefinition && data.tableDefinition.table && data.tableDefinition.table.length > 1) {
+            return true;
+        }
+        return false;
+    }
+
     add() {
         const data: DatastoreDialogInputData<any> = this.data(
             DatastoreDialogType.SAVE,
             new this.entity()
         );
-        if (!this.dialogRef) {
+        if (this.canOpenDialog(data)) {
             this.dialogRef = this.dialog.open(DatastoreDialogComponent, {
                 panelClass: 'dialog',
                 data,
@@ -223,7 +233,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         this.isSelectionClicked = false;
         console.log('details: ', element);
         const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.DETAILS, element);
-        if (!this.dialogRef) {
+        if (this.canOpenDialog(data)) {
             this.dialogRef = this.dialog.open(DatastoreDialogComponent, {
                 panelClass: 'dialog',
                 data,
@@ -245,7 +255,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         this.isSelectionClicked = false;
         console.log('edit: ', element);
         const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.UPDATE, element);
-        if (!this.dialogRef) {
+        if (this.canOpenDialog(data)) {
             this.dialogRef = this.dialog.open(DatastoreDialogComponent, {
                 panelClass: 'dialog',
                 data,

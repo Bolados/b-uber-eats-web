@@ -15,7 +15,12 @@ export class Phone extends MetaEntity<Phone> {
     }
 
     table_definition(): TableDefinition<Phone> {
-        throw new Error('Method not implemented.');
+        const definition = super.table_definition();
+
+        definition.table = [
+            ...definition.table,
+        ];
+        return definition;
     }
 
 }

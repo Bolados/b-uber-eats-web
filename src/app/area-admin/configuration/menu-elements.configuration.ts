@@ -66,7 +66,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Payment Mode',
-                link: '/admin/store/payments/mode',
+                link: '/admin/store/payments/modes',
                 icon: {
                     mat: false,
                     fa: 'question-circle'
@@ -98,29 +98,6 @@ const menuItems: MenuItem[] = [
                 chip: false,
                 open: false,
                 sub: false
-            },
-            {
-                translate: 'SIDEBAR.MENU.DASHBOARD',
-                name: 'Departments',
-                link: '/admin/store/departments',
-                icon: {
-                    mat: 'indeterminate_check_box',
-                    fa: false
-                },
-                chip: false,
-                open: false,
-                sub: false
-            },
-            {
-                translate: 'SIDEBAR.MENU.DASHBOARD',
-                name: 'List',
-                link: 'material-widgets/list',
-                icon: {
-                    mat: 'list',
-                    fa: false
-                },
-                chip: false,
-                open: false,
             },
         ]
     },
@@ -173,6 +150,10 @@ export function menu(): MenuItem[] {
     items.forEach(submenu => {
         if (submenu.sub) {
             submenu.sub.sort((a, b) => (a.name > b.name) ? 1 : -1);
+            const chip = submenu.chip;
+            const value = 'value';
+            chip[value] = submenu.sub.length;
+            submenu.chip =  chip;
         }
     });
     return items;

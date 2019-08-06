@@ -9,7 +9,7 @@ export interface MenuItem {
     open: boolean;
     chip: false | {
         value: number;
-        color: string;
+        color?: string;
     };
     sub?: Array<MenuItem> | false;
 }

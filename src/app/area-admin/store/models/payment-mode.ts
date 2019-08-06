@@ -14,7 +14,12 @@ export class PaymentMode extends MetaEntity<PaymentMode> {
     }
 
     table_definition(): TableDefinition<PaymentMode> {
-        throw new Error('Method not implemented.');
+        const definition = super.table_definition();
+
+        definition.table = [
+            ...definition.table,
+        ];
+        return definition;
     }
 
 }

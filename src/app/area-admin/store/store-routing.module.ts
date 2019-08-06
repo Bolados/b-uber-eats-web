@@ -1,7 +1,13 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import { RegionLayoutComponent } from './layouts/region-layout/region-layout.component';
-import { MediaLayoutComponent, OrderStatusLayoutComponent, PaymentModeLayoutComponent, RoleLayoutComponent, PhoneLayoutComponent } from './layouts';
+import {
+    MediaLayoutComponent,
+    OrderStatusLayoutComponent,
+     PaymentModeLayoutComponent,
+     RoleLayoutComponent,
+     PhoneLayoutComponent
+} from './layouts';
 
 const routes: Routes = [
     {
@@ -25,9 +31,9 @@ const routes: Routes = [
         data: {breadcrumb: 'Orders Status'}
     },
     {
-        path: 'payments/mode',
+        path: 'payments/modes',
         component: PaymentModeLayoutComponent,
-        data: {breadcrumb: 'Payment Mode'}
+        data: {breadcrumb: 'Payments Modes'}
     },
     {
         path: 'users/roles',

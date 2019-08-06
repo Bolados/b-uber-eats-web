@@ -1,1 +1,11 @@
-<p>media-layout works!</p>
+<app-base-area-admin [title]="areaTitle">
+    <app-datastore
+        [title]="storeTitle"
+        [dataSource]="dataSource"
+        [datastore]="datastore"
+        [entity]="entity"
+        [adapter]="adapter"
+        [tableDefinition]="tableDefinition"
+    >
+    </app-datastore>
+</app-base-area-admin>
