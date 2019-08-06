@@ -34,7 +34,7 @@ export class SidemenuItemComponent implements OnInit, AfterViewInit {
 
     openMenu() {
         this.menu.open = !this.menu.open;
-        if(this.checkForChildMenu() && this.iconOnly ) {
+        if (this.checkForChildMenu() && this.iconOnly ) {
             console.log('toogle');
             this.sidebarService.toggleSidebarKind();
         }
