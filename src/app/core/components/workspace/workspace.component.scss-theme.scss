@@ -1,0 +1,68 @@
+@import '~@angular/material/theming';
+@import '~angular-crumbs/style';
+
+@mixin app-workspace-component-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+    $padding-left-right: 30px;
+
+    .workspace {
+        padding: 0;
+        height: 100%;
+
+        .header {
+            background-color: transparent;
+            padding: 0 $padding-left-right;
+            border-bottom: 1px solid;
+            border-bottom-color: mat-color($accent, lighter);
+            height: 55px;
+
+            &.fullscreen {
+                width: calc(100% - 10px);
+            }
+
+            h1 {
+                font-weight: bold;
+                color: mat-color($primary, darker);
+                width: auto;
+                margin: 0;
+                padding: 0;
+                font-size: 24px;
+                text-transform: uppercase;
+                opacity: 0.9;
+            }
+
+            .spacer {
+                flex: 1 1 auto;
+            }
+
+            .breadcrumb {
+                text-decoration: none;
+
+                .mat-button {
+                    font-size: 18px;
+                    padding: unset;
+                }
+
+            }
+
+            .breadcrumb:before {
+                content: '/';
+            }
+        }
+        .content{
+            padding: $padding-left-right;
+        }
+
+        .no-hover-effect.mat-button.mat-primary .mat-button-focus-overlay,
+        .no-hover-effect.mat-button.mat-accent .mat-button-focus-overlay,
+        .no-hover-effect.mat-button.mat-warn .mat-button-focus-overlay
+        {
+            background-color: transparent;
+        }
+    }
+
+
+}

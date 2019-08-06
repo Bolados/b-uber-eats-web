@@ -1,0 +1,35 @@
+@import '~@angular/material/theming';
+@import '../../../../themes/app-variables';
+
+@mixin app-footer-component-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+    .mat-footer {
+        height: var(--appToolbarHeight);
+        background: mat-color($primary);
+        color: var(--appToolbarComponentsColor);
+
+        .footer {
+            height: var(--appToolbarHeight);
+            font-size: 14px;
+            width: 100%;
+            padding: 15px 0;
+        }
+
+        .copyright {
+            float: left;
+            text-align: center;
+            justify-content: center;
+            align-content: center;
+        }
+
+        &.fullscreen {
+            width: calc(100% - 10px);
+            position: sticky;
+            bottom: 0;
+        }
+    }
+
+}

@@ -1,0 +1,15 @@
+<div (mouseleave)="disableHoverItem()" class="side-menu">
+    <perfect-scrollbar class="side-menu-scroller">
+        <div [ngClass]="iconOnly?'side-menu-icon':'side-menu-full'" fxLayout="column">
+            <app-sidemenu-item #menuitem *ngFor="let menu of menus" [iconOnly]="iconOnly"
+                               [menu]="menu" class="side-menu-item"
+            >
+            </app-sidemenu-item>
+        </div>
+    </perfect-scrollbar>
+
+    <div [ngStyle]="hoverStyle()"
+         class="side-menu-item-hover"
+    >
+    </div>
+</div>

@@ -1,0 +1,35 @@
+
+@import '~@angular/material/theming';
+@import '../../../../themes/app-variables';
+
+@mixin app-language-component-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+    $height: var(--appToolbarHeight);
+    $textColor: var(--appToolbarComponentsColor);
+
+    .language {
+        height: $height;
+        width: 45px;
+        color: $textColor;
+
+        .mat-form-field-infix{
+            border-top: 8px solid transparent;
+        }
+
+        .mat-form-field-underline {
+            background-color: transparent;
+        }
+
+        .mat-form-field-underline {
+            height: 0px;
+        }
+    }
+
+    mat-option {
+
+    }
+
+}

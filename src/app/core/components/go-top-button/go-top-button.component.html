@@ -1,0 +1,12 @@
+<button
+    (click)="scrollTop($event)"
+    [@appearInOut]="animationState"
+    [hidden]="isHidden()"
+    [ngClass]="getClasses()"
+    [ngStyle]="getStyles()"
+    [tabIndex]="tabIndex"
+    mat-fab
+>
+    <mat-icon aria-label="go to top of page">keyboard_arrow_up</mat-icon>
+    <ng-content></ng-content>
+</button>

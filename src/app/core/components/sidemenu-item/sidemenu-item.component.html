@@ -1,0 +1,41 @@
+<div class="menu-item">
+    <mat-nav-list [class]="(menu.open)?'side-menu-item-opened':'side-menu-item-closed'"
+                  [ngClass]="{'secondaryMenu': secondaryMenu, 'primary': !secondaryMenu}"
+
+    >
+
+        <mat-list-item (click)="openMenu()" (mouseenter)="hoverMenuItem()" *ngIf="menu.link==false"
+                       class="item"
+        >
+
+            <mat-icon *ngIf="menu?.icon?.mat" iconsmall matListIcon>{{menu.icon.mat}} </mat-icon>
+            <mat-icon *ngIf="menu?.icon?.fa" fontIcon="fa-{{menu.icon.fa}}" fontSet="fa" matListIcon></mat-icon>
+            <h3 *ngIf="!iconOnly" matLine>{{ menu.name }} </h3>
+            <mat-chip-list *ngIf="menu?.chip && !iconOnly">
+                <mat-chip color="menu?.chip?.color">{{menu?.chip?.value}} </mat-chip>
+            </mat-chip-list>
+            <mat-icon  *ngIf="checkForChildMenu() && !iconOnly"
+                       [ngClass]="{'indicateOpen':menu.open}"
+                      class="sidenav-dropdown-indicator rotate "> expand_more
+            </mat-icon>
+        </mat-list-item>
+
+        <mat-list-item #routerLinkActiveInstance="routerLinkActive" (click)="openLink()" (mouseenter)="hoverMenuItem()"
+                       *ngIf="menu.link!=false"
+                       [class.list-item-active]="routerLinkActiveInstance.isActive"
+                       [ngClass]="routerLinkActiveInstance.isActive?'item-active':null"
+                       [routerLink]="[menu.link]"
+                       class="item"
+                       routerLinkActive
+        >
+            <mat-icon *ngIf="menu?.icon?.mat" iconsmall matListIcon>{{menu.icon.mat}} </mat-icon>
+            <mat-icon *ngIf="menu?.icon?.fa" fontIcon="fa-{{menu.icon.fa}}" fontSet="fa" matListIcon></mat-icon>
+            <h3 *ngIf="!iconOnly" matLine>{{ menu.name }} </h3>
+        </mat-list-item>
+
+        <app-sidemenu-item #submenuitem *ngFor="let submenu of menu?.sub" [iconOnly]="iconOnly" [menu]="submenu"
+                           [parent]="menu" class="sub-menu"></app-sidemenu-item>
+
+    </mat-nav-list>
+
+</div>

@@ -1,0 +1,197 @@
+@import '~@angular/material/theming';
+@import '../../../../themes/app-variables';
+
+@mixin common($theme) {
+
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+    $component-color: var(--appToolbarComponentsColor);
+
+    .app-toolbar-logo {
+        color: $component-color;
+    }
+
+    .app-toolbar-menu {
+
+        color: $component-color;
+
+    }
+
+    .app-toolbar-search {
+        color: white;
+
+        mat-form-field.mat-form-field {
+            font-size: 16px;
+            top: 5px;
+
+
+            .mat-form-field-underline {
+                color: mat-color($accent);
+            }
+        }
+
+
+    }
+
+    .app-toolbar-search-btn
+    .app-toolbar-search-icon {
+        color: $component-color;
+        font-size: 18px;
+    }
+
+    .app-toolbar-fullscreen {
+        color: $component-color;
+    }
+
+    .app-toolbar-user-menu {
+        color: $component-color;
+    }
+
+    &.side-nav, &.drawer {
+        -webkit-transition: all .5s ease-in-out;
+        -moz-transition: all .5s ease-in-out;
+        transition: all .5s ease-in-out;
+        -webkit-transition-property: left, width;
+        -moz-transition-property: left, width;
+        transition-property: left, width;
+    }
+
+
+}
+
+@mixin sidenav() {
+
+    $sidenav-width: var(--appSidebarMenuWidth);
+    $sidedrawer-width: var(--appSidebarMenuIconsWidth);
+
+    &.side-nav {
+        width: $sidenav-width;
+    }
+
+    &.drawer {
+        width: 0px;
+    }
+
+}
+
+@mixin drawer() {
+
+    $sidenav-width: var(--appSidebarMenuWidth);
+    $sidedrawer-width: var(--appSidebarMenuIconsWidth);
+
+    &.side-nav {
+        width: 0px;
+    }
+
+    &.drawer {
+        width: $sidedrawer-width;
+    }
+
+}
+
+@mixin sidecontent() {
+
+    $sidenav-width: var(--appSidebarMenuWidth);
+    $sidedrawer-width: var(--appSidebarMenuIconsWidth);
+
+    &.side-nav {
+        left: calc(var(--appSidebarMenuWidth) + var(--appToolbarLeft));
+        width: calc(100% - var(--appSidebarMenuWidth));
+
+        &.fullscreen {
+            width: calc(100% - var(--appSidebarMenuWidth) - 10px);
+        }
+
+    }
+
+    &.drawer {
+        left: calc(var(--appSidebarMenuIconsWidth) + 1px);
+        width: calc(100% - var(--appSidebarMenuIconsWidth));
+
+        &.fullscreen {
+            width: calc(100% - var(--appSidebarMenuIconsWidth) - 10px);
+        }
+    }
+
+}
+
+
+@mixin app-toolbar-component-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+    $background: mat-color($primary);
+    $height: var(--appToolbarHeight);
+    $sidenav-width: var(--appSidebarMenuWidth);
+    $sidedrawer-width: var(--appSidebarMenuIconsWidth);
+
+    .scrolled {
+        background-color: mat-color($primary) !important;
+        opacity: 0.9 !important;
+    }
+
+    .fixed {
+        position: fixed !important;
+    }
+
+
+    .app-toolbar-common {
+
+        background-color: $background;
+        height: $height;
+        z-index: 9000;
+        position: relative;
+        padding-right: 0px;
+        padding-left: 0px;
+
+        &.app-toolbar-sidebar {
+            width: $sidenav-width;
+            @include common($theme);
+            @include sidenav();
+
+            -webkit-transition: all .8s ease-in-out;
+            -moz-transition: all .8s ease-in-out;
+            transition: all .8s ease-in-out;
+            -webkit-transition-property: width;
+            -moz-transition-property: width;
+            transition-property: width;
+
+        }
+
+        &.app-toolbar-sidebar-content {
+            width: calc(100% - 10px);
+            @include common($theme);
+            @include sidecontent();
+        }
+
+        &.app-toolbar-drawer {
+            // width: 80px;
+            .app-toolbar-logo {
+                display: flex;
+
+                .logo-container {
+                    width: unset;
+
+                    .logo-btn {
+                        min-width: unset;
+                        width: 100%;
+                    }
+                }
+            }
+
+            @include common($theme);
+            @include drawer();
+        }
+
+        &.app-toolbar-default {
+            @include common($theme)
+        }
+
+
+    }
+
+
+}

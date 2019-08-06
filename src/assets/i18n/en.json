@@ -1,0 +1,52 @@
+{
+    "GLOBAL_CONFIGURATION": {
+        "PAGINATION": {
+            "FIRST_PAGE_LABEL": "First page",
+            "ITEMS_PER_PAGE_LABEL": "Points per page",
+            "LAST_PAGE_LABEL": "Last page",
+            "NEXT_PAGE_LABEL": "Next page",
+            "PREVIOUS_PAGE_LABEL": "Previous page",
+            "RANGE_PAGE_LABEL_1": "0 to {{length}}",
+            "RANGE_PAGE_LABEL_2": "{{startIndex}} - {{endIndex}} to {{length}}"
+        }
+    },
+    "APP": {
+        "BRAND_LOGO": {
+
+        },
+
+        "TOOLBAR": {
+            "SEARCH": {
+                "PLACEHOLDER": "Search"
+            }
+
+        },
+
+        "SIDEBAR": {
+            "MENU": {
+                "DASHBOARD":{
+                    "TEXT": "Dashboard"
+                }
+            }
+
+        },
+        "AREA": {
+            "ROLE": {
+                "ADMIN": {
+
+                }
+
+            }
+        },
+        "FOOTER": {
+            "COPYRIGHT": {
+                "YEARS": "2019",
+                "TEXT": "All Rights Reserved by Omeganumeric Designed and Developed by bscako"
+            },
+            "THEME_MODE": {
+                "DARK": "Dark",
+                "LIGHT": "Light"
+            }
+        }
+    }
+}

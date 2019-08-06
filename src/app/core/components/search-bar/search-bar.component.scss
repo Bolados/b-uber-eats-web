@@ -1,0 +1,22 @@
+:host {
+    // height: 100%;
+}
+
+.search {
+    width: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .4s cubic-bezier(.35, 0, .25, 1);
+}
+
+.search.search-open {
+    width: 350px;
+    visibility: visible;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+
+
+
+

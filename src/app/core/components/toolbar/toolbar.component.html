@@ -1,0 +1,56 @@
+<!-- <stbui-loading *ngIf="showLoading"></stbui-loading> -->
+
+<mat-toolbar
+    [ngClass]="getClasses()"
+    class="mat-elevation-z4 app-toolbar-common "
+>
+
+    <!-- [showImg] = "!config.isKind(displays.DRAWER)" -->
+    <app-logo
+        *ngIf="config.isKind(displays.SIDEBAR) || config.isKind(displays.DRAWER) || config.isKind(displays.DEFAULT)"
+        [showText]="!config.isKind(displays.DRAWER)"
+        class="app-toolbar-logo"
+    >
+    </app-logo>
+
+    <button
+        (click)="toggleSideBar();"
+        *ngIf="config.isKind(displays.SIDECONTENT) || config.isKind(displays.DEFAULT)" class="app-toolbar-menu"
+        mat-icon-button>
+        <i class="material-icons app-toolbar-menu-icon">menu </i>
+    </button>
+
+    <button
+        (click)="config.search.opened = !config.search.opened"
+        *ngIf="config.isKind(displays.SIDECONTENT) || config.isKind(displays.DEFAULT)"
+        [fxHide.gt-xs]="false" class="app-toolbar-search-btn"
+        fxHide="true" mat-icon-button
+    >
+        <i class="material-icons app-toolbar-search-icon">search</i>
+    </button>
+    <app-search-bar
+        *ngIf="config.isKind(displays.SIDECONTENT) || config.isKind(displays.DEFAULT)"
+        [open]="config.search.opened"
+        class="app-toolbar-search">
+    </app-search-bar>
+
+    <span
+        *ngIf="config.isKind(displays.SIDECONTENT) || config.isKind(displays.DEFAULT)"
+        class="spacer">
+    </span>
+
+    <app-fullscreen
+        *ngIf="config.isKind(displays.SIDECONTENT) || config.isKind(displays.DEFAULT)"
+        class="app-toolbar-fullscreen">
+    </app-fullscreen>
+
+    <app-language *ngIf="config.isKind(displays.SIDECONTENT) || config.isKind(displays.DEFAULT)" ></app-language>
+
+
+    <app-user-menu
+        *ngIf="config.isKind(displays.SIDECONTENT) || config.isKind(displays.DEFAULT)"
+        [currentUser]="toolbarHelpers?.currentUser" class="app-toolbar-user-menu">
+    </app-user-menu>
+
+
+</mat-toolbar>

@@ -1,0 +1,19 @@
+<div *ngIf="showImg || showText" class="logo-container">
+    <button (click)="open()" [disableRipple]="true"
+            [ngStyle.xs]="{'min-width': '70px'}" [routerLink]="[link]"
+            class="logo-btn"
+            mat-button
+    >
+      <div class="logo-content">
+        <img *ngIf="showImg" [src]="url" class="logo">
+        <span *ngIf="showText" class="name">{{name}}<span
+            [ngClass]="highlight?null:'sub-name'"
+            fxHide fxShow.gt-xs
+        >{{sub}}</span>
+        </span>
+      </div>
+
+    </button>
+
+</div>
+

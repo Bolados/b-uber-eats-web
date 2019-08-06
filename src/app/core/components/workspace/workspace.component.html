@@ -1,0 +1,33 @@
+<div class="workspace">
+    <mat-toolbar class="header " header [ngClass]="fullscreen?'fullscreen':null">
+        <h1 class="title">{{ title }}</h1>
+        <div class="spacer"></div>
+        <breadcrumb #parent>
+            <span *ngFor="let route of parent.breadcrumbs" class="breadcrumb">
+                <a
+                    mat-button *ngIf="!route.terminal"
+                    color="accent"
+                   [disableRipple]="true"
+                   [routerLink]="[route.url]"
+                   href=""
+                    class="no-hover-effect"
+                >
+                    {{ route.displayName }}
+                </a>
+                <a
+                    mat-button *ngIf="route.terminal" [disabled]="true"
+                >
+                    {{ route.displayName }}
+                </a>
+            </span>
+        </breadcrumb>
+    </mat-toolbar>
+    <div class="content">
+        <ng-content></ng-content>
+    </div>
+</div>
+
+
+
+
+

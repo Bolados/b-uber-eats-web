@@ -1,0 +1,11 @@
+
+<mat-form-field class = "language" [floatLabel]="'never'">
+    <mat-select
+       [(ngModel)]="selectedLanguage"
+        (ngModelChange)="translateTo()"
+    >
+        <mat-option *ngFor="let lang of translate.getLangs()" [value]="lang">
+            {{lang}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>

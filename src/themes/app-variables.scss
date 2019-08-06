@@ -1,0 +1,26 @@
+
+$variables: (
+    --appToolbarHeight:var(--appToolbarHeight),
+    --appToolbarBackgroundColor: var(--appToolbarBackgroundColor),
+    --appToolbarComponentsColor: var(--appToolbarComponentsColor),
+
+    --appToolbarLogoWidth:var(--appToolbarLogoWidth),
+    --appLogoImgWidth:var(--appLogoImgWidth),
+    --appLogoImgHeight:var(--appLogoImgHeight),
+
+    --appSidebarBackground:var(--appSidebarBackground),
+    --appSidebarTop:var(--appSidebarTop),
+
+    --appSidebarSideMenuItemColor:var(--appSidebarSideMenuItemColor),
+
+    --appSidebarMenuWidth:var(--appSidebarMenuWidth),
+    --appSidebarMenuIconsWidth:var(--appSidebarMenuIconsWidth),
+
+);
+
+
+// grabs the native css variable from the global sass map
+@function var($variable) {
+    @return map-get($variables, $variable);
+}
+

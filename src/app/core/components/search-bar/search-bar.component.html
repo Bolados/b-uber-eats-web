@@ -1,0 +1,18 @@
+<form (ngSubmit)="onSubmit(searchForm.value)"
+      [formGroup]="searchForm" class="form"
+      novalidate>
+    <mat-form-field [floatLabel]="'never'" [ngClass]="{'search-open': open == true}" class="search">
+        <input
+            matInput
+            (focus)="onFocus()"
+            (focusout)="onFocusOut()"
+            autocomplete="off"
+            class="search-input"
+            formControlName="value"
+            placeholder="{{'APP.TOOLBAR.SEARCH.PLACEHOLDER' | translate}}"
+
+        >
+    </mat-form-field>
+</form>
+
+

@@ -1,0 +1,24 @@
+@import '~@angular/material/theming';
+@import './toolbar/toolbar.component.scss-theme';
+@import './user-menu/user-menu.component.scss-theme';
+@import './sidebar/sidebar.component.scss-theme';
+@import './sidemenu/sidemenu.component.scss-theme';
+@import './sidemenu-item/sidemenu-item.component.scss-theme';
+@import './logo/logo.component.scss-theme';
+@import './search-bar/search-bar.component.scss-theme';
+@import './workspace/workspace.component.scss-theme';
+@import './language/language.component.scss-theme';
+@import './footer/footer.component.scss-theme';
+
+@mixin app-core-component-theme($theme) {
+    @include app-toolbar-component-theme($theme);
+    @include app-user-menu-component-theme($theme);
+    @include app-sidebar-component-theme($theme);
+    @include app-sidemenu-component-theme($theme);
+    @include app-sidemenu-item-component-theme($theme, 16px);
+    @include app-logo-component-theme($theme);
+    @include app-search-bar-component-theme($theme);
+    @include app-workspace-component-theme($theme);
+    @include app-language-component-theme($theme);
+    @include app-footer-component-theme($theme);
+}

@@ -1,0 +1,24 @@
+<mat-toolbar [ngClass]="fullscreen? 'fullscreen':null" class="mat-footer">
+
+    <footer class="row footer">
+        <div class="col-md-10 copyright">
+            © {{'APP.FOOTER.COPYRIGHT.YEARS' | translate}} {{'APP.FOOTER.COPYRIGHT.TEXT' | translate}}
+        </div>
+
+        <mat-slide-toggle
+            (toggleChange)="changeTheme()"
+            [checked]="isDarkTheme"
+            class="col-md-2 theme"
+        >
+            <div *ngIf="!isDarkTheme">
+                {{'APP.FOOTER.THEME_MODE.DARK' | translate}}
+            </div>
+            <div *ngIf="isDarkTheme">
+                {{'APP.FOOTER.THEME_MODE.LIGHT' | translate}}
+            </div>
+        </mat-slide-toggle>
+    </footer>
+
+</mat-toolbar>
+
+

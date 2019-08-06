@@ -1,0 +1,90 @@
+<ng-content select="[outsidetoolbar]"></ng-content>
+
+<app-toolbar
+    *ngIf="isSidebarStateNoFixedOutsideToolbar() && config.isOpen(kind.SIDENAV)"
+    class="sidebar-no-fixed-outside-toolbar"
+    [display]="display.SIDEBAR"
+    [fixed]="true"
+    [sidenav]="kind.SIDENAV"
+    [fullscreen]="config.fullscreen"
+></app-toolbar>
+
+<app-toolbar
+    *ngIf="isSidebarStateNoFixedOutsideToolbar() && config.isOpen(kind.DRAWER)"
+    class="sidebar-no-fixed-outside-toolbar"
+    [display]="display.DRAWER"
+    [fixed]="true"
+    [sidenav]="kind.DRAWER"
+    [fullscreen]="config.fullscreen"
+></app-toolbar>
+
+
+<mat-sidenav-container class="sidebar-container" [attr.fullscreen]="config.fullscreen?'fullscreen':null"
+                       [ngStyle]="customSidebarStyle(toolbarModes.OUTSIDE,display.DEFAULT)"
+>
+    <mat-sidenav #sidenav
+                 class="sidenav"
+                 [mode]="config.mode"
+                 [opened]="config.isOpen(kind.SIDENAV)"
+                 style="overflow: hidden;"
+                 [ngClass]="config.opened"
+    >
+        <app-toolbar #toolbarInSidebar
+                     *ngIf="config.shownToolbar()"
+                     [config]="config.toolbars.getToolbar(config.toolbars.kind, display.SIDEBAR).config"
+        ></app-toolbar>
+        <app-sidemenu #navbar class="sidebar-sidemenu"
+                      [ngClass]="{'fixed': config?.fixed}"
+                      [ngStyle]="customSideMenuStyle(config.toolbars.kind, display.SIDEBAR)"
+        ></app-sidemenu>
+        <!--<app-footer (changeTheme)="onThemeChange($event)"></app-footer>-->
+    </mat-sidenav>
+    <mat-sidenav-content class="sidebar-content">
+        <mat-drawer-container [attr.fullscreen]="config.fullscreen?'fullscreen':null">
+            <mat-drawer #drawer
+                        mode="side"
+                        class="sidebar-drawer"
+                        [ngClass]="config.opened"
+                        [opened]="config.isOpen(kind.DRAWER)" style="overflow: hidden;">
+                <app-toolbar #toolbarInDrawer
+                             *ngIf="config.shownToolbar()"
+                             [config]="config.toolbars.getToolbar(config.toolbars.kind, display.DRAWER).config"
+                ></app-toolbar>
+                <app-sidemenu #navbarIcons
+                              class="sidebar-sidemenu sidebar-sidemenu-icons "
+                              [ngClass]="{'fixed': config.fixed}"
+                              [ngStyle]="customSideMenuStyle(config.toolbars.kind,display.DRAWER)"
+                              [iconOnly]="true"
+                ></app-sidemenu>
+            </mat-drawer>
+            <mat-drawer-content class="sidebar-drawer-content" style="overflow: hidden;"
+
+            >
+                <perfect-scrollbar #contentScroller class="contentScroller"
+                                   [ngClass]="{'no-fullscreen': !config.fullscreen}"
+                                   (psYReachStart)="onPsReachStart($event)"
+                                   (psScrollY)="onPsScroll($event)"
+                >
+                    <app-toolbar #toolbarInSidebarContent
+                                 *ngIf="config.shownToolbar()"
+                                 [config]="config.toolbars.getToolbar(config.toolbars.kind, display.SIDECONTENT).config"
+                    ></app-toolbar>
+                    <div
+                        [ngStyle]=" customSidebarContentStyle(config.toolbars.kind, display.SIDECONTENT)"
+                    >
+                        <ng-container>
+                            <ng-content select="[content]"></ng-content>
+                            <ng-content select="[footer]"></ng-content>
+                        </ng-container>
+                    </div>
+                </perfect-scrollbar>
+                <app-go-top-button #gotopbtn class="sidebar-content-go-top-btn"
+                                   [psScroller]="contentScroller"
+                                   [animate]=true
+                                   [speed]=30
+                ></app-go-top-button>
+
+            </mat-drawer-content>
+        </mat-drawer-container>
+    </mat-sidenav-content>
+</mat-sidenav-container>

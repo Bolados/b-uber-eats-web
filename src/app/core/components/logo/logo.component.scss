@@ -1,0 +1,35 @@
+:host {
+    height: 100%;
+}
+
+.logo-container {
+    height: 100%;
+    position: relative;
+
+
+    .logo-btn {
+        display: flex;
+        justify-content: left;
+        height: 100%;
+        // min-width: 160px;
+        width: 100%;
+
+        .logo {
+          width: 35px;
+          height: 35px;
+        }
+
+        .name {
+            // margin: 0 8px 0 8px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .sub-name {
+
+        }
+
+    }
+
+
+}

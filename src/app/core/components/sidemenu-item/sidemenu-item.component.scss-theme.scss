@@ -1,0 +1,105 @@
+@import '~@angular/material/theming';
+@import '../../../../themes/app-variables';
+
+@mixin mat-list-icon($size: 24px) {
+    font-size: $size;
+    height: $size;
+    width: $size;
+}
+
+@mixin mat-chip() {
+    padding: 1px 15px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+
+@mixin app-sidemenu-item-component-theme($theme,$icon-size) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+    // $menu-color: mat-color($accent,lighter);
+    $menu-color: var(--appSidebarSideMenuItemColor);
+    $menu-height: 42px;
+    $menu-max-height: 1200px;
+
+    .menu-item {
+
+        .side-menu-item-closed {
+            height: $menu-height;
+        }
+
+        .side-menu-item-opened {
+            max-height: $menu-max-height;
+        }
+
+        .sidenav-dropdown-indicator {
+            transition: transform .25s;
+
+            &.indicateOpen {
+                transform: rotate(180deg);
+            }
+        }
+
+        mat-nav-list {
+          overflow: hidden;
+          padding-top: 0px;
+
+        }
+
+        .primary {
+            transition: max-height .4s cubic-bezier(.35, 0, .25, 1);
+            padding-top: 0px;
+        }
+
+        .secondaryMenu {
+            background: mat-color($primary, 500);;
+            transition: max-height .4s cubic-bezier(.35, 0, .25, 1);
+            padding-top: 0px;
+        }
+
+        .mat-nav-list .mat-list-item {
+            color: $menu-color;
+            height: $menu-height;
+
+            .mat-list-icon {
+                @include mat-list-icon($icon-size);
+            }
+        }
+
+        .mat-chip:not(.mat-basic-chip) {
+            @include mat-chip()
+        }
+
+        .mat-nav-list .mat-list-item {
+          font-size: 14px;
+        }
+
+        .mat-list-item.list-item-active {
+            font-weight: bold;
+            background-color: mat-color($accent, darker) !important;
+        }
+
+        .mat-list-item:hover {
+            color: mat-color($accent, darker);
+            background-color: mat-color($primary);
+            // border-right: 5px solid mat-color($accent,darker);
+        }
+
+        .item-active {
+            color: $menu-color !important;
+        }
+
+    }
+
+    .sub-menu {
+
+        .menu-item {
+            padding: 0 15px;
+        }
+
+    }
+
+
+}

@@ -1,0 +1,25 @@
+@import '~@angular/material/theming';
+
+// global variable for theme
+
+@mixin app-variables-blur-mint-theme($theme) {
+
+    --appToolbarHeight: 60px;
+    --appToolbarComponentsColor: white;
+    --appToolbarLeft: 1px;
+
+    --appToolbarLogoWidth: 229px;
+    --appLogoImgWidth : 30px;
+    --appLogoImgHeight : 30px;
+
+    --appSidebarBackground: red;
+    --appSidebarTop: var(--appToolbarHeight);
+
+    --appSidebarSideMenuItemColor: white;
+
+    --appSidebarMenuWidth: var(--appToolbarLogoWidth);
+    --appSidebarMenuIconsWidth: 62px;
+
+
+
+}

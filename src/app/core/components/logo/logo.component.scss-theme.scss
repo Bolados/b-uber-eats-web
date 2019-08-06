@@ -1,0 +1,53 @@
+@import '~@angular/material/theming';
+@import '../../../../themes/app-variables';
+
+@mixin app-logo-component-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+
+  $component-color: var(--appToolbarComponentsColor);
+  $brand-logo-width: var(--appToolbarLogoWidth);
+
+  $logo-width: var(--appLogoImgWidth);
+  $logo-height: var(--appLogoImgHeight);
+
+  .mat-button-focus-overlay {
+      background-color: transparent;
+  }
+
+  .logo-container {
+
+      width: $brand-logo-width;
+
+      .logo-btn {
+
+        padding: 0px 10px;
+
+        .logo-content {
+
+          display: flex;
+          justify-content: center;
+
+          .logo {
+            width: $logo-width;
+            height: $logo-height;
+          }
+
+          .name {
+            color: mat-color($accent, darker);
+          }
+
+          .sub-name {
+            color: $component-color;
+          }
+        }
+
+      }
+
+
+
+
+  }
+
+}
