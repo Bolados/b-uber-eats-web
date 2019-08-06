@@ -3,7 +3,7 @@ import {FormControl, Validators} from '@angular/forms';
 import {TableDefinition, TableExtension} from './table-definition.model';
 
 
-export class Region extends Resource implements TableExtension {
+export class Region extends TableExtension {
 
     code: string;
     name: string;
@@ -21,8 +21,6 @@ export class Region extends Resource implements TableExtension {
         }
         return null;
     }
-
-    start() {}
 
     public static get TABLE_DEFINITION(): TableDefinition<Region> {
         return {
@@ -66,8 +64,8 @@ export class Region extends Resource implements TableExtension {
                             {value: start, disabled},
                             [
                                 Validators.required,
-                                // Validators.minLength(2),
-                                // Validators.maxLength(2)
+                                Validators.minLength(2),
+                                Validators.maxLength(2)
                             ]
                         ),
                         error: {

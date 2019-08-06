@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
-import {MatCheckbox, MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatCheckbox, MatDialog, MatPaginator, MatSort, MatTableDataSource, MatHint} from '@angular/material';
 import Swal from 'sweetalert2';
 import {DatastoreDialogComponent, DatastoreDialogInputData, DatastoreDialogType} from '../../dialogs/datastore-dialog';
 import {Overlay} from '@angular/cdk/overlay';
@@ -25,10 +25,44 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     @ViewChild(MatSort, {static: false}) sort: MatSort;
     @ViewChild('filter', {static: false}) filter: ElementRef;
     @ViewChildren('rowSelection') rowSelections: Array<MatCheckbox>;
+    @ViewChildren('rowSelectionIds') rowSelectionsIds: Array<ElementRef>;
 
     rowsSelectionSelected = false;
     rowsSelectionIndeterminate = false;
     isSelectionClicked = true;
+
+    removeList(elements: Array<any>) {
+        console.log('remove list', elements);
+        elements.forEach(data => {
+            // const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
+            // this.datastore.data.value.splice(foundIndex, 1);
+            // this.datastore.data.next(this.datastore.data.value);
+            // this.refreshTable();
+            // Swal.fire({
+            //     title: 'Successfully deleted',
+            //     type: 'success',
+            //     timer: 1000,
+            //     showConfirmButton: false,
+            // });
+            this.datastore.delete(data).subscribe(
+                result => {
+                    console.log('deleted result', result);
+                    // for delete we use splice in order to remove single object from DataService
+                    const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
+                    this.datastore.data.value.splice(foundIndex, 1);
+                    this.datastore.data.next(this.datastore.data.value);
+                    this.refreshTable();
+                },
+                (err: HttpErrorResponse) => {
+                    Swal.fire({
+                        title: 'Error occurred ',
+                        text: 'Details: ' + err,
+                        type: 'error',
+                        showConfirmButton: true,
+                    });
+            });
+        });
+    }
 
     remove(data) {
         console.log('remove', data);
@@ -177,6 +211,44 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         });
     }
 
+    details(element) {
+        this.isSelectionClicked = false;
+        console.log('details: ', element);
+        const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.DETAILS, element);
+        const dialogRef = this.dialog.open(DatastoreDialogComponent, {
+            panelClass: 'dialog',
+            data,
+            scrollStrategy: this.overlay.scrollStrategies.noop(),
+            hasBackdrop: false,
+        });
+        dialogRef.afterClosed().subscribe(() => {
+            if (data.data) {
+                console.log('after close', data.data);
+                this.save(data.data);
+                this.refreshTable();
+            }
+        });
+    }
+
+    edit(element) {
+        this.isSelectionClicked = false;
+        console.log('edit: ', element);
+        const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.UPDATE, element);
+        const dialogRef = this.dialog.open(DatastoreDialogComponent, {
+            panelClass: 'dialog',
+            data,
+            scrollStrategy: this.overlay.scrollStrategies.noop(),
+            hasBackdrop: false,
+        });
+        dialogRef.afterClosed().subscribe(() => {
+            if (data.data) {
+                console.log('after close', data.data);
+                this.update(data.data);
+                this.refreshTable();
+            }
+        });
+    }
+
     delete(element) {
         this.isSelectionClicked = false;
         Swal.fire({
@@ -191,6 +263,49 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
                 this.remove(element);
             }
         });
+    }
+
+    deleteSelection() {
+        const elements: Array<any> = this.selectedData();
+        console.log('deletings ', elements);
+        if ( elements.length > 0) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Once deleted, you will not be able to recover it!',
+                type: 'warning',
+                showConfirmButton: true,
+                showCancelButton: true
+            })
+            .then((willDelete) => {
+                if (willDelete.value) {
+                    this.removeList(elements);
+                }
+            });
+        }
+    }
+
+    selectedIds(): number[] {
+        const result = [];
+        if ( this.rowSelections && this.rowSelectionsIds) {
+            this.rowSelections.forEach((value, index) => {
+                if ( value.checked ) {
+                    const found: ElementRef[] = this.rowSelectionsIds.filter((v, i) => i === index);
+                    if (found.length === 1) {
+                        const id = found[0].nativeElement.value;
+                        result.push(id);
+                    }
+                }
+            });
+        }
+        return result;
+    }
+
+    selectedData() {
+        const ids: number[] = this.selectedIds();
+        if ( ids.length > 0) {
+            return this.datastore.data.value.filter(data => ids.includes(data.id));
+        }
+        return ids;
     }
 
     countSelectedRow() {
@@ -242,44 +357,6 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
             });
         }
 
-    }
-
-    details(element) {
-        this.isSelectionClicked = false;
-        console.log('details: ', element);
-        const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.DETAILS, element);
-        const dialogRef = this.dialog.open(DatastoreDialogComponent, {
-            panelClass: 'dialog',
-            data,
-            scrollStrategy: this.overlay.scrollStrategies.noop(),
-            hasBackdrop: false,
-        });
-        dialogRef.afterClosed().subscribe(() => {
-            if (data.data) {
-                console.log('after close', data.data);
-                this.save(data.data);
-                this.refreshTable();
-            }
-        });
-    }
-
-    edit(element) {
-        this.isSelectionClicked = false;
-        console.log('edit: ', element);
-        const data: DatastoreDialogInputData<any> = this.data(DatastoreDialogType.UPDATE, element);
-        const dialogRef = this.dialog.open(DatastoreDialogComponent, {
-            panelClass: 'dialog',
-            data,
-            scrollStrategy: this.overlay.scrollStrategies.noop(),
-            hasBackdrop: false,
-        });
-        dialogRef.afterClosed().subscribe(() => {
-            if (data.data) {
-                console.log('after close', data.data);
-                this.update(data.data);
-                this.refreshTable();
-            }
-        });
     }
 
     constructor(

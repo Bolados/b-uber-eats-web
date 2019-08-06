@@ -1,4 +1,5 @@
 import {FormControl} from '@angular/forms';
+import { Resource } from '@lagoshny/ngx-hal-client';
 
 
 export interface TableDefinition<T> {
@@ -33,10 +34,8 @@ export interface ErrorElementType {
     pattern?: string;
 }
 
-export interface TableExtension {
-    selected?: boolean;
-    highlighted?: boolean;
-    hovered?: boolean;
-
-    start();
+export abstract class TableExtension extends Resource {
+    selected = false;
+    highlighted = false;
+    hovered = false;
 }
