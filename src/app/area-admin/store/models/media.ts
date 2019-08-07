@@ -1,5 +1,6 @@
 import { TableDefinition } from './table-definition.model';
 import { MetaEntity } from './entitiy.meta';
+import { Validators, FormControl } from '@angular/forms';
 
 export class Media extends MetaEntity<Media> {
 
@@ -18,6 +19,55 @@ export class Media extends MetaEntity<Media> {
 
         definition.table = [
             ...definition.table,
+
+            {
+                def: 'src',
+                cell: (element: Media) => element.src,
+                el: {
+                    add: {
+                        input: true,
+                    },
+                    update: {
+                        input: true,
+                    },
+                    details: {
+                        input: true,
+                    },
+                    control: (start, disabled = false) => new FormControl(
+                        {value: start, disabled},
+                        [
+                            Validators.required,
+                        ]
+                    ),
+                    error: {
+                        required: 'required',
+                    }
+                }
+            },
+            {
+                def: 'name',
+                cell: (element: Media) => element.mineType,
+                el: {
+                    add: {
+                        input: true,
+                    },
+                    update: {
+                        input: true,
+                    },
+                    details: {
+                        input: true,
+                    },
+                    control: (start, disabled = false) => new FormControl(
+                        {value: start, disabled},
+                        [
+                            Validators.required,
+                        ]
+                    ),
+                    error: {
+                        required: 'required',
+                    }
+                }
+            },
         ];
         return definition;
     }

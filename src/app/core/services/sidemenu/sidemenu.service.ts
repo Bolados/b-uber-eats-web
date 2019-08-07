@@ -10,7 +10,8 @@ export class SidemenuService {
 
     @Output() hoverItemEmitter: EventEmitter<SidemenuItemComponent> = new EventEmitter();
     @Output() menuEmitter: EventEmitter<Array<MenuItem>> = new EventEmitter();
-    private menu = menus;
+
+    private menu: MenuItem[] = [];
 
     constructor() {
     }
@@ -19,13 +20,33 @@ export class SidemenuService {
         this.hoverItemEmitter.emit(item);
     }
 
-    changeMenu(menu) {
+    changeMenu(menu: MenuItem[]) {
         this.menu = menu;
+        this.sortMenu();
         this.menuEmitter.emit(menu);
     }
 
     getMenu() {
         return this.menu;
+    }
+
+    closeSubMenu() {
+        this.menu.forEach(menuItem => {
+            menuItem.open = false;
+        });
+    }
+
+    sortMenu() {
+        this.menu.sort((a, b) => (a.name > b.name) ? 1 : -1);
+        this.menu.forEach(submenu => {
+            if (submenu.sub) {
+                submenu.sub.sort((a, b) => (a.name > b.name) ? 1 : -1);
+                const chip = submenu.chip;
+                const value = 'value';
+                chip[value] = submenu.sub.length;
+                submenu.chip =  chip;
+            }
+        });
     }
 
 }

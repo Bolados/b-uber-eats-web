@@ -1,6 +1,7 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {SidebarTools} from '../../tools';
 import {SidebarKind} from '../../domains/enums';
+import { SidemenuService } from '../sidemenu';
 
 @Injectable({
     providedIn: 'root'
@@ -19,6 +20,7 @@ export class SidebarService {
     toggleSidebarKind() {
         let kind: SidebarKind = SidebarKind.UNDEFINED;
         if (SidebarTools.isSame(SidebarKind.SIDENAV, this.kind)) {
+            this.sidemenuService.closeSubMenu();
             kind = SidebarKind.DRAWER;
         }
         if (SidebarTools.isSame(SidebarKind.DRAWER, this.kind)) {
@@ -31,6 +33,11 @@ export class SidebarService {
     toggleSideBarMode(mode: string) {
         this.mode = mode;
         this.sidebarModeEmitter.emit(this.mode);
+    }
+
+    constructor(
+        private sidemenuService: SidemenuService,
+    ){
     }
 
 

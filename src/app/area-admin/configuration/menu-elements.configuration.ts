@@ -69,7 +69,7 @@ const menuItems: MenuItem[] = [
                 link: '/admin/store/payments/modes',
                 icon: {
                     mat: false,
-                    fa: 'question-circle'
+                    fa: 'money-check'
                 },
                 chip: false,
                 open: false,
