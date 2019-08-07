@@ -11,9 +11,9 @@ import {API_RESOURCES_MEDIA} from 'src/app/area-admin/configuration';
 })
 export class MediaLayoutComponent implements OnInit {
 
-    areaTitle = 'Media';
+    areaTitle = 'Medias';
 
-    storeTitle = 'Media';
+    storeTitle = 'Medias';
     datastore: DatastoreService<Media> | null;
     entity = Media;
     adapter: (item: any) => Media = new Media().adapter;

@@ -11,9 +11,9 @@ import {API_RESOURCES_USERS_ROLE} from 'src/app/area-admin/configuration';
 })
 export class RoleLayoutComponent implements OnInit {
 
-    areaTitle = 'Phones';
+    areaTitle = 'Users Roles';
 
-    storeTitle = 'Phone';
+    storeTitle = 'Users Role';
     datastore: DatastoreService<Role> | null;
     entity = Role;
     adapter: (item: any) => Role = new Role().adapter;

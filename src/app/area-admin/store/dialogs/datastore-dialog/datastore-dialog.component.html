@@ -12,7 +12,7 @@
         <div *ngFor="let field of data?.tableDefinition?.table">
             <!-- save fields -->
             <div *ngIf="isSaveDialog()">
-                <div *ngIf="field?.el?.add?.valueOf('input')">
+                <div *ngIf="field?.el?.add?.value[field?.el?.add?.type]">
                     <mat-form-field color="primary">
                         <input matInput #input
                                formControlName="{{field?.def}}"
@@ -37,7 +37,7 @@
 
             <!-- update fields -->
             <div *ngIf="isUpdateDialog()">
-                <div *ngIf="field?.el?.update?.valueOf('input')">
+                <div *ngIf="field?.el?.update?.value[field?.el?.update?.type]">
                     <mat-form-field color="primary">
                         <input matInput #input
                                formControlName="{{field?.def}}"
@@ -62,7 +62,7 @@
 
             <!-- details fields -->
             <div *ngIf="isDetailsDialog()">
-                <div *ngIf="field?.el?.details?.valueOf('input')">
+                <div *ngIf="field?.el?.details?.value[field?.el?.details?.type]">
                     <mat-form-field color="primary">
                         <input matInput #input
                                formControlName="{{field?.def}}"

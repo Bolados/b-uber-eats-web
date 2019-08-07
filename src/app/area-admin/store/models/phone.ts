@@ -26,20 +26,35 @@ export class Phone extends MetaEntity<Phone> {
                 cell: (element: Phone) => element.number,
                 el: {
                     add: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                                Validators.pattern(new RegExp('^[0-9]+$'))
+                            ],
+                        }
                     },
                     update: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                                Validators.pattern(new RegExp('^[0-9]+$'))
+                            ],
+                        },
                     },
                     details: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: false,
+                        }
                     },
-                    control: (start, disabled = false) => new FormControl(
+                    control: (start, validators, disabled = false) => new FormControl(
                         {value: start, disabled},
-                        [
-                            Validators.required,
-                            Validators.pattern(new RegExp('^[0-9]+$'))
-                        ]
+                        validators ? validators : [],
                     ),
                     error: {
                         required: 'required',

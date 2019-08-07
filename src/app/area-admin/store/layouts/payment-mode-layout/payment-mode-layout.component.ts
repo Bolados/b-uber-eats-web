@@ -11,9 +11,9 @@ import {API_RESOURCES_PAYMENTS_MODE} from 'src/app/area-admin/configuration';
 })
 export class PaymentModeLayoutComponent implements OnInit {
 
-    areaTitle = 'Payment Modes';
+    areaTitle = 'Payments Modes';
 
-    storeTitle = 'Payment Mode';
+    storeTitle = 'Payments Mode';
     datastore: DatastoreService<PaymentMode> | null;
     entity = PaymentMode;
     adapter: (item: any) => PaymentMode = new PaymentMode().adapter;

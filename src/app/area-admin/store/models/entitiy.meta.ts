@@ -70,21 +70,33 @@ export abstract class MetaEntity<T> extends Resource implements Entity<T> {
                     def: idDef,
                     cell: (element: T) => element[idDef],
                     el: {
-                        add: false,
+                        add: {
+                            type: 'input',
+                            value: {
+                                input: false,
+                                validators: false,
+                            }
+                        },
                         update: {
-                            input: true,
+                            type: 'input',
+                            value: {
+                                input: true,
+                                validators: false,
+                            }
                         },
                         details: {
-                            input: true,
+                            type: 'input',
+                            value: {
+                                input: true,
+                                validators: false,
+                            }
                         },
-                        control: (start, disabled = true) => new FormControl(
-                            {value: start, disabled},
-                            [
-                                // Validators.required
-                            ]
+                        control: (value, validators, disabled = true) => new FormControl(
+                            {value, disabled},
+                            validators ? validators : [],
                         ),
                         error: {
-                            required: 'required'
+                            required: 'required',
                         }
                     }
                 }

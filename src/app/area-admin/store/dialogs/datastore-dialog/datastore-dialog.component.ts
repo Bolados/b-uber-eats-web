@@ -1,9 +1,9 @@
 import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {Resource} from '@lagoshny/ngx-hal-client';
 import Swal from 'sweetalert2';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, ValidatorFn} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {TableDefinition} from '../../models';
+import {TableDefinition, FieldDefinition, validatorsOf, FieldElementDefinitionType} from '../../models';
 
 export enum DatastoreDialogType {
     UPDATE = 'Update',
@@ -46,14 +46,30 @@ export class DatastoreDialogComponent implements OnInit {
                 if (data.kind !== DatastoreDialogType.SAVE) {
                     start = data.data[field.def];
                 }
-                config[field.def] = field.el.control(start);
+                console.log(data.kind, field.def, this.validators(field));
+                config[field.def] = field.el.control(start, this.validators(field));
                 if (data.kind === DatastoreDialogType.DETAILS) {
-                    config[field.def] = field.el.control(start, true);
+                    config[field.def] = field.el.control(start, this.validators(field), true);
                 }
 
             });
             this.formGroup = this.formBuilder.group(config);
         }
+    }
+
+    validators(field: FieldDefinition<any>): Array<ValidatorFn> | false {
+        const def = 'validators';
+        let validators: Array<ValidatorFn> | false = false;
+        if (field && field.el && this.isSaveDialog()) {
+            validators = validatorsOf(FieldElementDefinitionType.add, field.el);
+        }
+        if (field && field.el && this.isUpdateDialog()) {
+            validators = validatorsOf(FieldElementDefinitionType.update, field.el);
+        }
+        if (field && field.el && this.isDetailsDialog()) {
+            validators = validatorsOf(FieldElementDefinitionType.details, field.el);
+        }
+        return validators;
     }
 
     ngOnInit() {

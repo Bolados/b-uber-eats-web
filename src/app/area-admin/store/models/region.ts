@@ -25,21 +25,37 @@ export class Region extends MetaEntity<Region> {
                 cell: (element: Region) => element.code,
                 el: {
                     add: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                                Validators.minLength(2),
+                                Validators.maxLength(2)
+                            ],
+                        }
                     },
                     update: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                                Validators.minLength(2),
+                                Validators.maxLength(2)
+                            ],
+                        },
                     },
                     details: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: false,
+                        }
                     },
-                    control: (start, disabled = false) => new FormControl(
+                    control: (start, validators, disabled = false) => new FormControl(
                         {value: start, disabled},
-                        [
-                            Validators.required,
-                            Validators.minLength(2),
-                            Validators.maxLength(2)
-                        ]
+                        validators ? validators : [],
                     ),
                     error: {
                         required: 'required',
@@ -53,19 +69,33 @@ export class Region extends MetaEntity<Region> {
                 cell: (element: Region) => element.name,
                 el: {
                     add: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                            ],
+                        }
                     },
                     update: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                            ],
+                        },
                     },
                     details: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: false,
+                        }
                     },
-                    control: (start, disabled = false) => new FormControl(
+                    control: (start, validators, disabled = false) => new FormControl(
                         {value: start, disabled},
-                        [
-                            Validators.required,
-                        ]
+                        validators ? validators : [],
                     ),
                     error: {
                         required: 'required',

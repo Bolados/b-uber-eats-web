@@ -5,7 +5,7 @@ import { Validators, FormControl } from '@angular/forms';
 export class Media extends MetaEntity<Media> {
 
 
-    src: string = null;
+    name: string = null;
     mineType: string = null;
     menu: any = null;
 
@@ -21,23 +21,37 @@ export class Media extends MetaEntity<Media> {
             ...definition.table,
 
             {
-                def: 'src',
-                cell: (element: Media) => element.src,
+                def: 'name',
+                cell: (element: Media) => element.name,
                 el: {
                     add: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                            ],
+                        }
                     },
                     update: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                            ],
+                        },
                     },
                     details: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: false,
+                        }
                     },
-                    control: (start, disabled = false) => new FormControl(
+                    control: (start, validators, disabled = false) => new FormControl(
                         {value: start, disabled},
-                        [
-                            Validators.required,
-                        ]
+                        validators ? validators : [],
                     ),
                     error: {
                         required: 'required',
@@ -45,23 +59,37 @@ export class Media extends MetaEntity<Media> {
                 }
             },
             {
-                def: 'name',
+                def: 'mineType',
                 cell: (element: Media) => element.mineType,
                 el: {
                     add: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                            ],
+                        }
                     },
                     update: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                            ],
+                        },
                     },
                     details: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: false,
+                        }
                     },
-                    control: (start, disabled = false) => new FormControl(
+                    control: (start, validators, disabled = false) => new FormControl(
                         {value: start, disabled},
-                        [
-                            Validators.required,
-                        ]
+                        validators ? validators : [],
                     ),
                     error: {
                         required: 'required',

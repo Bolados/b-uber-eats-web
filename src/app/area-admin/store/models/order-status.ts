@@ -25,19 +25,33 @@ export class OrderStatus extends MetaEntity<OrderStatus> {
                 cell: (element: OrderStatus) => element.status,
                 el: {
                     add: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                            ],
+                        }
                     },
                     update: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: [
+                                Validators.required,
+                            ],
+                        },
                     },
                     details: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: false,
+                        }
                     },
-                    control: (start, disabled = false) => new FormControl(
+                    control: (start, validators, disabled = false) => new FormControl(
                         {value: start, disabled},
-                        [
-                            Validators.required,
-                        ]
+                        validators ? validators : [],
                     ),
                     error: {
                         required: 'required',
@@ -49,19 +63,29 @@ export class OrderStatus extends MetaEntity<OrderStatus> {
                 cell: (element: OrderStatus) => element.description,
                 el: {
                     add: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: false,
+                        }
                     },
                     update: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: false,
+                        },
                     },
                     details: {
-                        input: true,
+                        type: 'input',
+                        value: {
+                            input: true,
+                            validators: false,
+                        }
                     },
-                    control: (start, disabled = false) => new FormControl(
+                    control: (start, validators, disabled = false) => new FormControl(
                         {value: start, disabled},
-                        [
-                            Validators.required,
-                        ]
+                        validators ? validators : [],
                     ),
                     error: {
                         required: 'required',

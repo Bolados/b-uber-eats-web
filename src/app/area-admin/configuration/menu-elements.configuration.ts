@@ -65,7 +65,7 @@ const menuItems: MenuItem[] = [
             },
             {
                 translate: 'SIDEBAR.MENU.STORE',
-                name: 'Payment Mode',
+                name: 'Payments Modes',
                 link: '/admin/store/payments/modes',
                 icon: {
                     mat: false,
@@ -77,7 +77,7 @@ const menuItems: MenuItem[] = [
             },
             {
                 translate: 'SIDEBAR.MENU.STORE',
-                name: 'Phone',
+                name: 'Phones',
                 link: '/admin/store/phones',
                 icon: {
                     mat: false,
@@ -89,7 +89,7 @@ const menuItems: MenuItem[] = [
             },
             {
                 translate: 'SIDEBAR.MENU.STORE',
-                name: 'Role',
+                name: 'Users Roles',
                 link: '/admin/store/users/roles',
                 icon: {
                     mat: false,
