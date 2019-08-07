@@ -1,9 +1,8 @@
-import { Component, OnInit, Injector } from '@angular/core';
-import { DatastoreService } from '../../services';
-import { Phone, PaymentMode } from '../../models';
-import { TableDefinition } from '../../models/table-definition.model';
-import { MatTableDataSource } from '@angular/material';
-import { API_RESOURCES_PHONE } from 'src/app/area-admin/configuration';
+import {Component, Injector, OnInit} from '@angular/core';
+import {DatastoreService} from '../../services';
+import {Phone, TableDefinition} from '../../models';
+import {MatTableDataSource} from '@angular/material';
+import {API_RESOURCES_PHONE} from 'src/app/area-admin/configuration';
 
 @Component({
   selector: 'app-phone-layout',

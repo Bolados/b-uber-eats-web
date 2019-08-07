@@ -1,13 +1,12 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
-import {MatCheckbox, MatDialog, MatPaginator, MatSort, MatTableDataSource, MatHint} from '@angular/material';
+import {MatCheckbox, MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import Swal from 'sweetalert2';
 import {DatastoreDialogComponent, DatastoreDialogInputData, DatastoreDialogType} from '../../dialogs/datastore-dialog';
 import {Overlay} from '@angular/cdk/overlay';
 import {fromEvent} from 'rxjs';
 import {DatastoreService} from '../../services';
-import {TableDefinition} from '../../models/table-definition.model';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Region } from '../../models';
+import {TableDefinition} from '../../models';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-datastore',
@@ -197,13 +196,10 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     }
 
     canOpenDialog(data: DatastoreDialogInputData<any>): boolean {
-        if (this.dialogRef ) {
+        if (this.dialogRef) {
             return false;
         }
-        if (data && data.tableDefinition && data.tableDefinition.table && data.tableDefinition.table.length > 1) {
-            return true;
-        }
-        return false;
+        return (data && data.tableDefinition && data.tableDefinition.table && data.tableDefinition.table.length > 1);
     }
 
     add() {

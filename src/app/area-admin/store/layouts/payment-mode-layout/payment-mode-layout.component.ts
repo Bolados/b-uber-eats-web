@@ -1,9 +1,8 @@
-import { Component, OnInit, Injector } from '@angular/core';
-import { PaymentMode } from '../../models';
-import { DatastoreService } from '../../services';
-import { TableDefinition } from '../../models/table-definition.model';
-import { MatTableDataSource } from '@angular/material';
-import { API_RESOURCES_PAYMENTS_MODE } from 'src/app/area-admin/configuration';
+import {Component, Injector, OnInit} from '@angular/core';
+import {PaymentMode, TableDefinition} from '../../models';
+import {DatastoreService} from '../../services';
+import {MatTableDataSource} from '@angular/material';
+import {API_RESOURCES_PAYMENTS_MODE} from 'src/app/area-admin/configuration';
 
 @Component({
   selector: 'app-payment-mode-layout',

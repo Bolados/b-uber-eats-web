@@ -1,4 +1,4 @@
-import { MenuItem } from 'src/app/core/domains';
+import {MenuItem} from 'src/app/core/domains';
 
 
 const menuItems: MenuItem[] = [
@@ -41,8 +41,8 @@ const menuItems: MenuItem[] = [
             },
             {
                 translate: 'SIDEBAR.MENU.STORE',
-                name: 'Media',
-                link: '/admin/store/media',
+                name: 'Medias',
+                link: '/admin/store/medias',
                 icon: {
                     mat: false,
                     fa: 'image'

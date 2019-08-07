@@ -3,7 +3,7 @@ import {Resource} from '@lagoshny/ngx-hal-client';
 import Swal from 'sweetalert2';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {TableDefinition} from '../../models/table-definition.model';
+import {TableDefinition} from '../../models';
 
 export enum DatastoreDialogType {
     UPDATE = 'Update',

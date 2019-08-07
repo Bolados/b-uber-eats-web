@@ -1,9 +1,8 @@
-import { Component, OnInit, Injector } from '@angular/core';
-import { DatastoreService } from '../../services';
-import { Media } from '../../models';
-import { TableDefinition } from '../../models/table-definition.model';
-import { MatTableDataSource } from '@angular/material';
-import { API_RESOURCES_MEDIA } from 'src/app/area-admin/configuration';
+import {Component, Injector, OnInit} from '@angular/core';
+import {DatastoreService} from '../../services';
+import {Media, TableDefinition} from '../../models';
+import {MatTableDataSource} from '@angular/material';
+import {API_RESOURCES_MEDIA} from 'src/app/area-admin/configuration';
 
 @Component({
   selector: 'app-media-layout',

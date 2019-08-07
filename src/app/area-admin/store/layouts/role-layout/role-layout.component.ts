@@ -1,9 +1,8 @@
-import { Component, OnInit, Injector } from '@angular/core';
-import { Role } from '../../models';
-import { DatastoreService } from '../../services';
-import { TableDefinition } from '../../models/table-definition.model';
-import { MatTableDataSource } from '@angular/material';
-import { API_RESOURCES_USERS_ROLE } from 'src/app/area-admin/configuration';
+import {Component, Injector, OnInit} from '@angular/core';
+import {Role, TableDefinition} from '../../models';
+import {DatastoreService} from '../../services';
+import {MatTableDataSource} from '@angular/material';
+import {API_RESOURCES_USERS_ROLE} from 'src/app/area-admin/configuration';
 
 @Component({
   selector: 'app-role-layout',
