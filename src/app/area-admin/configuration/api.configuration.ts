@@ -6,3 +6,4 @@ export const API_RESOURCES_ORDERS_STATUS = 'orders_statuses';
 export const API_RESOURCES_PAYMENTS_MODE = 'payments_modes';
 export const API_RESOURCES_PHONE = 'phones';
 export const API_RESOURCES_USERS_ROLE = 'users_roles';
+export const API_RESOURCES_COUNTRY = 'countries';

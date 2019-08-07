@@ -99,6 +99,18 @@ const menuItems: MenuItem[] = [
                 open: false,
                 sub: false
             },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Countries',
+                link: '/admin/store/countries',
+                icon: {
+                    mat: false,
+                    fa: 'flag'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
         ]
     },
     {

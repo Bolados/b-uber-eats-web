@@ -1,6 +1,6 @@
 import {Resource} from '@lagoshny/ngx-hal-client';
 import {Entity} from './entity';
-import {TableDefinition} from './table-definition.model';
+import {TableDefinition, ErrorElementType} from './table-definition.model';
 import {FormControl} from '@angular/forms';
 
 function idFromHref(href: string) {
@@ -21,6 +21,7 @@ function setExtentionFieldsTo(entity) {
 }
 
 export abstract class MetaEntity<T> extends Resource implements Entity<T> {
+    public static idDef = 'id';
     localId: string = null;
     selected: boolean;
     highlighted: boolean;
@@ -44,6 +45,22 @@ export abstract class MetaEntity<T> extends Resource implements Entity<T> {
         this.localId = id;
     }
 
+    get errors(): ErrorElementType {
+        return {
+            required: 'required',
+            minlength: 'least than required',
+            maxlength: 'greater than required',
+            pattern: 'pattern error'
+        };
+    }
+
+    safeValue(object: object, field: string) {
+        if (object) {
+            return object[field];
+        }
+        return null;
+    }
+
 
     adapter(item: any): T {
         const links = '_links';
@@ -61,14 +78,14 @@ export abstract class MetaEntity<T> extends Resource implements Entity<T> {
     }
 
     table_definition(): TableDefinition<T> {
-
-        const idDef = 'id';
-
         return {
             table: [
                 {
-                    def: idDef,
-                    cell: (element: T) => element[idDef],
+                    def: MetaEntity.idDef,
+                    row: {
+                        display: true,
+                        cell: (element: T) => element[MetaEntity.idDef],
+                    },
                     el: {
                         add: {
                             type: 'input',

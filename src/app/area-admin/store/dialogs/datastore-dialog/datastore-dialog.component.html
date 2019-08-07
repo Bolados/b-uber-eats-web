@@ -2,149 +2,199 @@
 
     <h3 mat-dialog-title>{{data.kind}} {{data.title}}</h3>
 
-    <form
-        [formGroup]="formGroup"
-        #ngform="ngForm"
-        (ngSubmit)="submit(formGroup.value)"
-        novalidate
-        mat-dialog-content
-    >
-        <div *ngFor="let field of data?.tableDefinition?.table">
-            <!-- save fields -->
-            <div *ngIf="isSaveDialog()">
-                <div *ngIf="field?.el?.add?.value[field?.el?.add?.type]">
-                    <mat-form-field color="primary">
-                        <input matInput #input
-                               formControlName="{{field?.def}}"
-                               name="{{field?.def}}"
-                               placeholder="{{field?.def}}"
-                        >
-                        <mat-hint></mat-hint>
-                        <mat-error
-                            *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
-                            {{
+    <perfect-scrollbar>
+        <form
+            [formGroup]="formGroup"
+            #ngform="ngForm"
+            (ngSubmit)="submit(formGroup.value)"
+            novalidate
+            mat-dialog-content
+        >
+            <div *ngFor="let field of data?.tableDefinition?.table">
+                <!-- save fields -->
+                <div *ngIf="isSaveDialog()">
+                    <div *ngIf="field?.el?.add?.value[field?.el?.add?.type]">
+                        <mat-form-field color="primary">
+                            <input
+                                *ngIf="field?.el?.add?.type === 'input'"
+                                matInput #input
+                                formControlName="{{field?.def}}"
+                                name="{{field?.def}}"
+                                placeholder="{{field?.def}}"
+                                [required]="isRequiredField(field?.el?.add?.value.validators)"
+                                type="{{field?.el?.add?.value?.type}}"
+                            >
+                            <mat-select
+                                *ngIf="field?.el?.add?.type === 'select'"
+                                formControlName="{{field?.def}}"
+                                placeholder="{{field?.def}}"
+                                [required]="isRequiredField(field?.el?.add?.value.validators)"
+                            >
+                                <mat-option *ngFor="let item of relationsData(field?.related?.name)" [value]="item">
+                                {{item[field?.related?.field]}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint></mat-hint>
+                            <mat-error
+                                *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
+                                {{
+                                    getErrorMessage(
+                                        field?.el?.error,
+                                        field?.def
+                                    )
+                                }}
+                            </mat-error>
+
+                        </mat-form-field>
+
+                    </div>
+                </div>
+
+                <!-- update fields -->
+                <div *ngIf="isUpdateDialog()">
+                    <div *ngIf="field?.el?.update?.value[field?.el?.update?.type]">
+                        <mat-form-field color="primary">
+                            <input
+                                *ngIf="field?.el?.update?.type === 'input'"
+                                matInput #input
+                                formControlName="{{field?.def}}"
+                                name="{{field?.def}}"
+                                placeholder="{{field?.def}}"
+                                [required]="isRequiredField(field?.el?.update?.value.validators)"
+                                type="{{field?.el?.update?.value?.type}}"
+                            >
+                            <mat-select
+                                *ngIf="field?.el?.update?.type === 'select'"
+                                formControlName="{{field?.def}}"
+                                placeholder="{{field?.def}}"
+                                [required]="isRequiredField(field?.el?.update?.value.validators)"
+                            >
+                                <mat-option
+                                    *ngFor="let item of relationsData(field?.related?.name)"
+                                    [value]="item[field?.related?.field]"
+                                >
+                                    {{item[field?.related?.field]}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint></mat-hint>
+                            <mat-error
+                                *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
+                                {{
+                                getErrorMessage(
+                                    field?.el?.error,
+                                    field.def
+                                )
+                                }}
+                            </mat-error>
+
+                        </mat-form-field>
+
+                    </div>
+                </div>
+
+                <!-- details fields -->
+                <div *ngIf="isDetailsDialog()">
+                    <div *ngIf="field?.el?.details?.value[field?.el?.details?.type]">
+                        <mat-form-field color="primary">
+                            <input
+                                *ngIf="field?.el?.details?.type === 'input'"
+                                matInput #input
+                                formControlName="{{field?.def}}"
+                                name="{{field?.def}}"
+                                placeholder="{{field?.def}}"
+                                [required]="isRequiredField(field?.el?.details?.value?.validators)"
+                                type="{{field?.el?.details?.value?.type}}"
+                            >
+                            <mat-select
+                                *ngIf="field?.el?.update?.type === 'select'"
+                                formControlName="{{field?.def}}"
+                                placeholder="{{field?.def}}"
+                                [required]="isRequiredField(field?.el?.details?.value?.validators)"
+                            >
+                                <mat-option
+                                    *ngFor="let item of relationsData(field?.related?.name)"
+                                    [value]="item[field?.related?.field]"
+                                >
+                                {{item[field?.related?.field]}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint></mat-hint>
+                            <mat-error
+                                *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
+                                {{
                                 getErrorMessage(
                                     field?.el?.error,
                                     field?.def
                                 )
-                            }}
-                        </mat-error>
+                                }}
+                            </mat-error>
 
-                    </mat-form-field>
+                        </mat-form-field>
 
+                    </div>
                 </div>
             </div>
 
-            <!-- update fields -->
-            <div *ngIf="isUpdateDialog()">
-                <div *ngIf="field?.el?.update?.value[field?.el?.update?.type]">
-                    <mat-form-field color="primary">
-                        <input matInput #input
-                               formControlName="{{field?.def}}"
-                               name="{{field?.def}}"
-                               placeholder="{{field?.def}}"
-                        >
-                        <mat-hint></mat-hint>
-                        <mat-error
-                            *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
-                            {{
-                            getErrorMessage(
-                                field?.el?.error,
-                                field.def
-                            )
-                            }}
-                        </mat-error>
+            <!--Textarea for demo purposes-->
+            <!-- <div class="form">
+                <mat-form-field color="accent">
+                    <textarea #input [(ngModel)]="data.title" class="form-control" matInput name="title" placeholder="Title"
+                            required></textarea>
+                    <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+                </mat-form-field>
+            </div> -->
 
-                    </mat-form-field>
+            <!--Contains mat-hint for characters count and has maxLengt set-->
+            <!-- <div class="form">
+                <mat-form-field color="accent">
+                    <input #inputstate [(ngModel)]="data.state" class="form-control" matInput maxlength="10" name="state"
+                        placeholder="State" required>
+                    <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+                    <mat-hint align="end">{{inputstate.value?.length || 0}}/10</mat-hint>
+                </mat-form-field>
+            </div> -->
 
-                </div>
+            <!-- <div class="form">
+                <mat-form-field color="accent">
+                    <input [(ngModel)]="data.url" matInput name="url" placeholder="Url">
+                </mat-form-field>
             </div>
 
-            <!-- details fields -->
-            <div *ngIf="isDetailsDialog()">
-                <div *ngIf="field?.el?.details?.value[field?.el?.details?.type]">
-                    <mat-form-field color="primary">
-                        <input matInput #input
-                               formControlName="{{field?.def}}"
-                               name="{{field?.def}}"
-                               placeholder="{{field?.def}}"
-                        >
-                        <mat-hint></mat-hint>
-                        <mat-error
-                            *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
-                            {{
-                            getErrorMessage(
-                                field?.el?.error,
-                                field?.def
-                            )
-                            }}
-                        </mat-error>
-
-                    </mat-form-field>
-
-                </div>
+            <div class="form">
+                <mat-form-field color="accent">
+                    <input [(ngModel)]="data.created_at" matInput name="created_at" placeholder="Created at">
+                </mat-form-field>
             </div>
-        </div>
 
-        <!--Textarea for demo purposes-->
-        <!-- <div class="form">
-            <mat-form-field color="accent">
-                <textarea #input [(ngModel)]="data.title" class="form-control" matInput name="title" placeholder="Title"
-                          required></textarea>
-                <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-            </mat-form-field>
-        </div> -->
+            <div class="form">
+                <mat-form-field color="accent">
+                    <input [(ngModel)]="data.updated_at" matInput name="updated_at" placeholder="Updated at">
+                </mat-form-field>
+            </div> -->
 
-        <!--Contains mat-hint for characters count and has maxLengt set-->
-        <!-- <div class="form">
-            <mat-form-field color="accent">
-                <input #inputstate [(ngModel)]="data.state" class="form-control" matInput maxlength="10" name="state"
-                       placeholder="State" required>
-                <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-                <mat-hint align="end">{{inputstate.value?.length || 0}}/10</mat-hint>
-            </mat-form-field>
-        </div> -->
-
-        <!-- <div class="form">
-            <mat-form-field color="accent">
-                <input [(ngModel)]="data.url" matInput name="url" placeholder="Url">
-            </mat-form-field>
-        </div>
-
-        <div class="form">
-            <mat-form-field color="accent">
-                <input [(ngModel)]="data.created_at" matInput name="created_at" placeholder="Created at">
-            </mat-form-field>
-        </div>
-
-        <div class="form">
-            <mat-form-field color="accent">
-                <input [(ngModel)]="data.updated_at" matInput name="updated_at" placeholder="Updated at">
-            </mat-form-field>
-        </div> -->
-
-        <div mat-dialog-actions>
-            <button
-                mat-raised-button
-                (click)="send(formGroup.value)"
-                color="accent"
-                [disabled]="!formGroup.valid"
-                [mat-dialog-close]="1"
-                type="submit"
-            >
-                <span *ngIf="isSaveDialog()"> Save </span>
-                <span *ngIf="isUpdateDialog()"> Update </span>
-            </button>
-            <button
-                mat-raised-button
-                color="warn"
-                (click)="close()"
-                type="button"
-                tabindex="-1"
-            >
-                <span *ngIf="isDetailsDialog()"> Close </span>
-                <span *ngIf="!isDetailsDialog()"> Cancel </span>
-            </button>
-        </div>
-    </form>
+            <div mat-dialog-actions>
+                <button
+                    mat-raised-button
+                    (click)="send(formGroup.value)"
+                    color="accent"
+                    [disabled]="!formGroup.valid"
+                    [mat-dialog-close]="1"
+                    type="submit"
+                >
+                    <span *ngIf="isSaveDialog()"> Save </span>
+                    <span *ngIf="isUpdateDialog()"> Update </span>
+                </button>
+                <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="close()"
+                    type="button"
+                    tabindex="-1"
+                >
+                    <span *ngIf="isDetailsDialog()"> Close </span>
+                    <span *ngIf="!isDetailsDialog()"> Cancel </span>
+                </button>
+            </div>
+        </form>
+    </perfect-scrollbar>
 </div>

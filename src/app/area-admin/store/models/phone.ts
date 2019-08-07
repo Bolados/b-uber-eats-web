@@ -23,7 +23,10 @@ export class Phone extends MetaEntity<Phone> {
 
             {
                 def: 'number',
-                cell: (element: Phone) => element.number,
+                row: {
+                    display: true,
+                    cell: (element: Phone) => element.number,
+                },
                 el: {
                     add: {
                         type: 'input',

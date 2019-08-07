@@ -1,4 +1,4 @@
-import { Injectable, Injector, Inject, Output, EventEmitter } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RestService, Resource } from '@lagoshny/ngx-hal-client';
@@ -31,11 +31,22 @@ export class DatastoreService<T extends Resource> extends RestService<T> {
 
     public data: BehaviorSubject<Array<T>> = new BehaviorSubject<Array<T>>(new Array<T>());
 
+    private adapter: (item: any) => T = null;
+
+    setAdpter(adapter: (item: any) => T): DatastoreService<T> {
+        this.adapter = adapter;
+        return this;
+    }
 
     initData(): void {
         this.getAll().subscribe(
-            data => {
+            (data: T[]) => {
                 console.log('dfghjkl', data);
+                if (this.adapter) {
+                    data.forEach(v => {
+                        v = this.adapter(v);
+                    });
+                }
                 this.data.next(data);
             },
             (error: HttpErrorResponse) => {
@@ -47,7 +58,7 @@ export class DatastoreService<T extends Resource> extends RestService<T> {
     constructor(
         type: new ()  => T,
         resource: string,
-        injector: Injector
+        injector: Injector,
     ) {
         super(type, resource, injector);
     }

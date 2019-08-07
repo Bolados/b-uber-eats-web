@@ -22,7 +22,10 @@ export class OrderStatus extends MetaEntity<OrderStatus> {
 
             {
                 def: 'status',
-                cell: (element: OrderStatus) => element.status,
+                row: {
+                    display: true,
+                    cell: (element: OrderStatus) => element.status,
+                },
                 el: {
                     add: {
                         type: 'input',
@@ -60,7 +63,10 @@ export class OrderStatus extends MetaEntity<OrderStatus> {
             },
             {
                 def: 'description',
-                cell: (element: OrderStatus) => element.description,
+                row: {
+                    display: true,
+                    cell: (element: OrderStatus) => element.description,
+                },
                 el: {
                     add: {
                         type: 'input',

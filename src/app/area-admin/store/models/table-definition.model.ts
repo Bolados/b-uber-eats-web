@@ -6,10 +6,21 @@ export interface TableDefinition<T> {
     table: FieldDefinition<T>[];
 }
 
+export interface RelatedFieldDefinition {
+    name: string;
+    field: string;
+}
+
 export interface FieldDefinition<T> {
     def: string;
-    cell: (element: T) => string;
+    related?: RelatedFieldDefinition;
+    row: RowElementDefinition<T>;
     el: FieldElementDefinition;
+}
+
+export interface RowElementDefinition<T> {
+    display: boolean;
+    cell: (element: T) => string;
 }
 
 export enum FieldElementDefinitionType {
@@ -38,21 +49,25 @@ export interface FieldElementDefinition {
 
 export interface Input {
     input: boolean;
+    type?: string;
     validators: Array<ValidatorFn> | false;
 }
 
 export interface Area {
     area: boolean;
+    type?: string;
     validators: Array<ValidatorFn> | false;
 }
 
 export interface Check {
     check: boolean;
+    type?: string;
     validators: Array<ValidatorFn> | false;
 }
 
 export interface Select {
     select: boolean;
+    type?: string;
     validators: Array<ValidatorFn> | false;
 }
 

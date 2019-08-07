@@ -21,7 +21,10 @@ export class Role extends MetaEntity<Role> {
 
             {
                 def: 'name',
-                cell: (element: Role) => element.name,
+                row: {
+                    display: true,
+                    cell: (element: Role) => element.name,
+                },
                 el: {
                     add: {
                         type: 'input',
@@ -59,7 +62,10 @@ export class Role extends MetaEntity<Role> {
             },
             {
                 def: 'description',
-                cell: (element: Role) => element.description,
+                row: {
+                    display: true,
+                    cell: (element: Role) => element.description,
+                },
                 el: {
                     add: {
                         type: 'input',

@@ -22,7 +22,10 @@ export class Media extends MetaEntity<Media> {
 
             {
                 def: 'name',
-                cell: (element: Media) => element.name,
+                row: {
+                    display: true,
+                    cell: (element: Media) => element.name,
+                },
                 el: {
                     add: {
                         type: 'input',
@@ -60,7 +63,10 @@ export class Media extends MetaEntity<Media> {
             },
             {
                 def: 'mineType',
-                cell: (element: Media) => element.mineType,
+                row: {
+                    display: true,
+                    cell: (element: Media) => element.mineType,
+                },
                 el: {
                     add: {
                         type: 'input',

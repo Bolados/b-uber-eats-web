@@ -1,12 +1,18 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {MatCheckbox, MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import Swal from 'sweetalert2';
-import {DatastoreDialogComponent, DatastoreDialogInputData, DatastoreDialogType} from '../../dialogs/datastore-dialog';
+import {DatastoreDialogComponent, DatastoreDialogInputData, DatastoreDialogType, RelatedData} from '../../dialogs/datastore-dialog';
 import {Overlay} from '@angular/cdk/overlay';
 import {fromEvent} from 'rxjs';
 import {DatastoreService} from '../../services';
-import {TableDefinition} from '../../models';
+import {TableDefinition, MetaEntity, FieldDefinition} from '../../models';
 import {HttpErrorResponse} from '@angular/common/http';
+import { Resource } from '@lagoshny/ngx-hal-client';
+
+export  interface RelatedStore<T extends Resource> {
+    name: string;
+    datastore: DatastoreService<T>;
+}
 
 @Component({
   selector: 'app-datastore',
@@ -20,6 +26,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     @Input() entity: new () => void;
     @Input() adapter: (item: any) => any;
     @Input() tableDefinition: TableDefinition<any>;
+    @Input() relatedStores: Array<RelatedStore<any>> = [];
     @Input() dataSource: MatTableDataSource<any> | null ;
 
     @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -28,6 +35,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     @ViewChildren('rowSelection') rowSelections: Array<MatCheckbox>;
     @ViewChildren('rowSelectionIds') rowSelectionsIds: Array<ElementRef>;
 
+    private relatedData: Array<RelatedData> = [];
     private dialogRef = null;
 
     rowsSelectionSelected = false;
@@ -125,7 +133,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
             this.datastore.data.value.push(result);
             this.datastore.data.next(this.datastore.data.value);
             Swal.fire({
-                title: 'Successfully add',
+                title: 'Successfully updated',
                 type: 'success',
                 timer: 1000,
                 showConfirmButton: false,
@@ -158,7 +166,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
             this.datastore.data.value.push(result);
             this.datastore.data.next(this.datastore.data.value);
             Swal.fire({
-                title: 'Successfully add',
+                title: 'Successfully added',
                 type: 'success',
                 timer: 1000,
                 showConfirmButton: false,
@@ -179,12 +187,21 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
             title: this.title,
             kind,
             data: example,
-            tableDefinition: this.tableDefinition
+            tableDefinition: this.tableDefinition,
+            relatedData: this.relatedData
         };
     }
 
     get columns() {
-        return this.tableDefinition.table;
+        const displayedColumns: FieldDefinition<any>[] = this.tableDefinition.table
+            .filter(v => v.row.display);
+        const columnswithoutId: FieldDefinition<any>[] = displayedColumns
+            .filter(v => !v.def.includes(MetaEntity.idDef));
+        const columnswithId: FieldDefinition<any>[] = displayedColumns
+            .filter(v => v.def.includes(MetaEntity.idDef));
+        columnswithId.sort((a, b) => (a.def > b.def) ? 1 : -1);
+        columnswithoutId.sort((a, b) => (a.def > b.def) ? 1 : -1);
+        return columnswithId.concat(columnswithoutId);
     }
 
     get displayedColumns() {
@@ -393,6 +410,23 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         this.datastore.data.subscribe((data: Array<any>) => {
             this.dataSource.data = data;
         });
+        if (this.relatedStores) {
+            this.relatedStores.forEach(relstore => {
+                if (relstore && relstore.datastore) {
+                    relstore.datastore.data.subscribe(data => {
+                        const reldata: RelatedData = {
+                            name: relstore.name,
+                            data
+                        };
+                        const foundIndex = this.relatedData.findIndex(x => x.name === reldata.name);
+                        this.relatedData.splice(foundIndex, 1);
+                        this.relatedData.push(reldata);
+                    });
+                    relstore.datastore.initData();
+                }
+
+            });
+        }
     }
 
     ngAfterViewInit() {

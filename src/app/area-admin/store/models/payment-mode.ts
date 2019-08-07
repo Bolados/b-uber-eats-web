@@ -22,7 +22,10 @@ export class PaymentMode extends MetaEntity<PaymentMode> {
 
             {
                 def: 'mode',
-                cell: (element: PaymentMode) => element.mode,
+                row: {
+                    display: true,
+                    cell: (element: PaymentMode) => element.mode,
+                },
                 el: {
                     add: {
                         type: 'input',
@@ -60,7 +63,10 @@ export class PaymentMode extends MetaEntity<PaymentMode> {
             },
             {
                 def: 'description',
-                cell: (element: PaymentMode) => element.description,
+                row: {
+                    display: true,
+                    cell: (element: PaymentMode) => element.description,
+                },
                 el: {
                     add: {
                         type: 'input',

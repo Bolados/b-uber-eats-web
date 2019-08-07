@@ -9,7 +9,7 @@ import {OverlayContainer} from '@angular/cdk/overlay';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {SidemenuService} from '../../../core/services/sidemenu';
 import {Title} from '@angular/platform-browser';
-import { menu } from '../../configuration';
+import { menu, WorkspaceConfiguration } from '../../configuration';
 
 @Component({
     selector: 'app-base-area-admin',
@@ -51,41 +51,15 @@ export class BaseAreaAdminComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         this.titleService.setTitle(this.title);
         this.sidemenuService.changeMenu(this.sidebarMenuElements);
-        this.initSidebarInsideConfig();
+        this.sidebarConfig = WorkspaceConfiguration.SidebarWithFixedToolbarInside;
+        this.initWorkspaceConfig();
     }
 
-    initSidebarOutsideConfig() {
-        this.toolbarConfig = new ToolbarConfig();
-        this.toolbarConfig.display = ToolbarDisplay.DEFAULT;
-        this.toolbarConfig.fixed = false;
-        this.toolbarConfig.sidenav = SidebarKind.SIDENAV;
-        this.toolbarConfig.fullscreen = this.fullscreen;
-        this.toolbarConfig.search = new Search(true);
+    initWorkspaceConfig() {
+        this.sidebarConfig = WorkspaceConfiguration.SidebarWithFixedToolbarInside;
 
-        const outsideToolbar = new Toolbar(this.toolbarOutside, this.toolbarConfig);
-
-        this.sidebarConfig = new SidebarConfig();
-        this.sidebarConfig.mode = 'side';
-        this.sidebarConfig.opened = SidebarKind.SIDENAV;
-        this.sidebarConfig.fixed = true;
-        this.sidebarConfig.fullscreen = this.fullscreen;
-        this.sidebarConfig.toolbars.kind = ToolbarMode.OUTSIDE;
-        this.sidebarConfig.toolbars.fixed = this.toolbarConfig.fixed;
-        this.sidebarConfig.toolbars.components = new Array<Toolbar>(outsideToolbar);
-
-    }
-
-    initSidebarInsideConfig() {
-        this.sidebarConfig = new SidebarConfig();
-        this.sidebarConfig.mode = 'side';
-        this.sidebarConfig.opened = SidebarKind.SIDENAV;
-        this.sidebarConfig.fixed = true;
-        this.sidebarConfig.fullscreen = true;
-        this.sidebarConfig.toolbars.kind = ToolbarMode.INSIDE;
-        this.sidebarConfig.toolbars.fixed = false;
-        this.sidebarConfig.toolbars.search = new Search(false);
-        this.sidebarConfig.toolbars.components = new Array<Toolbar>();
-
+        // this.toolbarConfig = WorkspaceConfiguration.Toolbar;
+        // this.sidebarConfig = WorkspaceConfiguration.SidebarWithToolbarOutside(this.toolbarOutside, this.toolbarConfig);
 
     }
 

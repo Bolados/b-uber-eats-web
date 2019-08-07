@@ -8,6 +8,7 @@ import {
     RegionLayoutComponent,
     RoleLayoutComponent
 } from './layouts';
+import { CountryLayoutComponent } from './layouts/country-layout';
 
 const routes: Routes = [
     {
@@ -44,6 +45,11 @@ const routes: Routes = [
         path: 'phones',
         component: PhoneLayoutComponent,
         data: {breadcrumb: 'Phones'}
+    },
+    {
+        path: 'countries',
+        component: CountryLayoutComponent,
+        data: {breadcrumb: 'Countries'}
     }
 ];
 

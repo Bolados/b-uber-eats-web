@@ -1,13 +1,19 @@
 import {FormControl, Validators} from '@angular/forms';
 import {TableDefinition} from './table-definition.model';
 import { MetaEntity } from './entitiy.meta';
+import { Country } from './country';
 
 
 export class Region extends MetaEntity<Region> {
 
+    static entity = 'region';
+    static relation = 'region';
+
+    static fieldRelation = 'name';
+
     code: string = null;
     name: string = null;
-    countries: Array<any> = [];
+    countries: Array<Country> = [];
 
     adapter(item: any): Region {
         const entity = super.adapter(item);
@@ -22,7 +28,10 @@ export class Region extends MetaEntity<Region> {
             ...definition.table,
             {
                 def: 'code',
-                cell: (element: Region) => element.code,
+                row: {
+                    display: true,
+                    cell: (element: Region) => element.code,
+                },
                 el: {
                     add: {
                         type: 'input',
@@ -66,7 +75,10 @@ export class Region extends MetaEntity<Region> {
             },
             {
                 def: 'name',
-                cell: (element: Region) => element.name,
+                row: {
+                    display: true,
+                    cell: (element: Region) => element.name,
+                },
                 el: {
                     add: {
                         type: 'input',
