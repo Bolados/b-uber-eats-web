@@ -30,7 +30,7 @@ describe('Logger', () => {
         expect(new Logger()).toBeTruthy();
     });
 
-    it('should add a new LogOutput and receives log entries', () => {
+    it('should Add a new LogOutput and receives log entries', () => {
         // Arrange
         const outputSpy = jasmine.createSpy('outputSpy');
         const log = new Logger('test');
@@ -52,7 +52,7 @@ describe('Logger', () => {
         expect(outputSpy).toHaveBeenCalledWith('test', LogLevel.Error, 'e', {error: true});
     });
 
-    it('should add a new LogOutput and receives only production log entries', () => {
+    it('should Add a new LogOutput and receives only production log entries', () => {
         // Arrange
         const outputSpy = jasmine.createSpy('outputSpy');
         const log = new Logger('test');

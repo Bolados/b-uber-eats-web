@@ -26,7 +26,7 @@ export class ThemeService {
         return this;
     }
 
-    // remove old theme class and add new theme class
+    // remove old theme class and Add new theme class
     // we're removing any css class that contains '-theme' string but your theme classes can follow any pattern
 
     removeOld(overlayContainer: OverlayContainer) {

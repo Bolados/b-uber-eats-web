@@ -249,7 +249,7 @@ export class DatastoreDialogComponent implements OnInit {
         if (this.alertClose()) {
             Swal.fire({
                 title: 'Are you sure?',
-                text: 'We started edit data, once you close it, you will not be able to recover it!',
+                text: 'We started Edit data, once you close it, you will not be able to recover it!',
                 type: 'warning',
                 showConfirmButton: true,
                 showCancelButton: true

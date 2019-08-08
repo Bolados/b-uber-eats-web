@@ -1,35 +1,39 @@
-<button (click)="callback.details(data)"
-        *ngIf="input?.details || input?.all"
-        color="accent"
-        mat-icon-button
-        matTooltip="details"
+<button
+    (click)="callback.details(data.component, data.data)"
+    *ngIf="display?.details || display?.all"
+    color="accent"
+    mat-icon-button
+    matTooltip="details"
 >
     <mat-icon>visibility</mat-icon>
 </button>
 
-<button *ngIf="input?.add || input?.all"
-        mat-icon-button
-        matTooltip="add"
-        color="white"
-        (click)="callback.add()"
+<button
+    *ngIf="display?.add || display?.all"
+    (click)="callback.add(data.component)"
+    mat-icon-button
+    matTooltip="add"
+    color="white"
 >
     <mat-icon>add</mat-icon>
 </button>
 
 
-<button *ngIf="input?.edit || input?.all"
-        mat-icon-button
+<button
+    *ngIf="display?.edit || display?.all"
+    (click)="callback.edit(data.component, data.data)"
+    mat-icon-button
         matTooltip="edit"
         color="primary"
-        (click)="callback.edit(data)"
 >
     <mat-icon>border_color</mat-icon>
 </button>
-<button *ngIf="input?.delete || input?.all"
-        mat-icon-button
+<button
+    *ngIf="display?.delete || display?.all"
+    (click)="callback.delete(data.component, data.data)"
+    mat-icon-button
         matTooltip="delete"
         color="warn"
-        (click)="callback.delete(data)"
 >
     <mat-icon>delete</mat-icon>
 </button>

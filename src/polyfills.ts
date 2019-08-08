@@ -1,6 +1,6 @@
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
- * You can add your own extra polyfills to this file.
+ * You can Add your own extra polyfills to this file.
  *
  * This file is divided into 2 sections:
  *   1. Browser polyfills. These are applied before loading ZoneJS and are sorted by browsers.
@@ -26,7 +26,12 @@
  * Only required if AnimationBuilder is used within the application and using IE/Edge or Safari.
  * Standard animation support in Angular DOES NOT require any polyfills (as of Angular 6.0).
  */
-import 'web-animations-js';  // Run `npm install --save web-animations-js`.
+import 'web-animations-js'; // Run `npm install --save web-animations-js`.
+/***************************************************************************************************
+ * Zone JS is required by default for Angular itself.
+ */
+import 'zone.js/dist/zone'; // Included with Angular CLI.
+import 'hammerjs/hammer';
 
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents
@@ -34,7 +39,7 @@ import 'web-animations-js';  // Run `npm install --save web-animations-js`.
  * because those flags need to be set before `zone.js` being loaded, and webpack
  * will put import in the top of bundle, so user need to create a separate file
  * in this directory (for example: zone-flags.ts), and put the following flags
- * into that file, and then add the following code before importing zone.js.
+ * into that file, and then Add the following code before importing zone.js.
  * import './zone-flags.ts';
  *
  * The flags allowed in zone-flags.ts are listed here.
@@ -52,14 +57,7 @@ import 'web-animations-js';  // Run `npm install --save web-animations-js`.
  *
  */
 
-/***************************************************************************************************
- * Zone JS is required by default for Angular itself.
- */
-import 'zone.js/dist/zone'; // Included with Angular CLI.
-
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
-
-import 'hammerjs/hammer';

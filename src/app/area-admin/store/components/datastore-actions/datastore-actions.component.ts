@@ -1,13 +1,18 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-export interface DatastoreActionCallback {
-    add?: () => void;
-    edit?: (data) => void;
-    delete?: (data) => void;
-    details?: (data) => void;
+export interface DatastoreActionsInputData {
+    component: any;
+    data?: any;
 }
 
-export interface DatastoreActionInput {
+export interface DatastoreActionsInputCallback {
+    add?: (callbackComponent) => void;
+    edit?: (callbackComponent, data) => void;
+    delete?: (callbackComponent, data) => void;
+    details?: (callbackComponent, data) => void;
+}
+
+export interface DatastoreActionsInputDisplay {
     add?: boolean;
     edit?: boolean;
     delete?: boolean;
@@ -22,9 +27,9 @@ export interface DatastoreActionInput {
 })
 export class DatastoreActionsComponent implements OnInit {
 
-    @Input() input: DatastoreActionInput;
-    @Input() callback: DatastoreActionCallback;
-    @Input() data: any;
+    @Input() display: DatastoreActionsInputDisplay;
+    @Input() callback: DatastoreActionsInputCallback;
+    @Input() data: DatastoreActionsInputData;
 
     constructor() {
     }
@@ -36,27 +41,37 @@ export class DatastoreActionsComponent implements OnInit {
     validateInputs() {
         const errorMessagePrefix = 'Datastore actions component input validation error: ';
         const errorNoConfigPrefix = 'Configuration Error: ';
-        if ((this.input.add || this.input.all) && !this.callback.add) {
+        if ((this.display.add || this.display.all) && (!this.callback.add || !this.data || !this.data.component)) {
             throw Error(errorMessagePrefix
                 + errorNoConfigPrefix
-                + '\'callback\' parameter must be defined for add');
-        }
-        if ((this.input.edit || this.input.all) && (!this.callback.edit || !this.data)) {
-            throw Error(errorMessagePrefix
-                + errorNoConfigPrefix
-                + '\'callback or data\' parameter must be defined for edit');
+                + '\'callback and component\' parameter must be defined for Add');
         }
 
-        if ((this.input.delete || this.input.all) && (!this.callback.details || !this.data)) {
+        if (
+            (this.display.edit || this.display.all)
+            && (!this.callback.edit || !this.data || (!this.data.component && !this.data.component))
+        ) {
             throw Error(errorMessagePrefix
                 + errorNoConfigPrefix
-                + '\'callback\' parameter must be defined for delete');
+                + '\'callback or data\' parameter must be defined for Edit');
         }
 
-        if ((this.input.details || this.input.all) && (!this.callback.details || !this.data)) {
+        if (
+            (this.display.delete || this.display.all)
+            && (!this.callback.details || !this.data || (!this.data.component && !this.data.component))
+        ) {
             throw Error(errorMessagePrefix
                 + errorNoConfigPrefix
-                + '\'callback\' parameter must be defined for details');
+                + '\'callback\' parameter must be defined for Delete');
+        }
+
+        if (
+            (this.display.details || this.display.all)
+            && (!this.callback.details || !this.data || (!this.data.component && !this.data.component))
+        ) {
+            throw Error(errorMessagePrefix
+                + errorNoConfigPrefix
+                + '\'callback\' parameter must be defined for Details');
         }
     }
 

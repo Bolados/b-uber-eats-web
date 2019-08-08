@@ -16,7 +16,7 @@
  * log.debug('something happened');
  * ```
  *
- * To disable debug and info logs in production, add this snippet to your root component:
+ * To disable debug and info logs in production, Add this snippet to your root component:
  * ```
  * export class AppComponent implements OnInit {
  *   ngOnInit() {
@@ -27,7 +27,7 @@
  *   }
  * }
  *
- * If you want to process logs through other outputs than console, you can add LogOutput functions to Logger.outputs.
+ * If you want to process logs through other outputs than console, you can Add LogOutput functions to Logger.outputs.
  */
 
 /**

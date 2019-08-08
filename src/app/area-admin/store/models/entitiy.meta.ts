@@ -1,6 +1,6 @@
 import {Resource} from '@lagoshny/ngx-hal-client';
 import {Entity} from './entity';
-import {TableDefinition, ErrorElementType} from './table-definition.model';
+import {ErrorElementType, TableDefinition} from './table-definition.model';
 import {FormControl} from '@angular/forms';
 
 function idFromHref(href: string) {
@@ -32,7 +32,10 @@ export abstract class MetaEntity<T> extends Resource implements Entity<T> {
     }
 
     get id() {
-        if (this._links && this._links.self && this._links.self) {
+        if (
+            (this.localId == null)
+            && (this._links && this._links.self && this._links.self)
+        ) {
             const id = idFromHref(this._links.self.href);
             if (id) {
                 this.localId = id;

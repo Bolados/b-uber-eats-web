@@ -23,11 +23,11 @@
                 mat-icon-button mat-raise-button disableRipple
                 class="iconbutton"
                 color="warn"
-                matTooltip="delete selected data"
+                matTooltip="Delete selected data"
                 [disabled]="countSelectedRow() === 0"
                 (click)="deleteSelection()"
             >
-                <mat-icon aria-label="Delete">delete</mat-icon>
+                <mat-icon aria-label="Delete">Delete</mat-icon>
                 Delete
             </button> -->
 
@@ -81,41 +81,47 @@
                 <!-- datastore Action Column -->
                 <ng-container matColumnDef="actions">
                     <mat-header-cell *matHeaderCellDef class="action">
-                        <button
-                            mat-icon-button
-                            matTooltip="add"
-                            color="white"
-                            (click)="add()"
+                        <app-datastore-actions
+                            [callback]="headerActionButton.callback"
+                            [data]="headerActionButton.data"
+                            [display]="headerActionButton.display"
                         >
-                            <mat-icon>add</mat-icon>
-                        </button>
+                        </app-datastore-actions>
+
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="action">
 
-                        <button
-                            mat-icon-button
-                            matTooltip="details"
-                            color="accent"
-                            (click)="details(element)"
+                        <app-datastore-actions
+                            [callback]="actionsButtons.callback"
+                            [data]="actionsButtons.data(element)"
+                            [display]="actionsButtons.display"
                         >
-                            <mat-icon>visibility</mat-icon>
-                        </button>
-                        <button
-                            mat-icon-button
-                            matTooltip="edit"
-                            color="primary"
-                            (click)="edit(element)"
-                        >
-                            <mat-icon>border_color</mat-icon>
-                        </button>
-                        <button
-                            mat-icon-button
-                            matTooltip="delete"
-                            color="warn"
-                            (click)="delete(element)"
-                        >
-                            <mat-icon>delete</mat-icon>
-                        </button>
+                        </app-datastore-actions>
+
+                        <!--<button-->
+                        <!--mat-icon-button-->
+                        <!--matTooltip="Details"-->
+                        <!--color="accent"-->
+                        <!--(click)="Details(element)"-->
+                        <!--&gt;-->
+                        <!--<mat-icon>visibility</mat-icon>-->
+                        <!--</button>-->
+                        <!--<button-->
+                        <!--mat-icon-button-->
+                        <!--matTooltip="Edit"-->
+                        <!--color="primary"-->
+                        <!--(click)="Edit(element)"-->
+                        <!--&gt;-->
+                        <!--<mat-icon>border_color</mat-icon>-->
+                        <!--</button>-->
+                        <!--<button-->
+                        <!--mat-icon-button-->
+                        <!--matTooltip="Delete"-->
+                        <!--color="warn"-->
+                        <!--(click)="Delete(element)"-->
+                        <!--&gt;-->
+                        <!--<mat-icon>Delete</mat-icon>-->
+                        <!--</button>-->
                     </mat-cell>
                 </ng-container>
 
