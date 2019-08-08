@@ -1,0 +1,27 @@
+@import '~@angular/material/theming';
+
+@mixin app-datastore-actions-component-theme($theme) {
+
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+
+    .field-select-field {
+
+        .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow {
+            color: transparent;
+        }
+    }
+
+    .field-select-actions {
+        display: flex;
+        float: right;
+
+        button {
+            width: 30px;
+            opacity: 0.5;
+        }
+    }
+
+}

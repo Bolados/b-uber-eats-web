@@ -1,14 +1,9 @@
 import {DatastoreComponent} from './datastore.component';
 import {DatastoreDialogComponent, DatastoreDialogInputData, DatastoreDialogType} from '../../dialogs/datastore-dialog';
 import Swal from 'sweetalert2';
-import {DatastoreActionsInputData} from '../datastore-actions/datastore-actions.component';
 
 
 export class DatastoreHelpers {
-
-    static ActionsButtonsData(component: any, data: any): DatastoreActionsInputData {
-        return {component, data};
-    }
 
     static Add(that: DatastoreComponent) {
         const data: DatastoreDialogInputData<any> = that.data(

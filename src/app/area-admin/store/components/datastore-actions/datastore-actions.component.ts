@@ -20,12 +20,17 @@ export interface DatastoreActionsInputDisplay {
     all?: boolean;
 }
 
+export function DatastoreActionInputDataConverter(component: any, data: any): DatastoreActionsInputData {
+    return {component, data};
+}
+
 @Component({
     selector: 'app-datastore-actions',
     templateUrl: './datastore-actions.component.html',
     styleUrls: ['./datastore-actions.component.scss']
 })
 export class DatastoreActionsComponent implements OnInit {
+
 
     @Input() display: DatastoreActionsInputDisplay;
     @Input() callback: DatastoreActionsInputCallback;

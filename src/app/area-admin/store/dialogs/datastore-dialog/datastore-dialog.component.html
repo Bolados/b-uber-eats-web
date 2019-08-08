@@ -13,7 +13,7 @@
             <div *ngFor="let field of data?.tableDefinition?.table">
                 <div *ngIf="el(field)?.value[el(field)?.type]">
                     <mat-form-field color="primary">
-                        <div [ngSwitch]="el(field)?.type">
+                        <div [ngSwitch]="el(field)?.type" class="field-{{el(field)?.type}}">
                             <input #input
                                    *ngSwitchCase="fieldType.INPUT"
                                    [required]="isRequiredField(el(field)?.value.validators)"
@@ -24,15 +24,23 @@
                                    type="{{el(field)?.value?.type}}"
                             >
                             <div *ngSwitchCase="fieldType.SELECT">
-                                <mat-select
-                                    [required]="isRequiredField(el(field)?.value.validators)"
-                                    formControlName="{{field?.def}}"
-                                    placeholder="{{field?.def}}"
+                                <mat-select class="field-{{el(field)?.type}}-field"
+                                            [required]="isRequiredField(el(field)?.value.validators)"
+                                            formControlName="{{field?.def}}"
+                                            placeholder="{{field?.def}}"
                                 >
                                     <mat-option *ngFor="let item of relationsData(field?.related?.name)" [value]="item">
                                         {{item[field?.related?.field]}}
                                     </mat-option>
                                 </mat-select>
+                                <app-datastore-actions
+                                    *ngSwitchCase="fieldType.SELECT"
+                                    [callback]="actionsButtons.callback"
+                                    [data]="actionsButtons.data()"
+                                    [display]="actionsButtons.display"
+                                    class="field-{{el(field)?.type}}-actions"
+                                >
+                                </app-datastore-actions>
                             </div>
                             <div *ngSwitchDefault></div>
                         </div>
@@ -49,6 +57,11 @@
                         </mat-error>
 
                     </mat-form-field>
+
+                    <!--<div [ngSwitch]="el(field)?.type" class="field-{{el(field)?.type}}-actions">-->
+                    <!---->
+                    <!--<div *ngSwitchDefault></div>-->
+                    <!--</div>-->
 
                 </div>
             </div>

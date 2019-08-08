@@ -8,6 +8,7 @@ import {DatastoreService} from '../../services';
 import {FieldDefinition, MetaEntity, TableDefinition} from '../../models';
 import {Resource} from '@lagoshny/ngx-hal-client';
 import {
+    DatastoreActionInputDataConverter,
     DatastoreActionsInputCallback,
     DatastoreActionsInputData,
     DatastoreActionsInputDisplay
@@ -34,7 +35,7 @@ const ACTIONS_BUTTONS = {
         callback: {
             add: DatastoreHelpers.Add
         },
-        data: (component: any) => DatastoreHelpers.ActionsButtonsData(component, null)
+        data: (component: any) => DatastoreActionInputDataConverter(component, null)
     },
     content: {
         display: {
@@ -48,9 +49,9 @@ const ACTIONS_BUTTONS = {
             delete: DatastoreHelpers.Delete,
             details: DatastoreHelpers.Details,
         },
-        data: (component: any, data: any) => DatastoreHelpers.ActionsButtonsData(component, data)
+        data: (component: any, data: any) => DatastoreActionInputDataConverter(component, data)
     },
-    data: (component: any, data: any) => DatastoreHelpers.ActionsButtonsData(component, data)
+    data: (component: any, data: any) => DatastoreActionInputDataConverter(component, data)
 };
 
 @Component({
@@ -63,17 +64,6 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     relatedData: Array<RelatedData> = [];
     dialogRef = null;
 
-    // rowClicked(row) {
-    //     if (this.isSelectionClicked) {
-    //         this.rowSelections.forEach((element, index) => {
-    //             if ( (index + 1) === +row.id) {
-    //                 element.checked = !element.checked;
-    //                 this.rowSelection_change();
-    //             }
-    //         });
-    //     }
-
-    // }
     headerActionButton: DatastoreActionsInputs = {
         display: ACTIONS_BUTTONS.header.display,
         callback: ACTIONS_BUTTONS.header.callback,
@@ -93,6 +83,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     @ViewChild('filter', {static: false}) filter: ElementRef;
     @ViewChildren('rowSelection') rowSelections: Array<MatCheckbox>;
     @ViewChildren('rowSelectionIds') rowSelectionsIds: Array<ElementRef>;
+
     actionsButtons = {
         display: ACTIONS_BUTTONS.content.display,
         callback: ACTIONS_BUTTONS.content.callback,
@@ -421,6 +412,18 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     refreshStore() {
         this.datastore.initData();
     }
+
+    // rowClicked(row) {
+    //     if (this.isSelectionClicked) {
+    //         this.rowSelections.forEach((element, index) => {
+    //             if ( (index + 1) === +row.id) {
+    //                 element.checked = !element.checked;
+    //                 this.rowSelection_change();
+    //             }
+    //         });
+    //     }
+
+    // }
 
 
 }

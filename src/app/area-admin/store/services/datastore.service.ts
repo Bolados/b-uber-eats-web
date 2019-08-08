@@ -1,7 +1,7 @@
-import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
-import { RestService, Resource } from '@lagoshny/ngx-hal-client';
+import {Injectable, Injector} from '@angular/core';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {HttpErrorResponse} from '@angular/common/http';
+import {Resource, RestService} from '@lagoshny/ngx-hal-client';
 
 export interface IDataStoreFindParam {
     key: string;
@@ -41,10 +41,10 @@ export class DatastoreService<T extends Resource> extends RestService<T> {
     initData(): void {
         this.getAll().subscribe(
             (data: T[]) => {
-                console.log('dfghjkl', data);
+                console.log('init data', data);
                 if (this.adapter) {
-                    data.forEach(v => {
-                        v = this.adapter(v);
+                    data.forEach((v, i) => {
+                        data[i] = this.adapter(v);
                     });
                 }
                 this.data.next(data);

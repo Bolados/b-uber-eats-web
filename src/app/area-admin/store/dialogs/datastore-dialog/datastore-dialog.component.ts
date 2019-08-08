@@ -14,6 +14,7 @@ import {
     validatorsOf
 } from '../../models';
 import {HttpClient} from '@angular/common/http';
+import {DatastoreActionInputDataConverter} from '../../components/datastore-actions/datastore-actions.component';
 
 export enum DatastoreDialogType {
     UPDATE = 'Update',
@@ -34,6 +35,19 @@ export interface RelatedData {
     data: Array<any>;
 }
 
+// const ACTIONS_BUTTONS = {
+//     display: {
+//         all: true
+//     },
+//     callback: {
+//         add: DatastoreHelpers.Add,
+//         edit: DatastoreHelpers.Edit,
+//         delete: DatastoreHelpers.Delete,
+//         details: DatastoreHelpers.Details,
+//     },
+//     data: (component: any, data: any) => DatastoreActionInputDataConverter(component, data)
+// };
+
 @Component({
     selector: 'app-datastore-dialog',
     templateUrl: './datastore-dialog.component.html',
@@ -46,6 +60,19 @@ export class DatastoreDialogComponent implements OnInit {
 
     formGroup: FormGroup;
     fieldType = FieldTypeDefinitionEnum;
+
+    actionsButtons = {
+        display: {
+            all: true
+        },
+        callback: {
+            add: this.add,
+            edit: this.edit,
+            delete: this.delete,
+            details: this.details,
+        },
+        data: (component: any, data: any) => DatastoreActionInputDataConverter(component, data)
+    };
 
     constructor(
         private http: HttpClient,
@@ -78,6 +105,26 @@ export class DatastoreDialogComponent implements OnInit {
             });
             this.formGroup = this.formBuilder.group(config);
         }
+    }
+
+    add() {
+        console.log('datastore dialog relation add');
+        throw Error('not implemented');
+    }
+
+    edit(el) {
+        console.log('datastore dialog relation edit', el);
+        throw Error('not implemented');
+    }
+
+    delete(el) {
+        console.log('datastore dialog relation delete', el);
+        throw Error('not implemented');
+    }
+
+    details(el) {
+        console.log('datastore dialog relation details', el);
+        throw Error('not implemented');
     }
 
     el(field: FieldDefinition<any>): FieldTypeDefinition {
