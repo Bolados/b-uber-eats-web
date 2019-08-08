@@ -1,5 +1,5 @@
 import {FormControl, ValidatorFn} from '@angular/forms';
-import { Resource } from '@lagoshny/ngx-hal-client';
+import {Resource} from '@lagoshny/ngx-hal-client';
 
 
 export interface TableDefinition<T> {
@@ -30,20 +30,23 @@ export enum FieldElementDefinitionType {
 }
 
 export interface FieldElementDefinition {
-    add: {
-        type: string ,
-        value: Input | Area | Check | Select
-    };
-    update: {
-        type: string ,
-        value: Input | Area | Check | Select
-    };
-    details: {
-        type: string ,
-        value: Input | Area | Check | Select
-    };
+    add: FieldTypeDefinition;
+    update: FieldTypeDefinition;
+    details: FieldTypeDefinition;
     control: (start: string, validators: Array<ValidatorFn> | false, disabled?: boolean) => FormControl;
     error: ErrorElementType | object;
+}
+
+export enum FieldTypeDefinitionEnum {
+    INPUT = 'input',
+    AREA = 'area',
+    CHECK = 'check',
+    SELECT = 'select'
+}
+
+export interface FieldTypeDefinition {
+    type: FieldTypeDefinitionEnum | string;
+    value: Input | Area | Check | Select;
 }
 
 

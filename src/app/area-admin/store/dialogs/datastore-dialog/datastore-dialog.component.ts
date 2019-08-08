@@ -3,7 +3,17 @@ import {Resource} from '@lagoshny/ngx-hal-client';
 import Swal from 'sweetalert2';
 import {FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {TableDefinition, FieldDefinition, validatorsOf, FieldElementDefinitionType, MetaEntity, RelatedFieldDefinition} from '../../models';
+import {
+    FieldDefinition,
+    FieldElementDefinitionType,
+    FieldTypeDefinition,
+    FieldTypeDefinitionEnum,
+    MetaEntity,
+    RelatedFieldDefinition,
+    TableDefinition,
+    validatorsOf
+} from '../../models';
+import {HttpClient} from '@angular/common/http';
 
 export enum DatastoreDialogType {
     UPDATE = 'Update',
@@ -25,21 +35,22 @@ export interface RelatedData {
 }
 
 @Component({
-  selector: 'app-datastore-dialog',
-  templateUrl: './datastore-dialog.component.html',
-  styleUrls: ['./datastore-dialog.component.scss']
+    selector: 'app-datastore-dialog',
+    templateUrl: './datastore-dialog.component.html',
+    styleUrls: ['./datastore-dialog.component.scss']
 })
 export class DatastoreDialogComponent implements OnInit {
+
 
     private canClose = false;
 
     formGroup: FormGroup;
-
-    private storage = [];
+    fieldType = FieldTypeDefinitionEnum;
 
     constructor(
-        public dialogRef: MatDialogRef<DatastoreDialogComponent>,
+        private http: HttpClient,
         private formBuilder: FormBuilder,
+        public dialogRef: MatDialogRef<DatastoreDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: DatastoreDialogInputData<any>
     ) {
         this.dialogRef.disableClose = true;
@@ -69,7 +80,21 @@ export class DatastoreDialogComponent implements OnInit {
         }
     }
 
-    isRequiredField(validators: Array<ValidatorFn>) {
+    el(field: FieldDefinition<any>): FieldTypeDefinition {
+
+        if (this.isSaveDialog() && field && field.el && field.el.add) {
+            return field.el.add;
+        }
+        if (this.isUpdateDialog() && field && field.el && field.el.update) {
+            return field.el.update;
+        }
+        if (this.isDetailsDialog() && field && field.el && field.el.details) {
+            return field.el.details;
+        }
+        return null;
+    }
+
+    isRequiredField(validators: Array<ValidatorFn> | false): boolean {
         let required = false;
         if (validators) {
             validators.forEach(v => {
@@ -95,7 +120,6 @@ export class DatastoreDialogComponent implements OnInit {
     }
 
     validators(field: FieldDefinition<any>): Array<ValidatorFn> | false {
-        const def = 'validators';
         let validators: Array<ValidatorFn> | false = false;
         if (field && field.el && this.isSaveDialog()) {
             validators = validatorsOf(FieldElementDefinitionType.add, field.el);

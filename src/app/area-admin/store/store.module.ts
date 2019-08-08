@@ -12,7 +12,8 @@ import {MediaLayoutComponent} from './layouts/media-layout';
 import {OrderStatusLayoutComponent} from './layouts/order-status-layout';
 import {PhoneLayoutComponent} from './layouts/phone-layout';
 import {PaymentModeLayoutComponent} from './layouts/payment-mode-layout';
-import { CountryLayoutComponent } from './layouts/country-layout/country-layout.component';
+import {CountryLayoutComponent} from './layouts/country-layout/country-layout.component';
+import {DatastoreActionsComponent} from './components/datastore-actions/datastore-actions.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { CountryLayoutComponent } from './layouts/country-layout/country-layout.
         OrderStatusLayoutComponent,
         PhoneLayoutComponent,
         PaymentModeLayoutComponent,
-        CountryLayoutComponent
+        CountryLayoutComponent,
+        DatastoreActionsComponent
     ],
     entryComponents: [
         DatastoreDialogComponent

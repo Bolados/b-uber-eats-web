@@ -11,127 +11,45 @@
             mat-dialog-content
         >
             <div *ngFor="let field of data?.tableDefinition?.table">
-                <!-- save fields -->
-                <div *ngIf="isSaveDialog()">
-                    <div *ngIf="field?.el?.add?.value[field?.el?.add?.type]">
-                        <mat-form-field color="primary">
-                            <input
-                                *ngIf="field?.el?.add?.type === 'input'"
-                                matInput #input
-                                formControlName="{{field?.def}}"
-                                name="{{field?.def}}"
-                                placeholder="{{field?.def}}"
-                                [required]="isRequiredField(field?.el?.add?.value.validators)"
-                                type="{{field?.el?.add?.value?.type}}"
+                <div *ngIf="el(field)?.value[el(field)?.type]">
+                    <mat-form-field color="primary">
+                        <div [ngSwitch]="el(field)?.type">
+                            <input #input
+                                   *ngSwitchCase="fieldType.INPUT"
+                                   [required]="isRequiredField(el(field)?.value.validators)"
+                                   formControlName="{{field?.def}}"
+                                   matInput
+                                   name="{{field?.def}}"
+                                   placeholder="{{field?.def}}"
+                                   type="{{el(field)?.value?.type}}"
                             >
-                            <mat-select
-                                *ngIf="field?.el?.add?.type === 'select'"
-                                formControlName="{{field?.def}}"
-                                placeholder="{{field?.def}}"
-                                [required]="isRequiredField(field?.el?.add?.value.validators)"
-                            >
-                                <mat-option *ngFor="let item of relationsData(field?.related?.name)" [value]="item">
-                                {{item[field?.related?.field]}}
-                                </mat-option>
-                            </mat-select>
-                            <mat-hint></mat-hint>
-                            <mat-error
-                                *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
-                                {{
-                                    getErrorMessage(
-                                        field?.el?.error,
-                                        field?.def
-                                    )
-                                }}
-                            </mat-error>
-
-                        </mat-form-field>
-
-                    </div>
-                </div>
-
-                <!-- update fields -->
-                <div *ngIf="isUpdateDialog()">
-                    <div *ngIf="field?.el?.update?.value[field?.el?.update?.type]">
-                        <mat-form-field color="primary">
-                            <input
-                                *ngIf="field?.el?.update?.type === 'input'"
-                                matInput #input
-                                formControlName="{{field?.def}}"
-                                name="{{field?.def}}"
-                                placeholder="{{field?.def}}"
-                                [required]="isRequiredField(field?.el?.update?.value.validators)"
-                                type="{{field?.el?.update?.value?.type}}"
-                            >
-                            <mat-select
-                                *ngIf="field?.el?.update?.type === 'select'"
-                                formControlName="{{field?.def}}"
-                                placeholder="{{field?.def}}"
-                                [required]="isRequiredField(field?.el?.update?.value.validators)"
-                            >
-                                <mat-option
-                                    *ngFor="let item of relationsData(field?.related?.name)"
-                                    [value]="item[field?.related?.field]"
+                            <div *ngSwitchCase="fieldType.SELECT">
+                                <mat-select
+                                    [required]="isRequiredField(el(field)?.value.validators)"
+                                    formControlName="{{field?.def}}"
+                                    placeholder="{{field?.def}}"
                                 >
-                                    {{item[field?.related?.field]}}
-                                </mat-option>
-                            </mat-select>
-                            <mat-hint></mat-hint>
-                            <mat-error
-                                *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
-                                {{
-                                getErrorMessage(
-                                    field?.el?.error,
-                                    field.def
-                                )
-                                }}
-                            </mat-error>
+                                    <mat-option *ngFor="let item of relationsData(field?.related?.name)" [value]="item">
+                                        {{item[field?.related?.field]}}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                            <div *ngSwitchDefault></div>
+                        </div>
 
-                        </mat-form-field>
+                        <mat-hint></mat-hint>
+                        <mat-error
+                            *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
+                            {{
+                            getErrorMessage(
+                                field?.el?.error,
+                                field?.def
+                            )
+                            }}
+                        </mat-error>
 
-                    </div>
-                </div>
+                    </mat-form-field>
 
-                <!-- details fields -->
-                <div *ngIf="isDetailsDialog()">
-                    <div *ngIf="field?.el?.details?.value[field?.el?.details?.type]">
-                        <mat-form-field color="primary">
-                            <input
-                                *ngIf="field?.el?.details?.type === 'input'"
-                                matInput #input
-                                formControlName="{{field?.def}}"
-                                name="{{field?.def}}"
-                                placeholder="{{field?.def}}"
-                                [required]="isRequiredField(field?.el?.details?.value?.validators)"
-                                type="{{field?.el?.details?.value?.type}}"
-                            >
-                            <mat-select
-                                *ngIf="field?.el?.update?.type === 'select'"
-                                formControlName="{{field?.def}}"
-                                placeholder="{{field?.def}}"
-                                [required]="isRequiredField(field?.el?.details?.value?.validators)"
-                            >
-                                <mat-option
-                                    *ngFor="let item of relationsData(field?.related?.name)"
-                                    [value]="item[field?.related?.field]"
-                                >
-                                {{item[field?.related?.field]}}
-                                </mat-option>
-                            </mat-select>
-                            <mat-hint></mat-hint>
-                            <mat-error
-                                *ngIf="!formGroup.controls[field?.def].valid && formGroup.controls[field?.def].touched">
-                                {{
-                                getErrorMessage(
-                                    field?.el?.error,
-                                    field?.def
-                                )
-                                }}
-                            </mat-error>
-
-                        </mat-form-field>
-
-                    </div>
                 </div>
             </div>
 
