@@ -182,7 +182,7 @@ export class DatastoreDialogComponent implements OnInit {
             adapter,
             tableDefinition,
             data,
-            relatedStore: relatedData.relatedStore,
+            relatedStore: relatedData ? relatedData.relatedStore : [],
             datastore
         };
     }

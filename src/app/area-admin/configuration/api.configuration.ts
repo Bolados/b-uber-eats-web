@@ -7,3 +7,6 @@ export const API_RESOURCES_PAYMENTS_MODE = 'payments_modes';
 export const API_RESOURCES_PHONE = 'phones';
 export const API_RESOURCES_USERS_ROLE = 'users_roles';
 export const API_RESOURCES_COUNTRY = 'countries';
+export const API_RESOURCES_DEPARTMENT = 'departments';
+export const API_RESOURCES_DISTRICT = 'districts';
+export const API_RESOURCES_TOWN = 'towns';

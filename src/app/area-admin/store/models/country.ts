@@ -1,9 +1,15 @@
-import { MetaEntity } from './entitiy.meta';
-import { TableDefinition } from './table-definition.model';
-import { Validators, FormControl, NgControlStatusGroup } from '@angular/forms';
-import { Region } from './region';
+import {MetaEntity} from './entitiy.meta';
+import {TableDefinition} from './table-definition.model';
+import {FormControl, Validators} from '@angular/forms';
+import {Region} from './region';
+import {Department} from './department';
 
 export class Country extends MetaEntity<Country> {
+
+    static entity = 'country';
+    static relation = 'country';
+
+    static fieldRelation = 'name';
 
     name: string = null;
     variant: string = null;
@@ -14,7 +20,7 @@ export class Country extends MetaEntity<Country> {
     population: number = 0;
     density: number = 0;
     localRegion: Region = null;
-    departments: Array<any> = [];
+    departments: Array<Department> = [];
 
 
     get region() {

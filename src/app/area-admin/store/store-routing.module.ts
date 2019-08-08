@@ -8,7 +8,10 @@ import {
     RegionLayoutComponent,
     RoleLayoutComponent
 } from './layouts';
-import { CountryLayoutComponent } from './layouts/country-layout';
+import {CountryLayoutComponent} from './layouts/country-layout';
+import {DepartmentLayoutComponent} from './layouts/department-layout';
+import {DistrictLayoutComponent} from './layouts/district-layout';
+import {TownLayoutComponent} from './layouts/town-layout';
 
 const routes: Routes = [
     {
@@ -50,6 +53,21 @@ const routes: Routes = [
         path: 'countries',
         component: CountryLayoutComponent,
         data: {breadcrumb: 'Countries'}
+    },
+    {
+        path: 'departments',
+        component: DepartmentLayoutComponent,
+        data: {breadcrumb: 'Departments'}
+    },
+    {
+        path: 'districts',
+        component: DistrictLayoutComponent,
+        data: {breadcrumb: 'Districts'}
+    },
+    {
+        path: 'towns',
+        component: TownLayoutComponent,
+        data: {breadcrumb: 'Towns'}
     }
 ];
 

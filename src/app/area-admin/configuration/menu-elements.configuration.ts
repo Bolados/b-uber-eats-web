@@ -111,6 +111,42 @@ const menuItems: MenuItem[] = [
                 open: false,
                 sub: false
             },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Departments',
+                link: '/admin/store/departments',
+                icon: {
+                    mat: false,
+                    fa: 'question-circle'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Districts',
+                link: '/admin/store/districts',
+                icon: {
+                    mat: false,
+                    fa: 'question-circle'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Towns',
+                link: '/admin/store/towns',
+                icon: {
+                    mat: false,
+                    fa: 'city'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
         ]
     },
     {

@@ -6,6 +6,9 @@
 @import './region-layout/region-layout.component.scss-theme.scss';
 @import './role-layout/role-layout.component.scss-theme.scss';
 @import './country-layout/country-layout.component.scss-theme.scss';
+@import './department-layout/department-layout.component.scss-theme';
+@import './district-layout/district-layout.component.scss-theme';
+@import './town-layout/town-layout.component.scss-theme';
 
 @mixin app-layouts-components-theme($theme) {
     @include app-media-layout-component-theme($theme);
@@ -15,4 +18,7 @@
     @include app-region-layout-component-theme($theme);
     @include app-role-layout-component-theme($theme);
     @include app-country-layout-component-theme($theme);
+    @include app-department-layout-component-theme($theme);
+    @include app-district-layout-component-theme($theme);
+    @include app-town-layout-component-theme($theme);
 }

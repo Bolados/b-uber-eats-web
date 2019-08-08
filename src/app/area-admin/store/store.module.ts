@@ -14,6 +14,9 @@ import {PhoneLayoutComponent} from './layouts/phone-layout';
 import {PaymentModeLayoutComponent} from './layouts/payment-mode-layout';
 import {CountryLayoutComponent} from './layouts/country-layout/country-layout.component';
 import {DatastoreActionsComponent} from './components/datastore-actions/datastore-actions.component';
+import {DepartmentLayoutComponent} from './layouts/department-layout/department-layout.component';
+import {DistrictLayoutComponent} from './layouts/district-layout/district-layout.component';
+import {TownLayoutComponent} from './layouts/town-layout/town-layout.component';
 
 
 @NgModule({
@@ -27,7 +30,10 @@ import {DatastoreActionsComponent} from './components/datastore-actions/datastor
         PhoneLayoutComponent,
         PaymentModeLayoutComponent,
         CountryLayoutComponent,
-        DatastoreActionsComponent
+        DatastoreActionsComponent,
+        DepartmentLayoutComponent,
+        DistrictLayoutComponent,
+        TownLayoutComponent
     ],
     entryComponents: [
         DatastoreDialogComponent
