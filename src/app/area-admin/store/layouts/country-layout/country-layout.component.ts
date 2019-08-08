@@ -31,6 +31,8 @@ export class CountryLayoutComponent implements OnInit {
                     API_RESOURCES_REGION,
                     this.injector
                 ).setAdpter(new Region().adapter),
+                tableDefinition: new Region().table_definition(),
+                entity: Region
             }
         ];
     }

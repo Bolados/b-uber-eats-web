@@ -6,7 +6,7 @@ export interface DatastoreActionsInputData {
 }
 
 export interface DatastoreActionsInputCallback {
-    add?: (callbackComponent) => void;
+    add?: (callbackComponent, data) => void;
     edit?: (callbackComponent, data) => void;
     delete?: (callbackComponent, data) => void;
     details?: (callbackComponent, data) => void;

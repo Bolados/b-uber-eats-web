@@ -1,8 +1,8 @@
-import {Component, HostListener, Inject, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, Inject, OnInit} from '@angular/core';
 import {Resource} from '@lagoshny/ngx-hal-client';
 import Swal from 'sweetalert2';
 import {FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {
     FieldDefinition,
     FieldElementDefinitionType,
@@ -13,8 +13,11 @@ import {
     TableDefinition,
     validatorsOf
 } from '../../models';
-import {HttpClient} from '@angular/common/http';
 import {DatastoreActionInputDataConverter} from '../../components/datastore-actions/datastore-actions.component';
+import {Overlay} from '@angular/cdk/overlay';
+import {RelatedStore} from '../../components/datastore';
+import {DatastoreService} from '../../services';
+import {DatastoreDialogHelpers} from './datastore-dialog.helpers';
 
 export enum DatastoreDialogType {
     UPDATE = 'Update',
@@ -33,6 +36,11 @@ export interface DatastoreDialogInputData<T extends Resource> {
 export interface RelatedData {
     name: string;
     data: Array<any>;
+    entity: new () => any;
+    adapter?: (item: any) => any;
+    tableDefinition: TableDefinition<any>;
+    relatedStore?: Array<RelatedStore<any>>;
+    datastore: DatastoreService<any>;
 }
 
 // const ACTIONS_BUTTONS = {
@@ -58,24 +66,29 @@ export class DatastoreDialogComponent implements OnInit {
 
     private canClose = false;
 
-    formGroup: FormGroup;
-    fieldType = FieldTypeDefinitionEnum;
-
+    childDialogRef = null;
+    childRelatedData: Array<RelatedData> = [];
     actionsButtons = {
         display: {
             all: true
         },
         callback: {
-            add: this.add,
-            edit: this.edit,
-            delete: this.delete,
-            details: this.details,
+            add: DatastoreDialogHelpers.Add,
+            edit: DatastoreDialogHelpers.Edit,
+            delete: DatastoreDialogHelpers.Delete,
+            details: DatastoreDialogHelpers.Details,
         },
-        data: (component: any, data: any) => DatastoreActionInputDataConverter(component, data)
+        data: (data: any) => DatastoreActionInputDataConverter(this, data)
     };
 
+    formGroup: FormGroup;
+    fieldType = FieldTypeDefinitionEnum;
+    private date = new Date();
+
     constructor(
-        private http: HttpClient,
+        private cdr: ChangeDetectorRef,
+        public childDialog: MatDialog,
+        public  overlay: Overlay,
         private formBuilder: FormBuilder,
         public dialogRef: MatDialogRef<DatastoreDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: DatastoreDialogInputData<any>
@@ -105,27 +118,92 @@ export class DatastoreDialogComponent implements OnInit {
             });
             this.formGroup = this.formBuilder.group(config);
         }
+
+        if (this.data.relatedData) {
+            console.log('easy loading child datastore');
+            this.data.relatedData.forEach(relData => {
+                // subscription for change data
+                relData.datastore.data.subscribe((values: Array<any>) => {
+                    console.log('subscription');
+                    relData.data = values;
+                });
+                // load child store if exist
+                if (relData && relData.relatedStore) {
+                    relData.relatedStore.forEach(relStore => {
+                        if (relStore && relStore.datastore) {
+                            relStore.datastore.data.subscribe((values: Array<any>) => {
+                                console.log('subscribe datastore', relData.name, relStore.name, values);
+                                const childRelData: RelatedData = {
+                                    name: relStore.name,
+                                    data: values,
+                                    entity: relStore.entity,
+                                    tableDefinition: relStore.tableDefinition,
+                                    relatedStore: relStore.subRelatedStore,
+                                    datastore: relStore.datastore
+                                };
+                                const foundIndex = this.childRelatedData.findIndex(x => x.name === childRelData.name);
+                                this.childRelatedData.splice(foundIndex, 1);
+                                this.childRelatedData.push(childRelData);
+                            });
+                            relStore.datastore.initData();
+                        }
+
+                    });
+                }
+            });
+        }
     }
 
-    add() {
-        console.log('datastore dialog relation add');
-        throw Error('not implemented');
+    buildActionData(relation: RelatedFieldDefinition): RelatedData {
+        const relatedData: RelatedData = this.relatedData(relation.name);
+        const name = relation.name;
+        let entity = null;
+        let datastore = null;
+        let adapter = null;
+        let tableDefinition = null;
+        let data = null;
+        if (relatedData) {
+            entity = relatedData.entity;
+            tableDefinition = relatedData.tableDefinition;
+            adapter = relatedData.adapter;
+            data = relatedData.data;
+            datastore = relatedData.datastore;
+        }
+        return {
+            name,
+            entity,
+            adapter,
+            tableDefinition,
+            data,
+            relatedStore: relatedData.relatedStore,
+            datastore
+        };
     }
 
-    edit(el) {
-        console.log('datastore dialog relation edit', el);
-        throw Error('not implemented');
+    // storage
+
+    save = (datastore: DatastoreService<any>,
+            data: any, adapter: (item: any) => any
+    ) => DatastoreDialogHelpers.Save(datastore, data, adapter);
+
+    update = (datastore: DatastoreService<any>,
+              data: any, adapter: (item: any) => any
+    ) => DatastoreDialogHelpers.Update(datastore, data, adapter);
+
+    remove = (datastore: DatastoreService<any>,
+              data: any
+    ) => DatastoreDialogHelpers.Remove(datastore, data);
+
+    refreshSelect() {
+        console.log('refresh data', this.data.relatedData);
     }
 
-    delete(el) {
-        console.log('datastore dialog relation delete', el);
-        throw Error('not implemented');
-    }
+    // actions
+    add = (receivedData: RelatedData) => DatastoreDialogHelpers.Add(this, receivedData);
+    details = (receivedData: RelatedData) => DatastoreDialogHelpers.Details(this, receivedData);
+    delete = (receivedData: RelatedData) => DatastoreDialogHelpers.Delete(this, receivedData);
+    edit = (receivedData: RelatedData) => DatastoreDialogHelpers.Edit(this, receivedData);
 
-    details(el) {
-        console.log('datastore dialog relation details', el);
-        throw Error('not implemented');
-    }
 
     el(field: FieldDefinition<any>): FieldTypeDefinition {
 
@@ -152,6 +230,16 @@ export class DatastoreDialogComponent implements OnInit {
         }
 
         return required;
+    }
+
+    relatedData(fieldDef: string) {
+        if (this.data && this.data.relatedData) {
+            const relations = this.data.relatedData.filter(rel => (rel.name === fieldDef));
+            if (relations.length === 1) {
+                return relations[0];
+            }
+        }
+        return null;
     }
 
     relationsData(fieldDef: string) {

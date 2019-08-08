@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {MatCheckbox, MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import Swal from 'sweetalert2';
 import {DatastoreDialogInputData, DatastoreDialogType, RelatedData} from '../../dialogs/datastore-dialog';
 import {Overlay} from '@angular/cdk/overlay';
 import {fromEvent} from 'rxjs';
@@ -18,6 +17,10 @@ import {DatastoreHelpers} from './datastore.helpers';
 export  interface RelatedStore<T extends Resource> {
     name: string;
     datastore: DatastoreService<T>;
+    entity: new () => any;
+    adapter?: (item: any) => any;
+    tableDefinition: TableDefinition<any>;
+    subRelatedStore?: RelatedStore<T> [];
 }
 
 interface DatastoreActionsInputs {
@@ -72,7 +75,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
 
     @Input() title;
     @Input() datastore: DatastoreService<any>;
-    @Input() entity: new () => void;
+    @Input() entity: new () => any;
     @Input() adapter: (item: any) => any;
     @Input() tableDefinition: TableDefinition<any>;
     @Input() relatedStores: Array<RelatedStore<any>> = [];
@@ -120,148 +123,9 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         ).concat(post);
     }
 
-    // removeList(elements: Array<any>) {
-    //     console.log('remove list', elements);
-    //     elements.forEach(data => {
-    //         // const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
-    //         // this.datastore.data.value.splice(foundIndex, 1);
-    //         // this.datastore.data.next(this.datastore.data.value);
-    //         // this.refreshTable();
-    //         // Swal.fire({
-    //         //     title: 'Successfully deleted',
-    //         //     type: 'success',
-    //         //     timer: 1000,
-    //         //     showConfirmButton: false,
-    //         // });
-    //         this.datastore.Delete(data).subscribe(
-    //             result => {
-    //                 console.log('deleted result', result);
-    //                 // for Delete we use splice in order to remove single object from DataService
-    //                 const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
-    //                 this.datastore.data.value.splice(foundIndex, 1);
-    //                 this.datastore.data.next(this.datastore.data.value);
-    //                 this.refreshTable();
-    //             },
-    //             (err: HttpErrorResponse) => {
-    //                 Swal.fire({
-    //                     title: 'Error occurred ',
-    //                     text: 'Details: ' + err,
-    //                     type: 'error',
-    //                     showConfirmButton: true,
-    //                 });
-    //         });
-    //     });
-    // }
-
-    remove(data) {
-        console.log('remove', data);
-        // this.datastore.Delete(data).subscribe(result => {
-        //     console.log('deleted result', result);
-        //     // for Delete we use splice in order to remove single object from DataService
-        //     const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
-        //     this.datastore.data.value.splice(foundIndex, 1);
-        //     this.datastore.data.next(this.datastore.data.value);
-        //     this.refreshTable();
-        //     Swal.fire({
-        //         title: 'Successfully deleted',
-        //         type: 'success',
-        //         showConfirmButton: false,
-        //         timer: 1000,
-        //     });
-        //     this.refreshTable();
-        // },
-        // (err: HttpErrorResponse) => {
-        //     Swal.fire({
-        //         title: 'Error occurred ',
-        //         text: 'Details: ' + err,
-        //         type: 'error',
-        //         showConfirmButton: true,
-        //     });
-        // });
-        const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
-        this.datastore.data.value.splice(foundIndex, 1);
-        this.datastore.data.next(this.datastore.data.value);
-        this.refreshTable();
-        Swal.fire({
-            title: 'Successfully deleted',
-            type: 'success',
-            timer: 1000,
-            showConfirmButton: false,
-        });
-    }
-
-
-    update(data) {
-        console.log('update', data);
-        const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
-        this.datastore.data.value.splice(foundIndex, 1);
-        this.datastore.data.value.push(data);
-        this.datastore.data.next(this.datastore.data.value);
-        Swal.fire({
-            title: 'Successfully updated',
-            type: 'success',
-            timer: 1000,
-            showConfirmButton: false,
-        });
-        this.refreshTable();
-        // this.datastore.update(data).subscribe(result => {
-        //     console.log('update result', result);
-        //     result = this.adapter(result);
-        //     const foundIndex = this.datastore.data.value.findIndex(x => x.id === data.id);
-        //     this.datastore.data.value.splice(foundIndex, 1);
-        //     this.datastore.data.value.push(result);
-        //     this.datastore.data.next(this.datastore.data.value);
-        //     Swal.fire({
-        //         title: 'Successfully updated',
-        //         type: 'success',
-        //         timer: 1000,
-        //         showConfirmButton: false,
-        //     });
-        // },
-        // (err: HttpErrorResponse) => {
-        //     Swal.fire({
-        //         title: 'Error occurred ',
-        //         text: 'Details: ' + err,
-        //         type: 'error',
-        //         showConfirmButton: true,
-        //     });
-        // });
-    }
-
-    save(data) {
-        console.log('save', data);
-        data.id = this.datastore.data.value.length + 1;
-        this.datastore.data.value.push(data);
-        this.datastore.data.next(this.datastore.data.value);
-        Swal.fire({
-            title: 'Successfully Add',
-            type: 'success',
-            timer: 1000,
-            showConfirmButton: false,
-        });
-        this.refreshTable();
-        // this.datastore.create(data).subscribe(result => {
-        //     console.log('saved result', result);
-        //     // for Delete we use splice in order to remove single object from DataService
-        //     result = this.adapter(result);
-        //     this.datastore.data.value.push(result);
-        //     this.datastore.data.next(this.datastore.data.value);
-        //     Swal.fire({
-        //         title: 'Successfully added',
-        //         type: 'success',
-        //         timer: 1000,
-        //         showConfirmButton: false,
-        //     });
-        // },
-        // (err: HttpErrorResponse) => {
-        //     Swal.fire({
-        //         title: 'Error occurred ',
-        //         text: 'Details: ' + err,
-        //         type: 'error',
-        //         showConfirmButton: true,
-        //     });
-        // });
-    }
+    remove = (data) => DatastoreHelpers.Remove(this, data);
+    save = (data) => DatastoreHelpers.Save(this, data);
+    update = (data) => DatastoreHelpers.Update(this, data);
 
     data(kind: DatastoreDialogType, example: any): DatastoreDialogInputData<any>  {
         return {
@@ -365,19 +229,22 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
 
 
     ngOnInit() {
-        this.datastore.initData();
-        this.dataSource = new MatTableDataSource(this.datastore.data.value);
-        this.datastore.initData();
         this.datastore.data.subscribe((data: Array<any>) => {
             this.dataSource.data = data;
         });
+        this.datastore.initData();
+        this.dataSource = new MatTableDataSource(this.datastore.data.value);
         if (this.relatedStores) {
             this.relatedStores.forEach(relstore => {
                 if (relstore && relstore.datastore) {
                     relstore.datastore.data.subscribe(data => {
                         const reldata: RelatedData = {
                             name: relstore.name,
-                            data
+                            data,
+                            entity: relstore.entity,
+                            tableDefinition: relstore.tableDefinition,
+                            relatedStore: relstore.subRelatedStore,
+                            datastore: relstore.datastore
                         };
                         const foundIndex = this.relatedData.findIndex(x => x.name === reldata.name);
                         this.relatedData.splice(foundIndex, 1);

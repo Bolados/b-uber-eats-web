@@ -12,7 +12,7 @@
         >
             <div *ngFor="let field of data?.tableDefinition?.table">
                 <div *ngIf="el(field)?.value[el(field)?.type]">
-                    <mat-form-field color="primary">
+                    <mat-form-field class="mat-field-{{el(field)?.type}}" color="primary">
                         <div [ngSwitch]="el(field)?.type" class="field-{{el(field)?.type}}">
                             <input #input
                                    *ngSwitchCase="fieldType.INPUT"
@@ -33,14 +33,6 @@
                                         {{item[field?.related?.field]}}
                                     </mat-option>
                                 </mat-select>
-                                <app-datastore-actions
-                                    *ngSwitchCase="fieldType.SELECT"
-                                    [callback]="actionsButtons.callback"
-                                    [data]="actionsButtons.data()"
-                                    [display]="actionsButtons.display"
-                                    class="field-{{el(field)?.type}}-actions"
-                                >
-                                </app-datastore-actions>
                             </div>
                             <div *ngSwitchDefault></div>
                         </div>
@@ -58,10 +50,17 @@
 
                     </mat-form-field>
 
-                    <!--<div [ngSwitch]="el(field)?.type" class="field-{{el(field)?.type}}-actions">-->
-                    <!---->
-                    <!--<div *ngSwitchDefault></div>-->
-                    <!--</div>-->
+                    <div [ngSwitch]="el(field)?.type" class="field-{{el(field)?.type}}-actions">
+                        <app-datastore-actions
+                            *ngSwitchCase="fieldType.SELECT"
+                            [callback]="actionsButtons.callback"
+                            [data]="actionsButtons.data(buildActionData(field?.related))"
+                            [display]="actionsButtons.display"
+                            class="field-{{el(field)?.type}}-actions"
+                        >
+                        </app-datastore-actions>
+                        <div *ngSwitchDefault></div>
+                    </div>
 
                 </div>
             </div>

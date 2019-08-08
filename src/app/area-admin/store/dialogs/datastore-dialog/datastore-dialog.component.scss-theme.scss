@@ -1,0 +1,32 @@
+@import '~@angular/material/theming';
+
+@mixin app-datastore-dialog-component-theme($theme) {
+
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+    .mat-field-select .mat-form-field-wrapper {
+        width: 75%;
+        float: left;
+    }
+
+
+    .field-select-field {
+
+        .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow {
+            color: transparent;
+        }
+    }
+
+    .field-select-actions {
+        display: flex;
+
+        button {
+            width: 30px;
+            top: 15px;
+            left: -5px;
+        }
+    }
+
+}

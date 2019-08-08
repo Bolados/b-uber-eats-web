@@ -4,16 +4,18 @@
     color="accent"
     mat-icon-button
     matTooltip="details"
+    disableRipple
 >
     <mat-icon>visibility</mat-icon>
 </button>
 
 <button
     *ngIf="display?.add || display?.all"
-    (click)="callback.add(data.component)"
+    (click)="callback.add(data.component, data.data)"
     mat-icon-button
     matTooltip="add"
     color="white"
+    disableRipple
 >
     <mat-icon>add</mat-icon>
 </button>
@@ -23,8 +25,9 @@
     *ngIf="display?.edit || display?.all"
     (click)="callback.edit(data.component, data.data)"
     mat-icon-button
-        matTooltip="edit"
-        color="primary"
+    matTooltip="edit"
+    color="primary"
+    disableRipple
 >
     <mat-icon>border_color</mat-icon>
 </button>
@@ -32,8 +35,9 @@
     *ngIf="display?.delete || display?.all"
     (click)="callback.delete(data.component, data.data)"
     mat-icon-button
-        matTooltip="delete"
-        color="warn"
+    matTooltip="delete"
+    color="warn"
+    disableRipple
 >
     <mat-icon>delete</mat-icon>
 </button>
