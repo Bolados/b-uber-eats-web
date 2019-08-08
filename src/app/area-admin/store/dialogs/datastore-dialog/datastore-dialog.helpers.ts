@@ -115,15 +115,16 @@ export class DatastoreDialogHelpers {
     }
 
 
-    static convertRelatedDataToDatastoreDialogInputData(
+    static ConvertRelatedDataToDatastoreDialogInputData(
         that: DatastoreDialogComponent,
         receivedData: RelatedData,
         typeDialog: DatastoreDialogType,
+        isEntity: boolean = false
     ): DatastoreDialogInputData<any> {
         return {
             title: receivedData.name,
             kind: typeDialog,
-            data: receivedData.entity,
+            data: isEntity ? receivedData.entity : receivedData.data,
             tableDefinition: receivedData.tableDefinition,
             relatedData: that.childRelatedData,
         };
@@ -144,9 +145,10 @@ export class DatastoreDialogHelpers {
     static Add(that: DatastoreDialogComponent, receivedData: RelatedData) {
         console.log('datastore dialog relation add', receivedData);
         const data: DatastoreDialogInputData<any> =
-            DatastoreDialogHelpers.convertRelatedDataToDatastoreDialogInputData(
-                that, receivedData, DatastoreDialogType.SAVE
+            DatastoreDialogHelpers.ConvertRelatedDataToDatastoreDialogInputData(
+                that, receivedData, DatastoreDialogType.SAVE, true
             );
+        console.log(that.childDialogRef, data);
         if (DatastoreDialogHelpers.CanOpenedDialog(that.childDialogRef, data)) {
             that.childDialogRef = that.childDialog.open(DatastoreDialogComponent, {
                 panelClass: 'dialog',
@@ -158,7 +160,7 @@ export class DatastoreDialogHelpers {
                 if (data.data) {
                     console.log('after close', data.data);
                     that.save(receivedData.datastore, data.data, receivedData.adapter);
-                    that.refreshSelect();
+                    that.refresh(receivedData);
                 }
                 that.childDialogRef = null;
             });
@@ -168,9 +170,11 @@ export class DatastoreDialogHelpers {
     static Details(that: DatastoreDialogComponent, receivedData: RelatedData) {
         console.log('Details: ', receivedData);
         const data: DatastoreDialogInputData<any> =
-            DatastoreDialogHelpers.convertRelatedDataToDatastoreDialogInputData(
-                that, receivedData, DatastoreDialogType.DETAILS
+            DatastoreDialogHelpers.ConvertRelatedDataToDatastoreDialogInputData(
+                that, receivedData, DatastoreDialogType.DETAILS,
             );
+        console.log(receivedData.data);
+        console.log(data.data);
         if (DatastoreDialogHelpers.CanOpenedDialog(that.childDialogRef, data)) {
             that.childDialogRef = that.childDialog.open(DatastoreDialogComponent, {
                 panelClass: 'dialog',
@@ -187,8 +191,8 @@ export class DatastoreDialogHelpers {
     static Edit(that: DatastoreDialogComponent, receivedData: RelatedData) {
         console.log('Edit: ', receivedData);
         const data: DatastoreDialogInputData<any> =
-            DatastoreDialogHelpers.convertRelatedDataToDatastoreDialogInputData(
-                that, receivedData, DatastoreDialogType.UPDATE
+            DatastoreDialogHelpers.ConvertRelatedDataToDatastoreDialogInputData(
+                that, receivedData, DatastoreDialogType.UPDATE,
             );
         if (DatastoreDialogHelpers.CanOpenedDialog(that.childDialogRef, data)) {
             that.childDialogRef = that.childDialog.open(DatastoreDialogComponent, {
@@ -201,8 +205,9 @@ export class DatastoreDialogHelpers {
                 if (data.data) {
                     console.log('after close', data.data);
                     that.update(receivedData.datastore, data.data, receivedData.adapter);
+                    that.refresh(receivedData);
                 }
-                that.dialogRef = null;
+                that.childDialogRef = null;
             });
         }
     }
@@ -219,6 +224,7 @@ export class DatastoreDialogHelpers {
             .then((willDelete) => {
                 if (willDelete.value) {
                     that.remove(receivedData.datastore, receivedData.data);
+                    that.refreshForDelete(receivedData);
                 }
             });
     }

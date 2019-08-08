@@ -53,8 +53,9 @@
                     <div [ngSwitch]="el(field)?.type" class="field-{{el(field)?.type}}-actions">
                         <app-datastore-actions
                             *ngSwitchCase="fieldType.SELECT"
+                            [data]="actionsButtons.data(buildActionData(field?.related, field?.def ))"
                             [callback]="actionsButtons.callback"
-                            [data]="actionsButtons.data(buildActionData(field?.related))"
+                            [disabled]="isSelected(field?.def)"
                             [display]="actionsButtons.display"
                             class="field-{{el(field)?.type}}-actions"
                         >

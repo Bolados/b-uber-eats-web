@@ -154,7 +154,14 @@ export class DatastoreDialogComponent implements OnInit {
         }
     }
 
-    buildActionData(relation: RelatedFieldDefinition): RelatedData {
+    isSelected(fieldName: string) {
+        return !(this.formGroup && this.formGroup.value
+            && this.formGroup.value[fieldName]
+            && this.formGroup.value[fieldName].id
+        );
+    }
+
+    buildActionData(relation: RelatedFieldDefinition, fieldName: string): RelatedData {
         const relatedData: RelatedData = this.relatedData(relation.name);
         const name = relation.name;
         let entity = null;
@@ -166,7 +173,7 @@ export class DatastoreDialogComponent implements OnInit {
             entity = relatedData.entity;
             tableDefinition = relatedData.tableDefinition;
             adapter = relatedData.adapter;
-            data = relatedData.data;
+            data = this.formGroup.value[fieldName];
             datastore = relatedData.datastore;
         }
         return {
@@ -182,20 +189,24 @@ export class DatastoreDialogComponent implements OnInit {
 
     // storage
 
-    save = (datastore: DatastoreService<any>,
-            data: any, adapter: (item: any) => any
-    ) => DatastoreDialogHelpers.Save(datastore, data, adapter);
+    save = (datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) => DatastoreDialogHelpers
+        .Save(datastore, data, adapter);
 
-    update = (datastore: DatastoreService<any>,
-              data: any, adapter: (item: any) => any
-    ) => DatastoreDialogHelpers.Update(datastore, data, adapter);
+    update = (datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) => DatastoreDialogHelpers
+        .Update(datastore, data, adapter);
 
-    remove = (datastore: DatastoreService<any>,
-              data: any
-    ) => DatastoreDialogHelpers.Remove(datastore, data);
+    remove = (datastore: DatastoreService<any>, data: any) => DatastoreDialogHelpers
+        .Remove(datastore, data);
 
-    refreshSelect() {
+    refreshForDelete(receivedData: RelatedData) {
+        this.formGroup.value[receivedData.name] = null;
+        this.date = new Date();
+        this.cdr.detectChanges();
         console.log('refresh data', this.data.relatedData);
+    }
+
+    refresh(receivedData: RelatedData) {
+
     }
 
     // actions

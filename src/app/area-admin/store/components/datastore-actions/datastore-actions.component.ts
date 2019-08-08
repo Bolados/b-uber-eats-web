@@ -35,6 +35,7 @@ export class DatastoreActionsComponent implements OnInit {
     @Input() display: DatastoreActionsInputDisplay;
     @Input() callback: DatastoreActionsInputCallback;
     @Input() data: DatastoreActionsInputData;
+    @Input() disabled: boolean;
 
     constructor() {
     }

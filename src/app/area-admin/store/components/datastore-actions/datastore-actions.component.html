@@ -5,6 +5,7 @@
     mat-icon-button
     matTooltip="details"
     disableRipple
+    [disabled]="disabled"
 >
     <mat-icon>visibility</mat-icon>
 </button>
@@ -16,6 +17,7 @@
     matTooltip="add"
     color="white"
     disableRipple
+
 >
     <mat-icon>add</mat-icon>
 </button>
@@ -28,6 +30,7 @@
     matTooltip="edit"
     color="primary"
     disableRipple
+    [disabled]="disabled"
 >
     <mat-icon>border_color</mat-icon>
 </button>
@@ -38,6 +41,7 @@
     matTooltip="delete"
     color="warn"
     disableRipple
+    [disabled]="disabled"
 >
     <mat-icon>delete</mat-icon>
 </button>
