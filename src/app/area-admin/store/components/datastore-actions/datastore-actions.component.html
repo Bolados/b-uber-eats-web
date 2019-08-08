@@ -1,0 +1,35 @@
+<button (click)="callback.details(data)"
+        *ngIf="input?.details || input?.all"
+        color="accent"
+        mat-icon-button
+        matTooltip="details"
+>
+    <mat-icon>visibility</mat-icon>
+</button>
+
+<button *ngIf="input?.add || input?.all"
+        mat-icon-button
+        matTooltip="add"
+        color="white"
+        (click)="callback.add()"
+>
+    <mat-icon>add</mat-icon>
+</button>
+
+
+<button *ngIf="input?.edit || input?.all"
+        mat-icon-button
+        matTooltip="edit"
+        color="primary"
+        (click)="callback.edit(data)"
+>
+    <mat-icon>border_color</mat-icon>
+</button>
+<button *ngIf="input?.delete || input?.all"
+        mat-icon-button
+        matTooltip="delete"
+        color="warn"
+        (click)="callback.delete(data)"
+>
+    <mat-icon>delete</mat-icon>
+</button>
