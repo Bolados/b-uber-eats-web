@@ -1,11 +1,9 @@
-import { Component, OnInit, Injector } from '@angular/core';
-import { DatastoreService } from '../../services';
-import { TableDefinition, Region } from '../../models';
-import { Country } from '../../models';
-import { MatTableDataSource } from '@angular/material';
-import { API_RESOURCES_COUNTRY, API_RESOURCES_REGION } from 'src/app/area-admin/configuration';
-import { RelatedStore } from '../../components';
-
+import {Component, Injector, OnInit} from '@angular/core';
+import {DatastoreService} from '../../services';
+import {Country, Region, TableDefinition} from '../../models';
+import {MatTableDataSource} from '@angular/material';
+import {API_RESOURCES_COUNTRY, API_RESOURCES_REGION} from 'src/app/area-admin/configuration';
+import {RelatedStore} from '../../components';
 
 
 @Component({
@@ -32,8 +30,7 @@ export class CountryLayoutComponent implements OnInit {
                     Region,
                     API_RESOURCES_REGION,
                     this.injector
-                )
-                // .setAdpter(new Region().adapter),
+                ).setAdpter(new Region().adapter),
             }
         ];
     }
