@@ -13,11 +13,11 @@ import {
     TableDefinition,
     validatorsOf
 } from '../../models';
-import {DatastoreActionInputDataConverter} from '../../components/datastore-actions/datastore-actions.component';
 import {Overlay} from '@angular/cdk/overlay';
 import {RelatedStore} from '../../components/datastore';
 import {DatastoreService} from '../../services';
 import {DatastoreDialogHelpers} from './datastore-dialog.helpers';
+import {DatastoreActionInputDataConverter} from '../../components/datastore-actions/datastore-actions.component';
 
 export enum DatastoreDialogType {
     UPDATE = 'Update',
