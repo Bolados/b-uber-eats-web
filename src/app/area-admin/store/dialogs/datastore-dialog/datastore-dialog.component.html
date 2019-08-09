@@ -55,7 +55,7 @@
                             *ngSwitchCase="fieldType.SELECT"
                             [data]="actionsButtons.data(buildActionData(field?.related, field?.def ))"
                             [callback]="actionsButtons.callback"
-                            [disabled]="isSelected(field?.def)"
+                            [disabled]="disabledActions(field?.def)"
                             [display]="actionsButtons.display"
                             class="field-{{el(field)?.type}}-actions"
                         >

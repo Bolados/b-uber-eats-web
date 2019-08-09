@@ -5,7 +5,7 @@
     mat-icon-button
     matTooltip="details"
     disableRipple
-    [disabled]="disabled"
+    [disabled]="disabled?.details || disabled?.all"
 >
     <mat-icon>visibility</mat-icon>
 </button>
@@ -17,6 +17,7 @@
     matTooltip="add"
     color="white"
     disableRipple
+    [disabled]="disabled?.add || disabled?.all"
 
 >
     <mat-icon>add</mat-icon>
@@ -30,7 +31,7 @@
     matTooltip="edit"
     color="primary"
     disableRipple
-    [disabled]="disabled"
+    [disabled]="disabled?.edit || disabled?.all"
 >
     <mat-icon>border_color</mat-icon>
 </button>
@@ -41,7 +42,7 @@
     matTooltip="delete"
     color="warn"
     disableRipple
-    [disabled]="disabled"
+    [disabled]="disabled?.delete || disabled?.all"
 >
     <mat-icon>delete</mat-icon>
 </button>

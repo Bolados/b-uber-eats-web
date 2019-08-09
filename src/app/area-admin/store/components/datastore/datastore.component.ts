@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {MatCheckbox, MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {DatastoreDialogInputData, DatastoreDialogType, RelatedData} from '../../dialogs/datastore-dialog';
+import {DatastoreDialogInputData, DatastoreDialogType, RelatedData} from '../../dialogs/datastore-dialog/datastore-dialog.models';
 import {Overlay} from '@angular/cdk/overlay';
 import {fromEvent} from 'rxjs';
 import {DatastoreService} from '../../services';

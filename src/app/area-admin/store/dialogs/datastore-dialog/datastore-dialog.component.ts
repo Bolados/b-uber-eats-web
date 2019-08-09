@@ -1,5 +1,4 @@
 import {ChangeDetectorRef, Component, HostListener, Inject, OnInit} from '@angular/core';
-import {Resource} from '@lagoshny/ngx-hal-client';
 import Swal from 'sweetalert2';
 import {FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
@@ -14,47 +13,33 @@ import {
     validatorsOf
 } from '../../models';
 import {Overlay} from '@angular/cdk/overlay';
-import {RelatedStore} from '../../components/datastore';
 import {DatastoreService} from '../../services';
-import {DatastoreDialogHelpers} from './datastore-dialog.helpers';
-import {DatastoreActionInputDataConverter} from '../../components/datastore-actions/datastore-actions.component';
+import {
+    DatastoreActionInputDataConverter,
+    DatastoreActionsInputDisabled
+} from '../../components/datastore-actions/datastore-actions.component';
+import {DatastoreDialogInputData, DatastoreDialogType, RelatedData} from './datastore-dialog.models';
+import {DatastoreDialogActionsHelpers} from './datastore-dialog-actions.helpers';
+import {DatastoreDialogStorageHelpers} from './datastore-dialog-storage.helpers';
 
-export enum DatastoreDialogType {
-    UPDATE = 'Update',
-    SAVE = 'Create New',
-    DETAILS = 'Details of'
-}
-
-export interface DatastoreDialogInputData<T extends Resource> {
-    title: string;
-    kind: DatastoreDialogType;
-    data: T;
-    tableDefinition: TableDefinition<T>;
-    relatedData: Array<RelatedData>;
-}
-
-export interface RelatedData {
-    name: string;
-    data: Array<any>;
-    entity: new () => any;
-    adapter?: (item: any) => any;
-    tableDefinition: TableDefinition<any>;
-    relatedStore?: Array<RelatedStore<any>>;
-    datastore: DatastoreService<any>;
-}
-
-// const ACTIONS_BUTTONS = {
-//     display: {
-//         all: true
-//     },
-//     callback: {
-//         add: DatastoreHelpers.Add,
-//         edit: DatastoreHelpers.Edit,
-//         delete: DatastoreHelpers.Delete,
-//         details: DatastoreHelpers.Details,
-//     },
-//     data: (component: any, data: any) => DatastoreActionInputDataConverter(component, data)
-// };
+const ACTIONS_BUTTONS = {
+    display: {
+        all: true
+    },
+    disabled: {
+        add: true,
+        edit: true,
+        details: false,
+        delete: true,
+    },
+    callback: {
+        add: DatastoreDialogActionsHelpers.Add,
+        edit: DatastoreDialogActionsHelpers.Edit,
+        delete: DatastoreDialogActionsHelpers.Delete,
+        details: DatastoreDialogActionsHelpers.Details,
+    },
+    data: (component: any, data: any) => DatastoreActionInputDataConverter(component, data)
+};
 
 @Component({
     selector: 'app-datastore-dialog',
@@ -69,16 +54,10 @@ export class DatastoreDialogComponent implements OnInit {
     childDialogRef = null;
     childRelatedData: Array<RelatedData> = [];
     actionsButtons = {
-        display: {
-            all: true
-        },
-        callback: {
-            add: DatastoreDialogHelpers.Add,
-            edit: DatastoreDialogHelpers.Edit,
-            delete: DatastoreDialogHelpers.Delete,
-            details: DatastoreDialogHelpers.Details,
-        },
-        data: (data: any) => DatastoreActionInputDataConverter(this, data)
+        display: ACTIONS_BUTTONS.display,
+        disabled: ACTIONS_BUTTONS.disabled,
+        callback: ACTIONS_BUTTONS.callback,
+        data: (data: any) => ACTIONS_BUTTONS.data(this, data)
     };
 
     formGroup: FormGroup;
@@ -154,11 +133,21 @@ export class DatastoreDialogComponent implements OnInit {
         }
     }
 
-    isSelected(fieldName: string) {
-        return !(this.formGroup && this.formGroup.value
+    disabledActions(fieldName: string): DatastoreActionsInputDisabled {
+        const relatedData: RelatedData = this.relatedData(fieldName);
+        const selected: boolean = (this.formGroup && this.formGroup.value
             && this.formGroup.value[fieldName]
             && this.formGroup.value[fieldName].id
         );
+        const haveDatastore = relatedData && relatedData.datastore;
+
+        console.log(relatedData != null, selected);
+        return {
+            add: !haveDatastore,
+            edit: !(haveDatastore && selected),
+            details: !selected,
+            delete: !(relatedData && selected),
+        };
     }
 
     buildActionData(relation: RelatedFieldDefinition, fieldName: string): RelatedData {
@@ -189,13 +178,13 @@ export class DatastoreDialogComponent implements OnInit {
 
     // storage
 
-    save = (datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) => DatastoreDialogHelpers
+    save = (datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) => DatastoreDialogStorageHelpers
         .Save(datastore, data, adapter);
 
-    update = (datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) => DatastoreDialogHelpers
+    update = (datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) => DatastoreDialogStorageHelpers
         .Update(datastore, data, adapter);
 
-    remove = (datastore: DatastoreService<any>, data: any) => DatastoreDialogHelpers
+    remove = (datastore: DatastoreService<any>, data: any) => DatastoreDialogStorageHelpers
         .Remove(datastore, data);
 
     refreshForDelete(receivedData: RelatedData) {
@@ -210,10 +199,10 @@ export class DatastoreDialogComponent implements OnInit {
     }
 
     // actions
-    add = (receivedData: RelatedData) => DatastoreDialogHelpers.Add(this, receivedData);
-    details = (receivedData: RelatedData) => DatastoreDialogHelpers.Details(this, receivedData);
-    delete = (receivedData: RelatedData) => DatastoreDialogHelpers.Delete(this, receivedData);
-    edit = (receivedData: RelatedData) => DatastoreDialogHelpers.Edit(this, receivedData);
+    // add = (receivedData: RelatedData) => DatastoreDialogHelpers.Add(this, receivedData);
+    // details = (receivedData: RelatedData) => DatastoreDialogHelpers.Details(this, receivedData);
+    // delete = (receivedData: RelatedData) => DatastoreDialogHelpers.Delete(this, receivedData);
+    // edit = (receivedData: RelatedData) => DatastoreDialogHelpers.Edit(this, receivedData);
 
 
     el(field: FieldDefinition<any>): FieldTypeDefinition {

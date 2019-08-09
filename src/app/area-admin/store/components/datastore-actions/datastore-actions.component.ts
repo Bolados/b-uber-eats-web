@@ -20,6 +20,14 @@ export interface DatastoreActionsInputDisplay {
     all?: boolean;
 }
 
+export interface DatastoreActionsInputDisabled {
+    add?: boolean;
+    edit?: boolean;
+    delete?: boolean;
+    details?: boolean;
+    all?: boolean;
+}
+
 export function DatastoreActionInputDataConverter(component: any, data: any): DatastoreActionsInputData {
     return {component, data};
 }
@@ -35,7 +43,7 @@ export class DatastoreActionsComponent implements OnInit {
     @Input() display: DatastoreActionsInputDisplay;
     @Input() callback: DatastoreActionsInputCallback;
     @Input() data: DatastoreActionsInputData;
-    @Input() disabled: boolean;
+    @Input() disabled: DatastoreActionsInputDisabled;
 
     constructor() {
     }

@@ -1,6 +1,7 @@
 import {DatastoreComponent} from './datastore.component';
-import {DatastoreDialogComponent, DatastoreDialogInputData, DatastoreDialogType} from '../../dialogs/datastore-dialog';
+import {DatastoreDialogComponent} from '../../dialogs/datastore-dialog';
 import Swal from 'sweetalert2';
+import {DatastoreDialogInputData, DatastoreDialogType} from '../../dialogs/datastore-dialog/datastore-dialog.models';
 
 
 export class DatastoreHelpers {
