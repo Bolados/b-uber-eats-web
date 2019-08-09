@@ -19,27 +19,8 @@ import {
     DatastoreActionsInputDisabled
 } from '../../components/datastore-actions/datastore-actions.component';
 import {DatastoreDialogInputData, DatastoreDialogType, RelatedData} from './datastore-dialog.models';
-import {DatastoreDialogActionsHelpers} from './datastore-dialog-actions.helpers';
 import {DatastoreDialogStorageHelpers} from './datastore-dialog-storage.helpers';
 
-const ACTIONS_BUTTONS = {
-    display: {
-        all: true
-    },
-    disabled: {
-        add: true,
-        edit: true,
-        details: false,
-        delete: true,
-    },
-    callback: {
-        add: DatastoreDialogActionsHelpers.Add,
-        edit: DatastoreDialogActionsHelpers.Edit,
-        delete: DatastoreDialogActionsHelpers.Delete,
-        details: DatastoreDialogActionsHelpers.Details,
-    },
-    data: (component: any, data: any) => DatastoreActionInputDataConverter(component, data)
-};
 
 @Component({
     selector: 'app-datastore-dialog',
@@ -47,22 +28,6 @@ const ACTIONS_BUTTONS = {
     styleUrls: ['./datastore-dialog.component.scss']
 })
 export class DatastoreDialogComponent implements OnInit {
-
-
-    private canClose = false;
-
-    childDialogRef = null;
-    childRelatedData: Array<RelatedData> = [];
-    actionsButtons = {
-        display: ACTIONS_BUTTONS.display,
-        disabled: ACTIONS_BUTTONS.disabled,
-        callback: ACTIONS_BUTTONS.callback,
-        data: (data: any) => ACTIONS_BUTTONS.data(this, data)
-    };
-
-    formGroup: FormGroup;
-    fieldType = FieldTypeDefinitionEnum;
-    private date = new Date();
 
     constructor(
         private cdr: ChangeDetectorRef,
@@ -131,6 +96,146 @@ export class DatastoreDialogComponent implements OnInit {
                 }
             });
         }
+    }
+
+
+    childDialogRef = null;
+    childRelatedData: Array<RelatedData> = [];
+    actionsButtons = {
+        display: {
+            all: true
+        },
+        disabled: {
+            add: true,
+            edit: true,
+            details: false,
+            delete: true,
+        },
+        callback: {
+            add: DatastoreDialogComponent.Add,
+            edit: DatastoreDialogComponent.Edit,
+            delete: DatastoreDialogComponent.Delete,
+            details: DatastoreDialogComponent.Details,
+        },
+        data: (data: any) => DatastoreActionInputDataConverter(this, data)
+    };
+    formGroup: FormGroup;
+    fieldType = FieldTypeDefinitionEnum;
+    private canClose = false;
+    private date = new Date();
+
+    static ConvertRelatedDataToDatastoreDialogInputData(
+        that: DatastoreDialogComponent,
+        receivedData: RelatedData,
+        typeDialog: DatastoreDialogType,
+        isEntity: boolean = false
+    ): DatastoreDialogInputData<any> {
+        return {
+            title: receivedData.name,
+            kind: typeDialog,
+            data: isEntity ? receivedData.entity : receivedData.data,
+            tableDefinition: receivedData.tableDefinition,
+            relatedData: that.childRelatedData,
+        };
+    }
+
+    static CanOpenedDialog(dialogRef: any, data: DatastoreDialogInputData<any>): boolean {
+        if (dialogRef) {
+            return false;
+        }
+        return (
+            data && data.tableDefinition
+            && data.tableDefinition.table
+            && data.tableDefinition.table.length > 1
+        );
+    }
+
+    // actions buttons
+    static Add(that: DatastoreDialogComponent, receivedData: RelatedData) {
+        console.log('datastore dialog relation add', receivedData);
+        const data: DatastoreDialogInputData<any> =
+            DatastoreDialogComponent.ConvertRelatedDataToDatastoreDialogInputData(
+                that, receivedData, DatastoreDialogType.SAVE, true
+            );
+        console.log(that.childDialogRef, data);
+        if (DatastoreDialogComponent.CanOpenedDialog(that.childDialogRef, data)) {
+            that.childDialogRef = that.childDialog.open(DatastoreDialogComponent, {
+                panelClass: 'dialog',
+                data,
+                scrollStrategy: that.overlay.scrollStrategies.noop(),
+                hasBackdrop: false,
+            });
+            that.childDialogRef.afterClosed().subscribe(() => {
+                if (data.data) {
+                    console.log('after close', data.data);
+                    that.save(receivedData.datastore, data.data, receivedData.adapter);
+                    that.refresh(receivedData);
+                }
+                that.childDialogRef = null;
+            });
+        }
+    }
+
+    static Details(that: DatastoreDialogComponent, receivedData: RelatedData) {
+        console.log('Details: ', receivedData);
+        const data: DatastoreDialogInputData<any> =
+            DatastoreDialogComponent.ConvertRelatedDataToDatastoreDialogInputData(
+                that, receivedData, DatastoreDialogType.DETAILS,
+            );
+        console.log(receivedData.data);
+        console.log(data.data);
+        if (DatastoreDialogComponent.CanOpenedDialog(that.childDialogRef, data)) {
+            that.childDialogRef = that.childDialog.open(DatastoreDialogComponent, {
+                panelClass: 'dialog',
+                data,
+                scrollStrategy: that.overlay.scrollStrategies.noop(),
+                hasBackdrop: false,
+            });
+            that.childDialogRef.afterClosed().subscribe(() => {
+                that.childDialogRef = null;
+            });
+        }
+    }
+
+    static Edit(that: DatastoreDialogComponent, receivedData: RelatedData) {
+        console.log('Edit: ', receivedData);
+        const data: DatastoreDialogInputData<any> =
+            DatastoreDialogComponent.ConvertRelatedDataToDatastoreDialogInputData(
+                that, receivedData, DatastoreDialogType.UPDATE,
+            );
+        if (DatastoreDialogComponent.CanOpenedDialog(that.childDialogRef, data)) {
+            that.childDialogRef = that.childDialog.open(DatastoreDialogComponent, {
+                panelClass: 'dialog',
+                data,
+                scrollStrategy: that.overlay.scrollStrategies.noop(),
+                hasBackdrop: false,
+            });
+            that.childDialogRef.afterClosed().subscribe(() => {
+                if (data.data) {
+                    console.log('after close', data.data);
+                    that.update(receivedData.datastore, data.data, receivedData.adapter);
+                    that.refresh(receivedData);
+                }
+                that.childDialogRef = null;
+            });
+        }
+    }
+
+    static Delete(that: DatastoreDialogComponent, receivedData: RelatedData) {
+        console.log('Delete: ', receivedData);
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Once deleted, you will not be able to recover it!',
+            type: 'warning',
+            showConfirmButton: true,
+            showCancelButton: true
+        })
+            .then((willDelete) => {
+                if (willDelete.value) {
+                    that.remove(receivedData.datastore, receivedData.data);
+                    that.refreshForDelete(receivedData);
+                }
+            });
     }
 
     disabledActions(fieldName: string): DatastoreActionsInputDisabled {
