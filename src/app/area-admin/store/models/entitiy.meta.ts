@@ -22,10 +22,15 @@ function setExtentionFieldsTo(entity) {
 
 export abstract class MetaEntity<T> extends Resource implements Entity<T> {
     public static idDef = 'id';
+    public static HasFileFieldDef = 'hasFileField';
+    public static UrlDef = 'url';
     localId: string = null;
     selected: boolean;
     highlighted: boolean;
     hovered: boolean;
+
+    // hasFileField: any;
+    // url: any;
 
     constructor() {
         super();
@@ -82,6 +87,7 @@ export abstract class MetaEntity<T> extends Resource implements Entity<T> {
 
     table_definition(): TableDefinition<T> {
         return {
+            file: false,
             table: [
                 {
                     def: MetaEntity.idDef,

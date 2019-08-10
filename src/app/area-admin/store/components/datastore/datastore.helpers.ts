@@ -2,6 +2,7 @@ import {DatastoreComponent} from './datastore.component';
 import {DatastoreDialogComponent} from '../../dialogs/datastore-dialog';
 import Swal from 'sweetalert2';
 import {DatastoreDialogInputData, DatastoreDialogType} from '../../dialogs/datastore-dialog/datastore-dialog.models';
+import {MetaEntity} from '../../models';
 
 
 export class DatastoreHelpers {
@@ -81,9 +82,80 @@ export class DatastoreHelpers {
         // });
     }
 
+    static convertDataToFormData(data): FormData {
+        const formData = new FormData();
+        if (data[MetaEntity.HasFileFieldDef]) {
+            const fileField = data[MetaEntity.HasFileFieldDef];
+            formData.append('file', data[fileField]);
+            // data.hasFileField = null;
+            formData.append('data', data);
+        }
+        return formData;
+    }
+
+    static urlFromData(data): string {
+        if (data[MetaEntity.UrlDef]) {
+            return data[MetaEntity.UrlDef];
+        }
+        return null;
+    }
+
+    static UpdateFormData(that: DatastoreComponent, data) {
+        const formData = DatastoreHelpers.convertDataToFormData(data);
+        let url = DatastoreHelpers.urlFromData(data);
+        const id = DatastoreHelpers.urlFromData(data.id);
+        if (id) {
+            url += '/' + id.toString();
+        }
+        if (formData && url) {
+            that.httpClient.put<any>(url, formData).subscribe(
+                (result) => {
+                    console.log(result);
+                },
+                (err) => console.log(err)
+            );
+            const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
+            that.datastore.data.value.splice(foundIndex, 1);
+            that.datastore.data.value.push(data);
+            that.datastore.data.next(that.datastore.data.value);
+            Swal.fire({
+                title: 'Successfully updated formData',
+                type: 'success',
+                timer: 1000,
+                showConfirmButton: false,
+            });
+            that.refreshTable();
+        }
+    }
+
+    static SaveFormData(that: DatastoreComponent, data) {
+        const formData = DatastoreHelpers.convertDataToFormData(data);
+        const url = DatastoreHelpers.urlFromData(data);
+        if (formData && url) {
+            that.httpClient.post<any>(url, formData).subscribe(
+                (result) => {
+                    console.log(result);
+                },
+                (err) => console.log(err)
+            );
+
+            data.id = (that.datastore.data.value.length + 1).toString();
+            that.datastore.data.value.push(data);
+            that.datastore.data.next(that.datastore.data.value);
+            Swal.fire({
+                title: 'Successfully saved formData',
+                type: 'success',
+                timer: 1000,
+                showConfirmButton: false,
+            });
+            that.refreshTable();
+        }
+    }
+
+
     static Save(that: DatastoreComponent, data) {
-        console.log('save', data);
-        data.id = that.datastore.data.value.length + 1;
+        console.log('save', data, that.datastore.data.value);
+        data.id = (that.datastore.data.value.length + 1).toString();
         that.datastore.data.value.push(data);
         that.datastore.data.next(that.datastore.data.value);
         Swal.fire({
@@ -93,6 +165,8 @@ export class DatastoreHelpers {
             showConfirmButton: false,
         });
         that.refreshTable();
+        console.log('saved', data, that.datastore.data.value);
+
         // that.datastore.create(data).subscribe(result => {
         //     console.log('saved result', result);
         //     // for Delete we use splice in order to remove single object from DataService
@@ -163,8 +237,13 @@ export class DatastoreHelpers {
             });
             that.dialogRef.afterClosed().subscribe(() => {
                 if (data.data) {
-                    console.log('after close', data.data);
-                    that.save(data.data);
+                    console.log('after close', data.data, data[MetaEntity.HasFileFieldDef]);
+                    if (data.data[MetaEntity.HasFileFieldDef]) {
+                        that.saveFormData(data.data);
+                    } else {
+                        that.save(data.data);
+                    }
+
                     that.refreshTable();
                 }
                 that.dialogRef = null;
@@ -207,7 +286,11 @@ export class DatastoreHelpers {
             that.dialogRef.afterClosed().subscribe(() => {
                 if (data.data) {
                     console.log('after close', data.data);
-                    that.update(data.data);
+                    if (data.data[MetaEntity.HasFileFieldDef]) {
+                        that.updateFormData(data.data);
+                    } else {
+                        that.update(data.data);
+                    }
                     that.refreshTable();
                 }
                 that.dialogRef = null;

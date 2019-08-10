@@ -4,6 +4,10 @@ import {Resource} from '@lagoshny/ngx-hal-client';
 
 export interface TableDefinition<T> {
     table: FieldDefinition<T>[];
+    file: {
+        fileFieldNameDef: string;
+        resourcesUrl: string;
+    } | false;
 }
 
 export interface RelatedFieldDefinition {
@@ -20,7 +24,7 @@ export interface FieldDefinition<T> {
 
 export interface RowElementDefinition<T> {
     display: boolean;
-    cell: (element: T) => string;
+    cell: (element: T) => string | Blob;
 }
 
 export enum FieldElementDefinitionType {
@@ -33,7 +37,7 @@ export interface FieldElementDefinition {
     add: FieldTypeDefinition;
     update: FieldTypeDefinition;
     details: FieldTypeDefinition;
-    control: (start: string, validators: Array<ValidatorFn> | false, disabled?: boolean) => FormControl;
+    control: (start: string | Blob, validators: Array<ValidatorFn> | false, disabled?: boolean) => FormControl;
     error: ErrorElementType | object;
 }
 
@@ -41,14 +45,14 @@ export enum FieldTypeDefinitionEnum {
     INPUT = 'input',
     AREA = 'area',
     CHECK = 'check',
-    SELECT = 'select'
+    SELECT = 'select',
+    FILE = 'file'
 }
 
 export interface FieldTypeDefinition {
     type: FieldTypeDefinitionEnum | string;
-    value: Input | Area | Check | Select;
+    value: Input | Area | Check | Select | FileFile;
 }
-
 
 export interface Input {
     input: boolean;
@@ -72,6 +76,13 @@ export interface Select {
     select: boolean;
     type?: string;
     validators: Array<ValidatorFn> | false;
+}
+
+export interface FileFile {
+    file: boolean;
+    type?: string;
+    validators: Array<ValidatorFn> | false;
+    fieldName: string;
 }
 
 export interface ErrorElementType {

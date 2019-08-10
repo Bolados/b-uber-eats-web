@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {MatCheckbox, MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {DatastoreDialogInputData, DatastoreDialogType, RelatedData} from '../../dialogs/datastore-dialog/datastore-dialog.models';
 import {Overlay} from '@angular/cdk/overlay';
@@ -13,6 +13,7 @@ import {
     DatastoreActionsInputDisplay
 } from '../datastore-actions/datastore-actions.component';
 import {DatastoreHelpers} from './datastore.helpers';
+import {HttpClient} from '@angular/common/http';
 
 export  interface RelatedStore<T extends Resource> {
     name: string;
@@ -66,6 +67,7 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
 
     relatedData: Array<RelatedData> = [];
     dialogRef = null;
+    date = new Date();
 
     headerActionButton: DatastoreActionsInputs = {
         display: ACTIONS_BUTTONS.header.display,
@@ -96,6 +98,8 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
     constructor(
         public dialog: MatDialog,
         public overlay: Overlay,
+        public httpClient: HttpClient,
+        public cdr: ChangeDetectorRef,
     ) {
     }
 
@@ -125,7 +129,9 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
 
     remove = (data) => DatastoreHelpers.Remove(this, data);
     save = (data) => DatastoreHelpers.Save(this, data);
+    saveFormData = (data) => DatastoreHelpers.SaveFormData(this, data);
     update = (data) => DatastoreHelpers.Update(this, data);
+    updateFormData = (data) => DatastoreHelpers.UpdateFormData(this, data);
 
     data(kind: DatastoreDialogType, example: any): DatastoreDialogInputData<any>  {
         return {
@@ -229,11 +235,12 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
 
 
     ngOnInit() {
-        this.datastore.data.subscribe((data: Array<any>) => {
-            this.dataSource.data = data;
-        });
         this.datastore.initData();
         this.dataSource = new MatTableDataSource(this.datastore.data.value);
+        this.datastore.data.subscribe((data: Array<any>) => {
+            this.dataSource.data = data;
+            console.log('datasource update');
+        });
         if (this.relatedStores) {
             this.relatedStores.forEach(relstore => {
                 if (relstore && relstore.datastore) {
@@ -274,6 +281,8 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
         if (this.paginator) {
             this.paginator._changePageSize(this.paginator.pageSize);
         }
+        this.date = new Date();
+        this.cdr.detectChanges();
     }
 
     refreshStore() {

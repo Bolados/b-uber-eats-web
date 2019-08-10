@@ -58,7 +58,7 @@ export class DatastoreService<T extends Resource> extends RestService<T> {
     constructor(
         type: new ()  => T,
         resource: string,
-        injector: Injector,
+        injector: Injector
     ) {
         super(type, resource, injector);
     }

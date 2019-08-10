@@ -1,12 +1,27 @@
-import { TableDefinition } from './table-definition.model';
-import { MetaEntity } from './entitiy.meta';
-import { Validators, FormControl } from '@angular/forms';
+import {TableDefinition} from './table-definition.model';
+import {MetaEntity} from './entitiy.meta';
+import {AbstractControl, FormControl, Validators} from '@angular/forms';
+import {API_RESOURCES_MEDIA} from '../../configuration';
+
+const VALID_EXTENXION = ['.png', '.jpg', '.jpeg', '.ico'];
+
+function pictureValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    if (control.value !== undefined && (isNaN(control.value))) {
+        const file = control.value as File;
+        const extenxion = file.name.slice(file.name.lastIndexOf('.'));
+        console.log('validators', file.name, extenxion);
+        if (extenxion && !VALID_EXTENXION.includes(extenxion)) {
+            return {required: true};
+        }
+    }
+    return null;
+}
 
 export class Media extends MetaEntity<Media> {
 
-
     name: string = null;
-    mineType: string = null;
+    picture: Blob = null;
+
     menu: any = null;
 
     adapter(item: any): Media {
@@ -19,7 +34,6 @@ export class Media extends MetaEntity<Media> {
 
         definition.table = [
             ...definition.table,
-
             {
                 def: 'name',
                 row: {
@@ -32,7 +46,7 @@ export class Media extends MetaEntity<Media> {
                         value: {
                             input: true,
                             validators: [
-                                Validators.required,
+                                Validators.required
                             ],
                         }
                     },
@@ -62,34 +76,39 @@ export class Media extends MetaEntity<Media> {
                 }
             },
             {
-                def: 'mineType',
+                def: 'picture',
                 row: {
-                    display: true,
-                    cell: (element: Media) => element.mineType,
+                    display: false,
+                    cell: (element: Media) => element.picture,
                 },
                 el: {
                     add: {
-                        type: 'input',
+                        type: 'file',
                         value: {
-                            input: true,
+                            file: true,
+                            fieldName: 'name',
                             validators: [
                                 Validators.required,
+                                pictureValidator
                             ],
                         }
                     },
                     update: {
-                        type: 'input',
+                        type: 'file',
                         value: {
-                            input: true,
+                            file: true,
+                            fieldName: 'name',
                             validators: [
                                 Validators.required,
+                                pictureValidator
                             ],
                         },
                     },
                     details: {
-                        type: 'input',
+                        type: 'file',
                         value: {
-                            input: true,
+                            file: true,
+                            fieldName: 'name',
                             validators: false,
                         }
                     },
@@ -103,6 +122,11 @@ export class Media extends MetaEntity<Media> {
                 }
             },
         ];
+
+        definition.file = {
+            fileFieldNameDef: 'picture',
+            resourcesUrl: API_RESOURCES_MEDIA,
+        };
         return definition;
     }
 

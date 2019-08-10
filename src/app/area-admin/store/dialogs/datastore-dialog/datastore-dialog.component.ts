@@ -7,6 +7,7 @@ import {
     FieldElementDefinitionType,
     FieldTypeDefinition,
     FieldTypeDefinitionEnum,
+    FileFile,
     MetaEntity,
     RelatedFieldDefinition,
     TableDefinition,
@@ -20,6 +21,8 @@ import {
 } from '../../components/datastore-actions/datastore-actions.component';
 import {DatastoreDialogInputData, DatastoreDialogType, RelatedData} from './datastore-dialog.models';
 import {DatastoreDialogStorageHelpers} from './datastore-dialog-storage.helpers';
+import {FileSystemDirectoryEntry, FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
+import {DomSanitizer} from '@angular/platform-browser';
 
 
 @Component({
@@ -29,8 +32,38 @@ import {DatastoreDialogStorageHelpers} from './datastore-dialog-storage.helpers'
 })
 export class DatastoreDialogComponent implements OnInit {
 
+    file: NgxFileDropEntry = null;
+
+
+    childDialogRef = null;
+    childRelatedData: Array<RelatedData> = [];
+    actionsButtons = {
+        display: {
+            all: true
+        },
+        disabled: {
+            add: true,
+            edit: true,
+            details: false,
+            delete: true,
+        },
+        callback: {
+            add: DatastoreDialogComponent.Add,
+            edit: DatastoreDialogComponent.Edit,
+            delete: DatastoreDialogComponent.Delete,
+            details: DatastoreDialogComponent.Details,
+        },
+        data: (data: any) => DatastoreActionInputDataConverter(this, data)
+    };
+    formGroup: FormGroup;
+    fieldType = FieldTypeDefinitionEnum;
+    private canClose = false;
+    private date = new Date();
+    previewImage: any = 'none';
+
     constructor(
         private cdr: ChangeDetectorRef,
+        private sanitizer: DomSanitizer,
         public childDialog: MatDialog,
         public  overlay: Overlay,
         private formBuilder: FormBuilder,
@@ -46,20 +79,23 @@ export class DatastoreDialogComponent implements OnInit {
             const config = {};
             data.tableDefinition.table.forEach( field => {
                 let start = '';
-                if (data.kind !== DatastoreDialogType.SAVE) {
-                    if (field.related) {
-                        start = data.data[field.def][field.related.field];
-                    } else {
-                        start = data.data[field.def];
-                    }
+                if (field.related && data.data[field.def]
+                    && field.related.field && data.data[field.def][field.related.field]
+                ) {
+                    start = data.data[field.def][field.related.field];
+                } else {
+                    start = data.data[field.def];
                 }
                 console.log(data.kind, field.def, start, this.validators(field));
                 config[field.def] = field.el.control(start, this.validators(field));
                 if (data.kind === DatastoreDialogType.DETAILS) {
                     config[field.def] = field.el.control(start, this.validators(field), true);
                 }
-
             });
+            if (data.tableDefinition.file) {
+                config[MetaEntity.HasFileFieldDef] = data.tableDefinition.file.fileFieldNameDef;
+                config[MetaEntity.UrlDef] = data.tableDefinition.file.resourcesUrl;
+            }
             this.formGroup = this.formBuilder.group(config);
         }
 
@@ -98,31 +134,6 @@ export class DatastoreDialogComponent implements OnInit {
         }
     }
 
-
-    childDialogRef = null;
-    childRelatedData: Array<RelatedData> = [];
-    actionsButtons = {
-        display: {
-            all: true
-        },
-        disabled: {
-            add: true,
-            edit: true,
-            details: false,
-            delete: true,
-        },
-        callback: {
-            add: DatastoreDialogComponent.Add,
-            edit: DatastoreDialogComponent.Edit,
-            delete: DatastoreDialogComponent.Delete,
-            details: DatastoreDialogComponent.Details,
-        },
-        data: (data: any) => DatastoreActionInputDataConverter(this, data)
-    };
-    formGroup: FormGroup;
-    fieldType = FieldTypeDefinitionEnum;
-    private canClose = false;
-    private date = new Date();
 
     static ConvertRelatedDataToDatastoreDialogInputData(
         that: DatastoreDialogComponent,
@@ -238,6 +249,94 @@ export class DatastoreDialogComponent implements OnInit {
             });
     }
 
+
+    // urlFile(droppedFile: NgxFileDropEntry) {
+    //     const reader = new FileReader();
+    //     const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+    //     fileEntry.file((file: File) => {
+    //         reader.readAsDataURL(file);
+    //         reader.onload = () => {
+    //             return reader.result;
+    //         };
+    //     });
+    //     return null;
+
+    // }
+    public dropped(files: NgxFileDropEntry[], field: FieldDefinition<any>) {
+
+        const fieldFile = this.el(field).value as FileFile;
+        console.log(fieldFile);
+        if (files && files.length === 1) {
+            // Is it a file?
+            if (files[0].fileEntry.isFile) {
+                this.file = files[0];
+
+                const fileEntry = this.file.fileEntry as FileSystemFileEntry;
+                const reader = new FileReader();
+
+                fileEntry.file((file: File) => {
+
+                    // preview file
+                    reader.readAsDataURL(file);
+                    reader.onload = () => {
+                        this.previewImage = this.sanitizer.bypassSecurityTrustStyle(`url(${reader.result})`);
+                    };
+
+                    const blob = file as Blob;
+                    this.formGroup.setControl(
+                        field.def,
+                        field.el.control(blob, this.validators(field))
+                    );
+                    // set name file
+                    if (fieldFile && fieldFile.fieldName && this.getErrorMessage(field.el.error, field.def) == null) {
+                        this.formGroup.setControl(
+                            fieldFile.fieldName,
+                            this.findFieldDefinitionByName(fieldFile.fieldName).el.control(
+                                file.name.slice(0, file.name.lastIndexOf('.')),
+                                this.validators(this.findFieldDefinitionByName(fieldFile.fieldName))
+                            )
+                        );
+                    }
+
+                    console.log('preview', this.formGroup.value);
+
+                    // Here you can access the real file
+                    console.log(this.file.relativePath, file);
+                    //           /**
+                    //            // You could upload it like this:
+                    //            const formData = new FormData()
+                    //            formData.append('logo', file, relativePath)
+                    //
+                    //            // Headers
+                    //            const headers = new HttpHeaders({
+                    //   'security-token': 'mytoken'
+                    // })
+                    //
+                    //            this.http.post('https://mybackend.com/api/upload/sanitize-and-save-logo',
+                    //            formData, { headers: headers, responseType: 'blob' })
+                    //            .subscribe(data => {
+                    //   // Sanitized logo returned from backend
+                    // })
+                    //            **/
+
+                });
+            } else {
+                // It was a directory (empty directories are added, otherwise only files)
+                const fileEntry = this.file.fileEntry as FileSystemDirectoryEntry;
+                this.file = null;
+            }
+        }
+    }
+
+    public fileOver(event) {
+        console.log(event);
+    }
+
+    public fileLeave(event) {
+        console.log(event);
+    }
+
+
     disabledActions(fieldName: string): DatastoreActionsInputDisabled {
         const relatedData: RelatedData = this.relatedData(fieldName);
         const selected: boolean = (this.formGroup && this.formGroup.value
@@ -294,13 +393,13 @@ export class DatastoreDialogComponent implements OnInit {
 
     refreshForDelete(receivedData: RelatedData) {
         this.formGroup.value[receivedData.name] = null;
-        this.date = new Date();
-        this.cdr.detectChanges();
-        console.log('refresh data', this.data.relatedData);
+        this.refresh(receivedData);
     }
 
     refresh(receivedData: RelatedData) {
-
+        this.date = new Date();
+        this.cdr.detectChanges();
+        console.log('refresh data', this.data.relatedData);
     }
 
     // actions
@@ -309,6 +408,17 @@ export class DatastoreDialogComponent implements OnInit {
     // delete = (receivedData: RelatedData) => DatastoreDialogHelpers.Delete(this, receivedData);
     // edit = (receivedData: RelatedData) => DatastoreDialogHelpers.Edit(this, receivedData);
 
+    findFieldDefinitionByName(fieldDef: string): FieldDefinition<any> {
+        let result: FieldDefinition<any> = null;
+        if (this.data && this.data.tableDefinition && this.data.tableDefinition.table) {
+            this.data.tableDefinition.table.forEach(field => {
+                if (field.def === fieldDef) {
+                    result = field;
+                }
+            });
+        }
+        return result;
+    }
 
     el(field: FieldDefinition<any>): FieldTypeDefinition {
 
@@ -465,24 +575,24 @@ export class DatastoreDialogComponent implements OnInit {
         console.log('send ', this.data.kind, ' data: ', this.data.data);
     }
 
-
     submit(value) {
         if (this.formGroup.valid) {
             this.send(value);
         }
     }
 
-    isSaveDialog() {
-        return this.data.kind === DatastoreDialogType.SAVE;
+    onFileSelect(event, fieldName: string) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.formGroup.get(fieldName).setValue(file);
+        }
     }
 
-    isUpdateDialog() {
-        return this.data.kind === DatastoreDialogType.UPDATE;
-    }
+    isSaveDialog = () => this.data.kind === DatastoreDialogType.SAVE;
 
-    isDetailsDialog() {
-        return this.data.kind === DatastoreDialogType.DETAILS;
-    }
+    isUpdateDialog = () => this.data.kind === DatastoreDialogType.UPDATE;
+
+    isDetailsDialog = () => this.data.kind === DatastoreDialogType.DETAILS;
 
     @HostListener('window:keyup.esc')
     close() {

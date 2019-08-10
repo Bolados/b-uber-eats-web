@@ -36,6 +36,7 @@ import {BreadcrumbModule} from 'angular-crumbs';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {TranslateModule} from '@ngx-translate/core';
+import {NgxFileDropModule} from 'ngx-file-drop';
 
 library.add(
     faAsterisk,
@@ -81,6 +82,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         RouterModule,
         PerfectScrollbarModule,
         BreadcrumbModule,
+        NgxFileDropModule,
 
         FormsModule,
         ReactiveFormsModule,
@@ -96,6 +98,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         RouterModule,
         PerfectScrollbarModule,
         BreadcrumbModule,
+        NgxFileDropModule,
 
         FormsModule,
         ReactiveFormsModule,

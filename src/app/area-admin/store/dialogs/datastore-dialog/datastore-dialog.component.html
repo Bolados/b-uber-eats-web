@@ -23,6 +23,42 @@
                                    placeholder="{{field?.def}}"
                                    type="{{el(field)?.value?.type}}"
                             >
+                            <div *ngSwitchCase="fieldType.FILE" class="center">
+                                <input #file
+                                       (change)="onFileSelect($event, field?.def)"
+                                       [required]="isRequiredField(el(field)?.value.validators)"
+                                       formControlName="{{field?.def}}"
+                                       hidden
+                                       matInput
+                                       name="{{field?.def}}"
+                                       placeholder="{{field?.def}}"
+                                >
+                                <ngx-file-drop
+                                    (onFileDrop)="dropped($event, field)"
+                                    (onFileLeave)="fileLeave($event)"
+                                    (onFileOver)="fileOver($event)"
+                                    [dropZoneClassName]="'dropzone'"
+                                    [multiple]="false"
+                                    dropZoneLabel="Drop files here"
+                                >
+                                    <ng-template
+                                        let-openFileSelector="openFileSelector"
+                                        ngx-file-drop-content-tmp
+                                    >
+                                        <div *ngIf="previewImage" [style.background-image]="previewImage" class="test">
+                                            <!--<img *ngIf="previewImage" [src]="previewImage" width="100%" height="100%">-->
+                                            <button
+                                                (click)="openFileSelector()"
+                                                class="mat-elevation-z0"
+                                                mat-raised-button
+                                                type="button"
+                                            ><strong>Browse Drag Image</strong></button>
+                                        </div>
+
+                                    </ng-template>
+
+                                </ngx-file-drop>
+                            </div>
                             <div *ngSwitchCase="fieldType.SELECT">
                                 <mat-select class="field-{{el(field)?.type}}-field"
                                             [required]="isRequiredField(el(field)?.value.validators)"
