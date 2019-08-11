@@ -1,5 +1,5 @@
-import {TableDefinition} from './table-definition.model';
-import {MetaEntity} from './entitiy.meta';
+import {TableDefinition} from './meta/table-definition.model';
+import {MetaEntity} from './meta/entitiy.meta';
 import {AbstractControl, FormControl, Validators} from '@angular/forms';
 import {API_RESOURCES_MEDIA} from '../../configuration';
 

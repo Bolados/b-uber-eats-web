@@ -17,6 +17,13 @@ import {DatastoreActionsComponent} from './components/datastore-actions/datastor
 import {DepartmentLayoutComponent} from './layouts/department-layout/department-layout.component';
 import {DistrictLayoutComponent} from './layouts/district-layout/district-layout.component';
 import {TownLayoutComponent} from './layouts/town-layout/town-layout.component';
+import {AddressLayoutComponent} from './layouts/address-layout/address-layout.component';
+import {MenuLayoutComponent} from './layouts/menu-layout/menu-layout.component';
+import {OrderLayoutComponent} from './layouts/order-layout/order-layout.component';
+import {PaymentLayoutComponent} from './layouts/payment-layout/payment-layout.component';
+import {RestaurantLayoutComponent} from './layouts/restaurant-layout/restaurant-layout.component';
+import {UserLayoutComponent} from './layouts/user-layout/user-layout.component';
+import {RestaurantMenuLayoutComponent} from './layouts/restaurant-menu-layout/restaurant-menu-layout.component';
 
 
 @NgModule({
@@ -33,7 +40,14 @@ import {TownLayoutComponent} from './layouts/town-layout/town-layout.component';
         DatastoreActionsComponent,
         DepartmentLayoutComponent,
         DistrictLayoutComponent,
-        TownLayoutComponent
+        TownLayoutComponent,
+        AddressLayoutComponent,
+        MenuLayoutComponent,
+        OrderLayoutComponent,
+        PaymentLayoutComponent,
+        RestaurantLayoutComponent,
+        UserLayoutComponent,
+        RestaurantMenuLayoutComponent
     ],
     entryComponents: [
         DatastoreDialogComponent

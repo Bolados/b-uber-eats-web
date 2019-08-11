@@ -1,5 +1,5 @@
-import {MetaEntity} from './entitiy.meta';
-import {TableDefinition} from './table-definition.model';
+import {MetaEntity} from './meta/entitiy.meta';
+import {TableDefinition} from './meta/table-definition.model';
 import {FormControl, Validators} from '@angular/forms';
 import {District} from './district';
 

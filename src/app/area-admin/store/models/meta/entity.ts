@@ -1,4 +1,4 @@
-import { TableDefinition } from './table-definition.model';
+import {TableDefinition} from './table-definition.model';
 
 export interface Entity<T> {
     id: string;

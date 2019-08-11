@@ -1,6 +1,6 @@
-import { MetaEntity } from './entitiy.meta';
-import { TableDefinition } from './table-definition.model';
-import { Validators, FormControl } from '@angular/forms';
+import {MetaEntity} from './meta/entitiy.meta';
+import {TableDefinition} from './meta/table-definition.model';
+import {FormControl, Validators} from '@angular/forms';
 
 
 export class Phone extends MetaEntity<Phone> {

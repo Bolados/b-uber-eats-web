@@ -1,7 +1,7 @@
 import {FormControl, Validators} from '@angular/forms';
-import {TableDefinition} from './table-definition.model';
-import { MetaEntity } from './entitiy.meta';
-import { Country } from './country';
+import {TableDefinition} from './meta/table-definition.model';
+import {MetaEntity} from './meta/entitiy.meta';
+import {Country} from './country';
 
 
 export class Region extends MetaEntity<Region> {
