@@ -4,6 +4,12 @@ import {FormControl, Validators} from '@angular/forms';
 
 export class PaymentMode extends MetaEntity<PaymentMode> {
 
+    static entity = 'payment_mode';
+    static relation = 'payment_mode';
+
+    static fieldRelation = [
+        'mode',
+    ];
 
     mode: string = null;
     description: string = null;

@@ -19,6 +19,14 @@ function pictureValidator(control: AbstractControl): { [key: string]: boolean } 
 
 export class Media extends MetaEntity<Media> {
 
+    static entity = 'media';
+    static relation = 'media';
+
+    static fieldRelation = [
+        'name',
+        'picture',
+    ];
+
     name: string = null;
     picture: Blob = null;
 

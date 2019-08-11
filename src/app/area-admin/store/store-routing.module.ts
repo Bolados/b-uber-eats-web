@@ -12,6 +12,13 @@ import {CountryLayoutComponent} from './layouts/country-layout';
 import {DepartmentLayoutComponent} from './layouts/department-layout';
 import {DistrictLayoutComponent} from './layouts/district-layout';
 import {TownLayoutComponent} from './layouts/town-layout';
+import {AddressLayoutComponent} from './layouts/address-layout';
+import {MenuLayoutComponent} from './layouts/menu-layout';
+import {OrderLayoutComponent} from './layouts/order-layout';
+import {PaymentLayoutComponent} from './layouts/payment-layout';
+import {RestaurantLayoutComponent} from './layouts/restaurant-layout';
+import {RestaurantMenuLayoutComponent} from './layouts/restaurant-menu-layout';
+import {UserLayoutComponent} from './layouts/user-layout';
 
 const routes: Routes = [
     {
@@ -68,6 +75,41 @@ const routes: Routes = [
         path: 'towns',
         component: TownLayoutComponent,
         data: {breadcrumb: 'Towns'}
+    },
+    {
+        path: 'addresses',
+        component: AddressLayoutComponent,
+        data: {breadcrumb: 'Addresses'}
+    },
+    {
+        path: 'menus',
+        component: MenuLayoutComponent,
+        data: {breadcrumb: 'Menus'}
+    },
+    {
+        path: 'orders',
+        component: OrderLayoutComponent,
+        data: {breadcrumb: 'Orders'}
+    },
+    {
+        path: 'payments',
+        component: PaymentLayoutComponent,
+        data: {breadcrumb: 'Payments'}
+    },
+    {
+        path: 'restaurants',
+        component: RestaurantLayoutComponent,
+        data: {breadcrumb: 'Restaurants'}
+    },
+    {
+        path: 'restaurants/menus',
+        component: RestaurantMenuLayoutComponent,
+        data: {breadcrumb: 'Restaurants Menu'}
+    },
+    {
+        path: 'users',
+        component: UserLayoutComponent,
+        data: {breadcrumb: 'Users'}
     }
 ];
 

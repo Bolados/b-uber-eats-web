@@ -1,11 +1,18 @@
 import {Component, Injector, OnInit} from '@angular/core';
 import {DatastoreService} from '../../services';
 import {District} from '../../models/district';
-import {TableDefinition} from '../../models';
+import {Country, Region, TableDefinition} from '../../models';
 import {MatTableDataSource} from '@angular/material';
 import {RelatedStore} from '../../components/datastore';
-import {API_RESOURCES_DISTRICT, API_RESOURCES_TOWN} from '../../../configuration';
+import {
+    API_RESOURCES_COUNTRY,
+    API_RESOURCES_DEPARTMENT,
+    API_RESOURCES_DISTRICT,
+    API_RESOURCES_REGION,
+    API_RESOURCES_TOWN
+} from '../../../configuration';
 import {Town} from '../../models/town';
+import {Department} from '../../models/department';
 
 @Component({
     selector: 'app-town-layout',
@@ -38,7 +45,43 @@ export class TownLayoutComponent implements OnInit {
                     this.injector
                 ).setAdpter(new District().adapter),
                 tableDefinition: new District().table_definition(),
-                entity: District
+                entity: District,
+                subRelatedStore: [
+                    {
+                        name: Department.relation,
+                        datastore: new DatastoreService<Department>(
+                            Department,
+                            API_RESOURCES_DEPARTMENT,
+                            this.injector
+                        ).setAdpter(new Department().adapter),
+                        tableDefinition: new Department().table_definition(),
+                        entity: Department,
+                        subRelatedStore: [
+                            {
+                                name: Country.relation,
+                                datastore: new DatastoreService<Country>(
+                                    Country,
+                                    API_RESOURCES_COUNTRY,
+                                    this.injector
+                                ).setAdpter(new Country().adapter),
+                                tableDefinition: new Country().table_definition(),
+                                entity: Country,
+                                subRelatedStore: [
+                                    {
+                                        name: Region.relation,
+                                        datastore: new DatastoreService<Region>(
+                                            Region,
+                                            API_RESOURCES_REGION,
+                                            this.injector
+                                        ).setAdpter(new Region().adapter),
+                                        tableDefinition: new Region().table_definition(),
+                                        entity: Region
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
             }
         ];
     }

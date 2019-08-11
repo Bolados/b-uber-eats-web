@@ -1,4 +1,20 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Injector, OnInit} from '@angular/core';
+import {DatastoreService} from '../../services';
+import {Town} from '../../models/town';
+import {Country, Region, TableDefinition} from '../../models';
+import {MatTableDataSource} from '@angular/material';
+import {RelatedStore} from '../../components/datastore';
+import {District} from '../../models/district';
+import {
+    API_RESOURCES_ADDRESS,
+    API_RESOURCES_COUNTRY,
+    API_RESOURCES_DEPARTMENT,
+    API_RESOURCES_DISTRICT,
+    API_RESOURCES_REGION,
+    API_RESOURCES_TOWN
+} from '../../../configuration';
+import {Department} from '../../models/department';
+import {Address} from '../../models/address';
 
 @Component({
     selector: 'app-address-layout',
@@ -7,10 +23,90 @@ import {Component, OnInit} from '@angular/core';
 })
 export class AddressLayoutComponent implements OnInit {
 
-    constructor() {
+    areaTitle = 'Addresses';
+
+    storeTitle = 'Address';
+    datastore: DatastoreService<Address> | null;
+    entity = Town;
+    adapter: (item: any) => Address = new Address().adapter;
+    tableDefinition: TableDefinition<Address> = new Address().table_definition();
+    dataSource: MatTableDataSource<Address> | null;
+
+    constructor(
+        private injector: Injector,
+    ) {
+    }
+
+    get relatedStores(): Array<RelatedStore<any>> {
+        return [
+            {
+                name: Town.relation,
+                datastore: new DatastoreService<Town>(
+                    Town,
+                    API_RESOURCES_TOWN,
+                    this.injector
+                ).setAdpter(new Town().adapter),
+                tableDefinition: new Town().table_definition(),
+                entity: Town,
+                subRelatedStore: [
+                    {
+                        name: District.relation,
+                        datastore: new DatastoreService<District>(
+                            District,
+                            API_RESOURCES_DISTRICT,
+                            this.injector
+                        ).setAdpter(new District().adapter),
+                        tableDefinition: new District().table_definition(),
+                        entity: District,
+                        subRelatedStore: [
+                            {
+                                name: Department.relation,
+                                datastore: new DatastoreService<Department>(
+                                    Department,
+                                    API_RESOURCES_DEPARTMENT,
+                                    this.injector
+                                ).setAdpter(new Department().adapter),
+                                tableDefinition: new Department().table_definition(),
+                                entity: Department,
+                                subRelatedStore: [
+                                    {
+                                        name: Country.relation,
+                                        datastore: new DatastoreService<Country>(
+                                            Country,
+                                            API_RESOURCES_COUNTRY,
+                                            this.injector
+                                        ).setAdpter(new Country().adapter),
+                                        tableDefinition: new Country().table_definition(),
+                                        entity: Country,
+                                        subRelatedStore: [
+                                            {
+                                                name: Region.relation,
+                                                datastore: new DatastoreService<Region>(
+                                                    Region,
+                                                    API_RESOURCES_REGION,
+                                                    this.injector
+                                                ).setAdpter(new Region().adapter),
+                                                tableDefinition: new Region().table_definition(),
+                                                entity: Region
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
     }
 
     ngOnInit() {
+        this.datastore = new DatastoreService<Address>(
+            Address,
+            API_RESOURCES_ADDRESS,
+            this.injector
+        ).setAdpter(new Address().adapter);
+
     }
 
 }

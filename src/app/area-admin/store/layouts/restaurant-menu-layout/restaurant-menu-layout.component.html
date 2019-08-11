@@ -1,1 +1,12 @@
-<p>restaurant-menu-layout works!</p>
+<app-base-area-admin [title]="areaTitle">
+    <app-datastore
+        [adapter]="adapter"
+        [dataSource]="dataSource"
+        [datastore]="datastore"
+        [entity]="entity"
+        [relatedStores]="relatedStores"
+        [tableDefinition]="tableDefinition"
+        [title]="storeTitle"
+    >
+    </app-datastore>
+</app-base-area-admin>

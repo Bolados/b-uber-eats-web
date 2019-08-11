@@ -9,7 +9,7 @@ export class Country extends MetaEntity<Country> {
     static entity = 'country';
     static relation = 'country';
 
-    static fieldRelation = 'name';
+    static fieldRelation = ['name', 'region.name'];
 
     name: string = null;
     variant: string = null;
@@ -53,7 +53,7 @@ export class Country extends MetaEntity<Country> {
         definition.related = [
             {
                 name: Region.relation,
-                field: Region.fieldRelation,
+                fields: Region.fieldRelation,
                 with: 'region',
             }
         ];
@@ -74,8 +74,6 @@ export class Country extends MetaEntity<Country> {
                             select: true,
                             validators: [
                                 Validators.required,
-                                // Validators.minLength(2),
-                                // Validators.maxLength(2)
                             ],
                         }
                     },
@@ -85,8 +83,6 @@ export class Country extends MetaEntity<Country> {
                             select: true,
                             validators: [
                                 Validators.required,
-                                // Validators.minLength(2),
-                                // Validators.maxLength(2)
                             ],
                         },
                     },
@@ -103,8 +99,6 @@ export class Country extends MetaEntity<Country> {
                     ),
                     error: {
                         required: 'required',
-                        minlength: 'least than 2',
-                        maxlength: 'greater than 2'
                     }
                 }
             },
@@ -162,7 +156,6 @@ export class Country extends MetaEntity<Country> {
                         type: 'input',
                         value: {
                             input: true,
-                            type: 'number',
                             validators: [
                                 // Validators.required,
                                 // Validators.minLength(2),

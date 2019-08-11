@@ -62,11 +62,23 @@ export abstract class MetaEntity<T> extends Resource implements Entity<T> {
         };
     }
 
-    safeValue(object: object, field: string) {
-        if (object) {
-            return object[field];
+    safeValue(object: object, fields: Array<string>) {
+        const result = [];
+        if (object && fields) {
+            fields.forEach(field => {
+                const splitter = field.split('.');
+                let res = object;
+                splitter.forEach(v => {
+                    if (res && res[v]) {
+                        res = res[v];
+                    } else {
+                        res = null;
+                    }
+                });
+                result.push(res);
+            });
         }
-        return null;
+        return result.join(' ');
     }
 
 

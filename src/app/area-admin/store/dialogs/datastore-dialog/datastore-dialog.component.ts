@@ -71,19 +71,20 @@ export class DatastoreDialogComponent implements OnInit {
     ) {
         this.dialogRef.disableClose = true;
         this.dialogRef.backdropClick().subscribe(() => {
-            this.close();
+            this.close(null);
         });
-        console.log('receive data :' , data.data);
+        console.log('receive data :', data);
         if (data && data.data && data.tableDefinition && data.tableDefinition.table && data.tableDefinition.table.length > 1) {
             const config = {};
             data.tableDefinition.table.forEach( field => {
                 let start = '';
-                const relatedField: RelatedFieldDefinition | false = this.relatedFields(field);
-                if (relatedField) {
-                    start = this.safeRelatedData(data.data, relatedField);
-                } else {
-                    start = data.data[field.def];
-                }
+                // const relatedField: RelatedFieldDefinition | false = this.relatedFields(field);
+                // if (relatedField) {
+                //     start = this.safeRelatedData(data.data, relatedField);
+                // } else {
+                //     start = data.data[field.def];
+                // }
+                start = data.data[field.def];
                 console.log(data.kind, field.def, start, this.validators(field));
                 config[field.def] = field.el.control(start, this.validators(field));
                 if (data.kind === DatastoreDialogType.DETAILS) {
@@ -91,8 +92,8 @@ export class DatastoreDialogComponent implements OnInit {
                 }
             });
             if (data.tableDefinition.file) {
-                config[MetaEntity.HasFileFieldDef] = data.tableDefinition.file.fileFieldNameDef;
-                config[MetaEntity.UrlDef] = data.tableDefinition.file.resourcesUrl;
+                data[MetaEntity.HasFileFieldDef] = data.tableDefinition.file.fileFieldNameDef;
+                data[MetaEntity.UrlDef] = data.tableDefinition.file.resourcesUrl;
             }
             this.formGroup = this.formBuilder.group(config);
         }
@@ -142,7 +143,7 @@ export class DatastoreDialogComponent implements OnInit {
         return {
             title: receivedData.name,
             kind: typeDialog,
-            data: isEntity ? receivedData.entity : receivedData.data,
+            data: isEntity ? new receivedData.entity() : receivedData.data,
             tableDefinition: receivedData.tableDefinition,
             relatedData: that.childRelatedData,
         };
@@ -166,6 +167,7 @@ export class DatastoreDialogComponent implements OnInit {
             DatastoreDialogComponent.ConvertRelatedDataToDatastoreDialogInputData(
                 that, receivedData, DatastoreDialogType.SAVE, true
             );
+        console.log('datastore dialog relation add converted for input', data);
         console.log(that.childDialogRef, data);
         if (DatastoreDialogComponent.CanOpenedDialog(that.childDialogRef, data)) {
             that.childDialogRef = that.childDialog.open(DatastoreDialogComponent, {
@@ -247,7 +249,6 @@ export class DatastoreDialogComponent implements OnInit {
             });
     }
 
-
     relatedFields(field: FieldDefinition<any>): RelatedFieldDefinition | false {
         const tableRelatedDefinition = this.data.tableDefinition.related;
         if (tableRelatedDefinition) {
@@ -259,21 +260,25 @@ export class DatastoreDialogComponent implements OnInit {
         return false;
     }
 
-    safeRelatedData(data, relatedFieldDefinition: RelatedFieldDefinition): string {
-        let result = null;
+    safeRelatedData(data, relatedFieldDefinition: RelatedFieldDefinition | false): string {
+        const result = [];
         if (relatedFieldDefinition) {
-            let properties = [relatedFieldDefinition.with];
-            if (relatedFieldDefinition && relatedFieldDefinition.dataAccess) {
-                properties = relatedFieldDefinition.dataAccess.split('.');
-            }
-            result = data;
+            const properties = relatedFieldDefinition.fields;
             properties.forEach(property => {
-                if (result && result[property]) {
-                    result = result[property];
-                }
+                const splitter = property.split('.');
+                let res = data;
+                splitter.forEach(v => {
+                    if (res && res[v]) {
+                        res = res[v];
+                    } else {
+                        res = null;
+                    }
+                });
+                result.push(res);
             });
         }
-        return result;
+        // console.log('safe data', data, relatedFieldDefinition, result);
+        return result.join(' ');
     }
 
 
@@ -371,31 +376,36 @@ export class DatastoreDialogComponent implements OnInit {
             && this.formGroup.value[fieldName].id
         );
         const haveDatastore = relatedData && relatedData.datastore;
-
-        console.log(relatedData != null, selected);
+        const isDetailsDialog = this.isDetailsDialog();
         return {
-            add: !haveDatastore,
-            edit: !(haveDatastore && selected),
-            details: !selected,
-            delete: !(relatedData && selected),
+            add: !haveDatastore || isDetailsDialog,
+            edit: !(haveDatastore && selected) || isDetailsDialog,
+            details: !(haveDatastore && selected),
+            delete: !(relatedData && selected) || isDetailsDialog,
         };
     }
 
-    buildActionData(relation: RelatedFieldDefinition, fieldName: string): RelatedData {
-        const relatedData: RelatedData = this.relatedData(relation.name);
-        const name = relation.name;
+    buildActionData(relation: RelatedFieldDefinition | false, field: FieldDefinition<any>): RelatedData {
         let entity = null;
         let datastore = null;
         let adapter = null;
         let tableDefinition = null;
         let data = null;
-        if (relatedData) {
-            entity = relatedData.entity;
-            tableDefinition = relatedData.tableDefinition;
-            adapter = relatedData.adapter;
-            data = this.formGroup.value[fieldName];
-            datastore = relatedData.datastore;
+        let relatedData: RelatedData = null;
+        let name = null;
+
+        if (relation) {
+            relatedData = this.relatedData(relation.name);
+            name = relation.name;
+            if (relatedData) {
+                entity = relatedData.entity;
+                tableDefinition = relatedData.tableDefinition;
+                adapter = relatedData.adapter;
+                data = this.formGroup.value[field.def];
+                datastore = relatedData.datastore;
+            }
         }
+
         return {
             name,
             entity,
@@ -552,42 +562,50 @@ export class DatastoreDialogComponent implements OnInit {
         return alert;
     }
 
-    resolveRelation(relation: RelatedFieldDefinition, value: string): any {
-        if (relation && value) {
-            const relatedData = this.relationsData(relation.name);
-            const found = relatedData.filter(data => {
-                const relatedValue: string = data[relation.field];
-                return  relatedValue.toLowerCase() === value.toLowerCase();
-            });
-            if (found.length === 1) {
-                return found[0];
+    resolveRelation(relation: RelatedFieldDefinition, value: object): any {
+        const result = value;
+        for (const key in value) {
+            if (value.hasOwnProperty(key)) {
+                const relatedFields: RelatedFieldDefinition[] | false = this.data.tableDefinition.related;
+                if (relatedFields) {
+                    const found = relatedFields.filter(f => f.name === key);
+                    if (found && found.length === 1) {
+                        result[key] = this.resolveRelation(found[0], value[key]);
+                    } else {
+                        result[key] = value[key];
+                    }
+                } else {
+                    result[key] = value[key];
+                }
             }
         }
-        return value;
+        return result;
     }
 
-    send(value) {
+
+    send(formGroupValue) {
         if (this.isUpdateDialog()) {
-            const relatedFields: RelatedFieldDefinition[] | false = this.data.tableDefinition.related;
-            if (relatedFields) {
-                for (const key in value) {
-                    if (value.hasOwnProperty(key)) {
+            for (const key in formGroupValue) {
+                if (formGroupValue.hasOwnProperty(key)) {
+                    let value = formGroupValue[key];
+                    const relatedFields: RelatedFieldDefinition[] | false = this.data.tableDefinition.related;
+                    if (relatedFields) {
                         const found = relatedFields.filter(f => f.name === key);
-                        if (found.length === 1) {
-                            this.data.data[key] = this.resolveRelation(found[0], value[key]);
-                        } else {
-                            this.data.data[key] = value[key];
+                        if (found && found.length === 1) {
+                            console.log('related field found for send', found, value);
+                            value = this.resolveRelation(found[0], value);
                         }
                     }
+                    this.data.data[key] = formGroupValue[key];
                 }
             }
         }
 
         if (this.isSaveDialog()) {
-            this.data.data = value;
+            this.data.data = formGroupValue;
         }
 
-        console.log('form data: ', value);
+        console.log('form data: ', formGroupValue);
         console.log('send ', this.data.kind, ' data: ', this.data.data);
     }
 
@@ -610,8 +628,12 @@ export class DatastoreDialogComponent implements OnInit {
 
     isDetailsDialog = () => this.data.kind === DatastoreDialogType.DETAILS;
 
-    @HostListener('window:keyup.esc')
-    close() {
+    @HostListener('window:keyup.esc', ['$event'])
+    close(event: Event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
         if (this.alertClose()) {
             Swal.fire({
                 title: 'Are you sure?',

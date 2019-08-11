@@ -2,16 +2,19 @@ import {MetaEntity} from './meta/entitiy.meta';
 import {TableDefinition} from './meta/table-definition.model';
 import {FormControl, Validators} from '@angular/forms';
 import {District} from './district';
-import {Department} from './department';
-import {Country} from './country';
-import {Region} from './region';
 
 export class Town extends MetaEntity<Town> {
 
     static entity = 'town';
     static relation = 'town';
 
-    static fieldRelation = 'name';
+    static fieldRelation = [
+        'name',
+        'district.name',
+        'district.department.name',
+        'district.department.country.name',
+        'district.department.country.region.name'
+    ];
 
     name: string = null;
     variant: string = null;
@@ -48,28 +51,9 @@ export class Town extends MetaEntity<Town> {
         definition.related = [
             {
                 name: District.relation,
-                field: District.fieldRelation,
+                fields: District.fieldRelation,
                 with: 'district',
             },
-            {
-                name: Department.relation,
-                field: Department.fieldRelation,
-                with: 'department',
-                dataAccess: 'district.department.country'
-            },
-            {
-                name: Country.relation,
-                field: Country.fieldRelation,
-                with: 'country',
-                dataAccess: 'district.department.country'
-
-            },
-            {
-                name: Region.relation,
-                field: Region.fieldRelation,
-                with: 'region',
-                dataAccess: 'district.department.country.region',
-            }
         ];
 
         definition.table = [
@@ -118,129 +102,6 @@ export class Town extends MetaEntity<Town> {
                         required: 'required',
                         minlength: 'least than 2',
                         maxlength: 'greater than 2'
-                    }
-                }
-            },
-            {
-                def: 'department',
-                row: {
-                    display: true,
-                    cell: (element: Town) => super.safeValue(element.district.department, Department.fieldRelation),
-                },
-                el: {
-                    add: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: [
-                                Validators.required,
-                            ],
-                        }
-                    },
-                    update: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: [
-                                Validators.required,
-                            ],
-                        },
-                    },
-                    details: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: false,
-                        }
-                    },
-                    control: (start, validators, disabled = false) => new FormControl(
-                        {value: start, disabled},
-                        validators ? validators : [],
-                    ),
-                    error: {
-                        required: 'required',
-                    }
-                }
-            },
-            {
-                def: 'country',
-                row: {
-                    display: true,
-                    cell: (element: Town) => super.safeValue(element.district.department.country, Country.fieldRelation),
-                },
-                el: {
-                    add: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: [
-                                Validators.required,
-                            ],
-                        }
-                    },
-                    update: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: [
-                                Validators.required,
-                            ],
-                        },
-                    },
-                    details: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: false,
-                        }
-                    },
-                    control: (start, validators, disabled = false) => new FormControl(
-                        {value: start, disabled},
-                        validators ? validators : [],
-                    ),
-                    error: {
-                        required: 'required',
-                    }
-                }
-            },
-            {
-                def: 'region',
-                row: {
-                    display: true,
-                    cell: (element: Town) => super.safeValue(element.district.department.country.region, Region.fieldRelation),
-                },
-                el: {
-                    add: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: [
-                                Validators.required,
-                            ],
-                        }
-                    },
-                    update: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: [
-                                Validators.required,
-                            ],
-                        },
-                    },
-                    details: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: false,
-                        }
-                    },
-                    control: (start, validators, disabled = false) => new FormControl(
-                        {value: start, disabled},
-                        validators ? validators : [],
-                    ),
-                    error: {
-                        required: 'required',
                     }
                 }
             },

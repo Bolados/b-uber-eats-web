@@ -11,7 +11,7 @@
             mat-dialog-content
         >
             <div *ngFor="let field of data?.tableDefinition?.table">
-                <div *ngIf="el(field)?.value[el(field)?.type]">
+                <div *ngIf="el(field)?.value[el(field)?.type]" class="form-field-{{el(field)?.type}}">
                     <mat-form-field class="mat-field-{{el(field)?.type}}" color="primary">
                         <div [ngSwitch]="el(field)?.type" class="field-{{el(field)?.type}}">
                             <input #input
@@ -65,8 +65,11 @@
                                             formControlName="{{field?.def}}"
                                             placeholder="{{field?.def}}"
                                 >
-                                    <mat-option *ngFor="let item of relationsData(field?.related?.name)" [value]="item">
-                                        {{item[field?.related?.field]}}
+                                    <mat-option *ngFor="let item of relationsData(relatedFields(field)?.name)"
+                                                [value]="item">
+                                        <!--{{displayRelatedData(item, field)}}-->
+                                        <!--{{item[relatedFields(field)?.field]}}-->
+                                        {{safeRelatedData(item, relatedFields(field))}}
                                     </mat-option>
                                 </mat-select>
                             </div>
@@ -89,7 +92,7 @@
                     <div [ngSwitch]="el(field)?.type" class="field-{{el(field)?.type}}-actions">
                         <app-datastore-actions
                             *ngSwitchCase="fieldType.SELECT"
-                            [data]="actionsButtons.data(buildActionData(field?.related, field?.def ))"
+                            [data]="actionsButtons.data(buildActionData(relatedFields(field), field ))"
                             [callback]="actionsButtons.callback"
                             [disabled]="disabledActions(field?.def)"
                             [display]="actionsButtons.display"
@@ -154,7 +157,7 @@
                 <button
                     mat-raised-button
                     color="warn"
-                    (click)="close()"
+                    (click)="close($event)"
                     type="button"
                     tabindex="-1"
                 >

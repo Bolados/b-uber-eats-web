@@ -5,6 +5,13 @@ import {FormControl, Validators} from '@angular/forms';
 export class OrderStatus extends MetaEntity<OrderStatus> {
 
 
+    static entity = 'order_status';
+    static relation = 'order_status';
+
+    static fieldRelation = [
+        'status',
+    ];
+
     status: string = null;
     description: string = null;
     orders: Array<any> = [];

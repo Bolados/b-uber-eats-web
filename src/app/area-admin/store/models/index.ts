@@ -8,4 +8,12 @@ export * from './meta/entitiy.meta';
 export * from './meta/entity';
 export * from './meta/table-definition.model';
 export * from './country';
+export * from './department';
+export * from './district';
+export * from './menu';
+export * from './order';
+export * from './payment';
+export * from './restaurant-menu';
+export * from './restaurant';
+export * from './user';
 

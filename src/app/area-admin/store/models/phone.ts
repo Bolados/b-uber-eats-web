@@ -5,6 +5,12 @@ import {FormControl, Validators} from '@angular/forms';
 
 export class Phone extends MetaEntity<Phone> {
 
+    static entity = 'phone';
+    static relation = 'phone';
+
+    static fieldRelation = [
+        'number',
+    ];
 
     number: string = null;
     user: any = null;

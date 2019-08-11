@@ -4,6 +4,13 @@ import {FormControl, Validators} from '@angular/forms';
 
 export class Role extends MetaEntity<Role> {
 
+    static entity = 'role';
+    static relation = 'role';
+
+    static fieldRelation = [
+        'name',
+    ];
+
     name: string = null;
     description: string = null;
     users: Array<any> = [];

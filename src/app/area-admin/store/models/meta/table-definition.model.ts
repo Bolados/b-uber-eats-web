@@ -13,9 +13,8 @@ export interface TableDefinition<T> {
 
 export interface RelatedFieldDefinition {
     name: string;
-    field: string;
+    fields: Array<string>;
     with: string; // fieldName in relation
-    dataAccess?: string
 }
 
 export interface FieldDefinition<T> {

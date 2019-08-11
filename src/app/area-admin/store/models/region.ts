@@ -9,7 +9,7 @@ export class Region extends MetaEntity<Region> {
     static entity = 'region';
     static relation = 'region';
 
-    static fieldRelation = 'name';
+    static fieldRelation = ['name'];
 
     code: string = null;
     name: string = null;

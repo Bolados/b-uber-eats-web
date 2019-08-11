@@ -147,6 +147,90 @@ const menuItems: MenuItem[] = [
                 open: false,
                 sub: false
             },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Addresses',
+                link: '/admin/store/addresses',
+                icon: {
+                    mat: false,
+                    fa: 'address_book'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Menus',
+                link: '/admin/store/menus',
+                icon: {
+                    mat: false,
+                    fa: 'question-circle'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Orders',
+                link: '/admin/store/orders',
+                icon: {
+                    mat: false,
+                    fa: 'question-circle'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Payments',
+                link: '/admin/store/payments',
+                icon: {
+                    mat: false,
+                    fa: 'question-circle'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Restaurant',
+                link: '/admin/store/restaurants',
+                icon: {
+                    mat: false,
+                    fa: 'question-circle'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'Restaurants Menus',
+                link: '/admin/store/restaurants/menus',
+                icon: {
+                    mat: false,
+                    fa: 'question-circle'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
+            {
+                translate: 'SIDEBAR.MENU.STORE',
+                name: 'User',
+                link: '/admin/store/users',
+                icon: {
+                    mat: false,
+                    fa: 'users'
+                },
+                chip: false,
+                open: false,
+                sub: false
+            },
         ]
     },
     {

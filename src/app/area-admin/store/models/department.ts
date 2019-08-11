@@ -3,14 +3,13 @@ import {FormControl, Validators} from '@angular/forms';
 import {MetaEntity} from './meta/entitiy.meta';
 import {District} from './district';
 import {Country} from './country';
-import {Region} from './region';
 
 export class Department extends MetaEntity<Department> {
 
     static entity = 'department';
     static relation = 'department';
 
-    static fieldRelation = 'name';
+    static fieldRelation = ['name', 'country.name', 'country.region.name'];
 
     name: string = null;
     variant: string = null;
@@ -48,15 +47,9 @@ export class Department extends MetaEntity<Department> {
         definition.related = [
             {
                 name: Country.relation,
-                field: Country.fieldRelation,
+                fields: Country.fieldRelation,
                 with: 'country',
             },
-            {
-                name: Region.relation,
-                field: Region.fieldRelation,
-                with: 'region',
-                dataAccess: 'country.region'
-            }
         ];
 
         definition.table = [
@@ -66,53 +59,6 @@ export class Department extends MetaEntity<Department> {
                 row: {
                     display: true,
                     cell: (element: Department) => super.safeValue(element.country, Country.fieldRelation),
-                },
-                el: {
-                    add: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: [
-                                Validators.required,
-                                // Validators.minLength(2),
-                                // Validators.maxLength(2)
-                            ],
-                        }
-                    },
-                    update: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: [
-                                Validators.required,
-                                // Validators.minLength(2),
-                                // Validators.maxLength(2)
-                            ],
-                        },
-                    },
-                    details: {
-                        type: 'select',
-                        value: {
-                            select: true,
-                            validators: false,
-                        }
-                    },
-                    control: (start, validators, disabled = false) => new FormControl(
-                        {value: start, disabled},
-                        validators ? validators : [],
-                    ),
-                    error: {
-                        required: 'required',
-                        minlength: 'least than 2',
-                        maxlength: 'greater than 2'
-                    }
-                }
-            },
-            {
-                def: 'region',
-                row: {
-                    display: true,
-                    cell: (element: Department) => super.safeValue(element.country.region, Region.fieldRelation),
                 },
                 el: {
                     add: {
