@@ -22,6 +22,7 @@ import {DatastoreDialogInputData, DatastoreDialogType, RelatedData} from './data
 import {DatastoreDialogStorageHelpers} from './datastore-dialog-storage.helpers';
 import {FileSystemDirectoryEntry, FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
 import {DomSanitizer} from '@angular/platform-browser';
+import {HttpClient} from '@angular/common/http';
 
 
 @Component({
@@ -62,6 +63,7 @@ export class DatastoreDialogComponent implements OnInit {
 
     constructor(
         private cdr: ChangeDetectorRef,
+        private httpClient: HttpClient,
         private sanitizer: DomSanitizer,
         public childDialog: MatDialog,
         public  overlay: Overlay,
@@ -179,7 +181,12 @@ export class DatastoreDialogComponent implements OnInit {
             that.childDialogRef.afterClosed().subscribe(() => {
                 if (data.data) {
                     console.log('after close', data.data);
-                    that.save(receivedData.datastore, data.data, receivedData.adapter);
+                    if (data.data[MetaEntity.HasFileFieldDef]) {
+                        that.saveFormData(receivedData.datastore, data.data, receivedData.adapter);
+                    } else {
+                        that.save(receivedData.datastore, data.data, receivedData.adapter);
+                    }
+
                     that.refresh(receivedData);
                 }
                 that.childDialogRef = null;
@@ -224,7 +231,11 @@ export class DatastoreDialogComponent implements OnInit {
             that.childDialogRef.afterClosed().subscribe(() => {
                 if (data.data) {
                     console.log('after close', data.data);
-                    that.update(receivedData.datastore, data.data, receivedData.adapter);
+                    if (data.data[MetaEntity.HasFileFieldDef]) {
+                        that.updateFormData(receivedData.datastore, data.data, receivedData.adapter);
+                    } else {
+                        that.update(receivedData.datastore, data.data, receivedData.adapter);
+                    }
                     that.refresh(receivedData);
                 }
                 that.childDialogRef = null;
@@ -423,8 +434,17 @@ export class DatastoreDialogComponent implements OnInit {
         return DatastoreDialogStorageHelpers.Save(datastore, data, adapter);
     }
 
+    saveFormData(datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) {
+        return DatastoreDialogStorageHelpers.SaveFormData(datastore, data, this.httpClient, adapter);
+    }
+
+
     update(datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) {
         return DatastoreDialogStorageHelpers.Update(datastore, data, adapter);
+    }
+
+    updateFormData(datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) {
+        return DatastoreDialogStorageHelpers.UpdateFormData(datastore, data, this.httpClient, adapter);
     }
 
     remove(datastore: DatastoreService<any>, data: any) {

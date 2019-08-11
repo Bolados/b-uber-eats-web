@@ -17,3 +17,5 @@ export const API_RESOURCES_RESTAURANTS = 'restaurants';
 export const API_RESOURCES_RESTAURANTS_MENUS = 'restaurants_menus';
 export const API_RESOURCES_USER = 'users';
 export const API_RESOURCES_ADDRESS = 'addresses';
+
+

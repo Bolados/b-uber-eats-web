@@ -3,83 +3,84 @@ import {DatastoreDialogComponent} from '../../dialogs/datastore-dialog';
 import Swal from 'sweetalert2';
 import {DatastoreDialogInputData, DatastoreDialogType} from '../../dialogs/datastore-dialog/datastore-dialog.models';
 import {MetaEntity} from '../../models';
+import {HttpErrorResponse} from '@angular/common/http';
 
 
 export class DatastoreHelpers {
 
     static Remove(that: DatastoreComponent, data) {
         console.log('remove', data);
-        // that.datastore.Delete(data).subscribe(result => {
-        //     console.log('deleted result', result);
-        //     // for Delete we use splice in order to remove single object from DataService
-        //     const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
-        //     that.datastore.data.value.splice(foundIndex, 1);
-        //     that.datastore.data.next(that.datastore.data.value);
-        //     that.refreshTable();
-        //     Swal.fire({
-        //         title: 'Successfully deleted',
-        //         type: 'success',
-        //         showConfirmButton: false,
-        //         timer: 1000,
-        //     });
-        //     that.refreshTable();
-        // },
-        // (err: HttpErrorResponse) => {
-        //     Swal.fire({
-        //         title: 'Error occurred ',
-        //         text: 'Details: ' + err,
-        //         type: 'error',
-        //         showConfirmButton: true,
-        //     });
+        that.datastore.delete(data).subscribe(result => {
+                console.log('deleted result', result);
+                // for Delete we use splice in order to remove single object from DataService
+                const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
+                that.datastore.data.value.splice(foundIndex, 1);
+                that.datastore.data.next(that.datastore.data.value);
+                that.refreshTable();
+                Swal.fire({
+                    title: 'Successfully deleted',
+                    type: 'success',
+                    showConfirmButton: false,
+                    timer: 1000,
+                });
+                that.refreshTable();
+            },
+            (err: HttpErrorResponse) => {
+                Swal.fire({
+                    title: 'Error occurred ',
+                    text: 'Details: ' + err,
+                    type: 'error',
+                    showConfirmButton: true,
+                });
+            });
+        // const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
+        // that.datastore.data.value.splice(foundIndex, 1);
+        // that.datastore.data.next(that.datastore.data.value);
+        // that.refreshTable();
+        // Swal.fire({
+        //     title: 'Successfully deleted',
+        //     type: 'success',
+        //     timer: 1000,
+        //     showConfirmButton: false,
         // });
-        const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
-        that.datastore.data.value.splice(foundIndex, 1);
-        that.datastore.data.next(that.datastore.data.value);
-        that.refreshTable();
-        Swal.fire({
-            title: 'Successfully deleted',
-            type: 'success',
-            timer: 1000,
-            showConfirmButton: false,
-        });
     }
 
 
     static Update(that: DatastoreComponent, data) {
         console.log('update', data);
-        const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
-        that.datastore.data.value.splice(foundIndex, 1);
-        that.datastore.data.value.push(data);
-        that.datastore.data.next(that.datastore.data.value);
-        Swal.fire({
-            title: 'Successfully updated',
-            type: 'success',
-            timer: 1000,
-            showConfirmButton: false,
-        });
-        that.refreshTable();
-        // that.datastore.update(data).subscribe(result => {
-        //     console.log('update result', result);
-        //     result = that.adapter(result);
-        //     const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
-        //     that.datastore.data.value.splice(foundIndex, 1);
-        //     that.datastore.data.value.push(result);
-        //     that.datastore.data.next(that.datastore.data.value);
-        //     Swal.fire({
-        //         title: 'Successfully updated',
-        //         type: 'success',
-        //         timer: 1000,
-        //         showConfirmButton: false,
-        //     });
-        // },
-        // (err: HttpErrorResponse) => {
-        //     Swal.fire({
-        //         title: 'Error occurred ',
-        //         text: 'Details: ' + err,
-        //         type: 'error',
-        //         showConfirmButton: true,
-        //     });
+        // const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
+        // that.datastore.data.value.splice(foundIndex, 1);
+        // that.datastore.data.value.push(data);
+        // that.datastore.data.next(that.datastore.data.value);
+        // Swal.fire({
+        //     title: 'Successfully updated',
+        //     type: 'success',
+        //     timer: 1000,
+        //     showConfirmButton: false,
         // });
+        // that.refreshTable();
+        that.datastore.update(data).subscribe(result => {
+                console.log('update result', result);
+                result = that.adapter(result);
+                const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
+                that.datastore.data.value.splice(foundIndex, 1);
+                that.datastore.data.value.push(result);
+                that.datastore.data.next(that.datastore.data.value);
+                Swal.fire({
+                    title: 'Successfully updated',
+                    type: 'success',
+                    timer: 1000,
+                    showConfirmButton: false,
+                });
+            },
+            (err: HttpErrorResponse) => {
+                Swal.fire({
+                    title: 'Error occurred ',
+                    text: 'Details: ' + err,
+                    type: 'error',
+                    showConfirmButton: true,
+                });
+            });
     }
 
     static convertDataToFormData(data): FormData {
@@ -103,28 +104,46 @@ export class DatastoreHelpers {
     static UpdateFormData(that: DatastoreComponent, data) {
         const formData = DatastoreHelpers.convertDataToFormData(data);
         let url = DatastoreHelpers.urlFromData(data);
-        const id = DatastoreHelpers.urlFromData(data.id);
+        const id = data.id;
         if (id) {
             url += '/' + id.toString();
         }
         if (formData && url) {
             that.httpClient.put<any>(url, formData).subscribe(
                 (result) => {
-                    console.log(result);
+                    console.log('update formdata result', result);
+                    result = that.adapter(result);
+                    const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
+                    that.datastore.data.value.splice(foundIndex, 1);
+                    that.datastore.data.value.push(result);
+                    that.datastore.data.next(that.datastore.data.value);
+                    Swal.fire({
+                        title: 'Successfully updated',
+                        type: 'success',
+                        timer: 1000,
+                        showConfirmButton: false,
+                    });
                 },
-                (err) => console.log(err)
+                (err: HttpErrorResponse) => {
+                    Swal.fire({
+                        title: 'Error occurred ',
+                        text: 'Details: ' + err,
+                        type: 'error',
+                        showConfirmButton: true,
+                    });
+                }
             );
-            const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
-            that.datastore.data.value.splice(foundIndex, 1);
-            that.datastore.data.value.push(data);
-            that.datastore.data.next(that.datastore.data.value);
-            Swal.fire({
-                title: 'Successfully updated formData',
-                type: 'success',
-                timer: 1000,
-                showConfirmButton: false,
-            });
-            that.refreshTable();
+            // const foundIndex = that.datastore.data.value.findIndex(x => x.id === data.id);
+            // that.datastore.data.value.splice(foundIndex, 1);
+            // that.datastore.data.value.push(data);
+            // that.datastore.data.next(that.datastore.data.value);
+            // Swal.fire({
+            //     title: 'Successfully updated formData',
+            //     type: 'success',
+            //     timer: 1000,
+            //     showConfirmButton: false,
+            // });
+            // that.refreshTable();
         }
     }
 
@@ -132,62 +151,78 @@ export class DatastoreHelpers {
         const formData = DatastoreHelpers.convertDataToFormData(data);
         const url = DatastoreHelpers.urlFromData(data);
         if (formData && url) {
-            that.httpClient.post<any>(url, formData).subscribe(
-                (result) => {
-                    console.log(result);
+            that.httpClient.post<any>(url, formData).subscribe(result => {
+                    console.log('saved result', result);
+                    // for Delete we use splice in order to remove single object from DataService
+                    result = that.adapter(result);
+                    that.datastore.data.value.push(result);
+                    that.datastore.data.next(that.datastore.data.value);
+                    Swal.fire({
+                        title: 'Successfully added',
+                        type: 'success',
+                        timer: 1000,
+                        showConfirmButton: false,
+                    });
                 },
-                (err) => console.log(err)
+                (err: HttpErrorResponse) => {
+                    Swal.fire({
+                        title: 'Error occurred ',
+                        text: 'Details: ' + err,
+                        type: 'error',
+                        showConfirmButton: true,
+                    });
+                }
             );
 
-            data.id = (that.datastore.data.value.length + 1).toString();
-            that.datastore.data.value.push(data);
-            that.datastore.data.next(that.datastore.data.value);
-            Swal.fire({
-                title: 'Successfully saved formData',
-                type: 'success',
-                timer: 1000,
-                showConfirmButton: false,
-            });
-            that.refreshTable();
+            // data.id = (that.datastore.data.value.length + 1).toString();
+            // that.datastore.data.value.push(data);
+            // that.datastore.data.next(that.datastore.data.value);
+            // Swal.fire({
+            //     title: 'Successfully saved formData',
+            //     type: 'success',
+            //     timer: 1000,
+            //     showConfirmButton: false,
+            // });
+            // that.refreshTable();
         }
     }
 
 
     static Save(that: DatastoreComponent, data) {
         console.log('save', data, that.datastore.data.value);
-        data.id = (that.datastore.data.value.length + 1).toString();
-        that.datastore.data.value.push(data);
-        that.datastore.data.next(that.datastore.data.value);
-        Swal.fire({
-            title: 'Successfully Add',
-            type: 'success',
-            timer: 1000,
-            showConfirmButton: false,
-        });
-        that.refreshTable();
-        console.log('saved', data, that.datastore.data.value);
-
-        // that.datastore.create(data).subscribe(result => {
-        //     console.log('saved result', result);
-        //     // for Delete we use splice in order to remove single object from DataService
-        //     result = that.adapter(result);
-        //     that.datastore.data.value.push(result);
-        //     that.datastore.data.next(that.datastore.data.value);
-        //     Swal.fire({
-        //         title: 'Successfully added',
-        //         type: 'success',
-        //         timer: 1000,
-        //         showConfirmButton: false,
-        //     });
-        // },
-        // (err: HttpErrorResponse) => {
-        //     Swal.fire({
-        //         title: 'Error occurred ',
-        //         text: 'Details: ' + err,
-        //         type: 'error',
-        //         showConfirmButton: true,
-        //     });
+        // data.id = (that.datastore.data.value.length + 1).toString();
+        // that.datastore.data.value.push(data);
+        // that.datastore.data.next(that.datastore.data.value);
+        // Swal.fire({
+        //     title: 'Successfully Add',
+        //     type: 'success',
+        //     timer: 1000,
+        //     showConfirmButton: false,
         // });
+        // that.refreshTable();
+        // console.log('saved', data, that.datastore.data.value);
+
+        that.datastore.create(data).subscribe(result => {
+                console.log('saved result', result);
+                // for Delete we use splice in order to remove single object from DataService
+                result = that.adapter(result);
+                that.datastore.data.value.push(result);
+                that.datastore.data.next(that.datastore.data.value);
+                Swal.fire({
+                    title: 'Successfully added',
+                    type: 'success',
+                    timer: 1000,
+                    showConfirmButton: false,
+                });
+            },
+            (err: HttpErrorResponse) => {
+                Swal.fire({
+                    title: 'Error occurred ',
+                    text: 'Details: ' + err,
+                    type: 'error',
+                    showConfirmButton: true,
+                });
+            });
     }
 
     // removeList(elements: Array<any>) {
