@@ -10,7 +10,6 @@ import {
     FileFile,
     MetaEntity,
     RelatedFieldDefinition,
-    TableDefinition,
     validatorsOf
 } from '../../models';
 import {Overlay} from '@angular/cdk/overlay';
@@ -75,14 +74,13 @@ export class DatastoreDialogComponent implements OnInit {
             this.close();
         });
         console.log('receive data :' , data.data);
-        if (data && data.tableDefinition && data.tableDefinition.table && data.tableDefinition.table.length > 1) {
+        if (data && data.data && data.tableDefinition && data.tableDefinition.table && data.tableDefinition.table.length > 1) {
             const config = {};
             data.tableDefinition.table.forEach( field => {
                 let start = '';
-                if (field.related && data.data[field.def]
-                    && field.related.field && data.data[field.def][field.related.field]
-                ) {
-                    start = data.data[field.def][field.related.field];
+                const relatedField: RelatedFieldDefinition | false = this.relatedFields(field);
+                if (relatedField) {
+                    start = this.safeRelatedData(data.data, relatedField);
                 } else {
                     start = data.data[field.def];
                 }
@@ -250,6 +248,35 @@ export class DatastoreDialogComponent implements OnInit {
     }
 
 
+    relatedFields(field: FieldDefinition<any>): RelatedFieldDefinition | false {
+        const tableRelatedDefinition = this.data.tableDefinition.related;
+        if (tableRelatedDefinition) {
+            const filter = tableRelatedDefinition.filter(v => v.with === field.def);
+            if (filter && filter.length === 1) {
+                return filter[0];
+            }
+        }
+        return false;
+    }
+
+    safeRelatedData(data, relatedFieldDefinition: RelatedFieldDefinition): string {
+        let result = null;
+        if (relatedFieldDefinition) {
+            let properties = [relatedFieldDefinition.with];
+            if (relatedFieldDefinition && relatedFieldDefinition.dataAccess) {
+                properties = relatedFieldDefinition.dataAccess.split('.');
+            }
+            result = data;
+            properties.forEach(property => {
+                if (result && result[property]) {
+                    result = result[property];
+                }
+            });
+        }
+        return result;
+    }
+
+
     // urlFile(droppedFile: NgxFileDropEntry) {
     //     const reader = new FileReader();
     //     const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
@@ -382,14 +409,17 @@ export class DatastoreDialogComponent implements OnInit {
 
     // storage
 
-    save = (datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) => DatastoreDialogStorageHelpers
-        .Save(datastore, data, adapter);
+    save(datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) {
+        return DatastoreDialogStorageHelpers.Save(datastore, data, adapter);
+    }
 
-    update = (datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) => DatastoreDialogStorageHelpers
-        .Update(datastore, data, adapter);
+    update(datastore: DatastoreService<any>, data: any, adapter: (item: any) => any) {
+        return DatastoreDialogStorageHelpers.Update(datastore, data, adapter);
+    }
 
-    remove = (datastore: DatastoreService<any>, data: any) => DatastoreDialogStorageHelpers
-        .Remove(datastore, data);
+    remove(datastore: DatastoreService<any>, data: any) {
+        return DatastoreDialogStorageHelpers.Remove(datastore, data);
+    }
 
     refreshForDelete(receivedData: RelatedData) {
         this.formGroup.value[receivedData.name] = null;
@@ -504,8 +534,9 @@ export class DatastoreDialogComponent implements OnInit {
                     let current: string = this.data.data[field.def];
                     const formData: string = this.formGroup.value[field.def];
                     if (this.isUpdateDialog() && current ) {
-                        if (field.related && current) {
-                            current = current[field.related.field];
+                        const relatedField: RelatedFieldDefinition | false = this.relatedFields(field);
+                        if (relatedField && current) {
+                            current = this.safeRelatedData(current, relatedField);
                         }
                         console.log('compare', field.def, current, formData);
                         if (current !== formData) {
@@ -519,22 +550,6 @@ export class DatastoreDialogComponent implements OnInit {
             });
         }
         return alert;
-    }
-
-    relatedFieldsOf(tableDefinition: TableDefinition<any>): RelatedFieldDefinition[] {
-        const relatedFields: RelatedFieldDefinition[] = [];
-        if (tableDefinition && tableDefinition.table && tableDefinition.table.length > 1) {
-            tableDefinition.table.forEach( field => {
-                if (field.related) {
-                    relatedFields.push(field.related);
-                }
-            });
-        }
-        return relatedFields;
-    }
-
-    hasRelatedFields(tableDefinition: TableDefinition<any>): boolean {
-        return (this.relatedFieldsOf(tableDefinition).length > 0);
     }
 
     resolveRelation(relation: RelatedFieldDefinition, value: string): any {
@@ -553,15 +568,16 @@ export class DatastoreDialogComponent implements OnInit {
 
     send(value) {
         if (this.isUpdateDialog()) {
-            const relatedFiels: RelatedFieldDefinition[] = this.relatedFieldsOf(this.data.tableDefinition);
-            for (const key in value) {
-                if (value.hasOwnProperty(key)) {
-                    const found = relatedFiels.filter(f => f.name === key );
-                    if (found.length === 1) {
-                        const resolved = this.resolveRelation(found[0], value[key]);
-                        this.data.data[key] = resolved;
-                    } else {
-                        this.data.data[key] = value[key];
+            const relatedFields: RelatedFieldDefinition[] | false = this.data.tableDefinition.related;
+            if (relatedFields) {
+                for (const key in value) {
+                    if (value.hasOwnProperty(key)) {
+                        const found = relatedFields.filter(f => f.name === key);
+                        if (found.length === 1) {
+                            this.data.data[key] = this.resolveRelation(found[0], value[key]);
+                        } else {
+                            this.data.data[key] = value[key];
+                        }
                     }
                 }
             }

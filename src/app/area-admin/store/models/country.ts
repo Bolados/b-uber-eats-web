@@ -50,14 +50,19 @@ export class Country extends MetaEntity<Country> {
     table_definition(): TableDefinition<Country> {
         const definition = super.table_definition();
 
+        definition.related = [
+            {
+                name: Region.relation,
+                field: Region.fieldRelation,
+                with: 'region',
+            }
+        ];
+
+
         definition.table = [
             ...definition.table,
             {
                 def: 'region',
-                related: {
-                    name: Region.relation,
-                    field: Region.fieldRelation
-                },
                 row: {
                     display: true,
                     cell: (element: Country) => super.safeValue(element.region, Region.fieldRelation),

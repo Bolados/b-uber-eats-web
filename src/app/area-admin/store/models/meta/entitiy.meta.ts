@@ -88,6 +88,7 @@ export abstract class MetaEntity<T> extends Resource implements Entity<T> {
     table_definition(): TableDefinition<T> {
         return {
             file: false,
+            related: false,
             table: [
                 {
                     def: MetaEntity.idDef,

@@ -4,6 +4,7 @@ import {Resource} from '@lagoshny/ngx-hal-client';
 
 export interface TableDefinition<T> {
     table: FieldDefinition<T>[];
+    related?: Array<RelatedFieldDefinition> | false;
     file: {
         fileFieldNameDef: string;
         resourcesUrl: string;
@@ -13,11 +14,12 @@ export interface TableDefinition<T> {
 export interface RelatedFieldDefinition {
     name: string;
     field: string;
+    with: string; // fieldName in relation
+    dataAccess?: string
 }
 
 export interface FieldDefinition<T> {
     def: string;
-    related?: RelatedFieldDefinition;
     row: RowElementDefinition<T>;
     el: FieldElementDefinition;
 }
