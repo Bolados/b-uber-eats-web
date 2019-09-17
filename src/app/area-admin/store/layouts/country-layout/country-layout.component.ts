@@ -30,7 +30,7 @@ export class CountryLayoutComponent implements OnInit {
                     Region,
                     API_RESOURCES_REGION,
                     this.injector
-                ).setAdpter(new Region().adapter),
+                ).setAdapter(new Region().adapter),
                 tableDefinition: new Region().table_definition(),
                 entity: Region
             }
@@ -46,7 +46,7 @@ export class CountryLayoutComponent implements OnInit {
             Country,
             API_RESOURCES_COUNTRY,
             this.injector
-        ).setAdpter(new Country().adapter);
+        ).setAdapter(new Country().adapter);
 
     }
 }

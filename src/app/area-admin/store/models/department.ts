@@ -155,7 +155,6 @@ export class Department extends MetaEntity<Department> {
                         type: 'input',
                         value: {
                             input: true,
-                            type: 'number',
                             validators: [
                                 // Validators.required,
                                 // Validators.minLength(2),
@@ -167,7 +166,6 @@ export class Department extends MetaEntity<Department> {
                         type: 'input',
                         value: {
                             input: true,
-                            type: 'number',
                             validators: [
                                 // Validators.required,
                                 // Validators.minLength(2),

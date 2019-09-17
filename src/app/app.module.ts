@@ -6,21 +6,15 @@ import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SharedModule} from './shared';
 import {CoreModule} from './core';
-import {
-    MissingTranslationHandler,
-    TranslateLoader,
-    TranslateModule,
-    TranslateService
-} from '@ngx-translate/core';
-import {HttpClient, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {MissingTranslationHandler, TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {HTTP_INTERCEPTORS, HttpClient} from '@angular/common/http';
 import {MatPaginatorIntl} from '@angular/material';
 import {PaginatorI18n} from './shared/utils/paginatorI18n.model';
 import {HttpLoaderFactory, MyMissingTranslationHandler} from './shared/utils/i18n.helpers';
-import { NgxHalClientModule } from '@lagoshny/ngx-hal-client';
-import { ExternalConfigurationService } from './services/externalconfiguration.service';
-import { HttpErrorInterceptor } from './errors/handle.error';
-import { timeout } from 'q';
-
+import {NgxHalClientModule} from '@lagoshny/ngx-hal-client';
+import {ExternalConfigurationService} from './services/externalconfiguration.service';
+import {HttpErrorInterceptor} from './errors/handle.error';
+import {JwtInterceptor} from './authentication/interceptors/jwt-interceptor';
 
 
 @NgModule({
@@ -60,7 +54,12 @@ import { timeout } from 'q';
             provide: HTTP_INTERCEPTORS,
             useClass: HttpErrorInterceptor,
             multi: true
-        }
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: JwtInterceptor,
+            multi: true
+        },
     ],
   bootstrap: [AppComponent]
 })

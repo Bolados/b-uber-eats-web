@@ -35,7 +35,7 @@ export class RestaurantLayoutComponent implements OnInit {
             Restaurant,
             API_RESOURCES_RESTAURANTS,
             this.injector
-        ).setAdpter(new Restaurant().adapter);
+        ).setAdapter(new Restaurant().adapter);
 
     }
 

@@ -7,7 +7,8 @@ import {TranslateService} from '@ngx-translate/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'ubereats back office';
+
+    title = 'ubereats back office';
 
     constructor(public translate: TranslateService) {
         const Languages = ['en', 'fr'];

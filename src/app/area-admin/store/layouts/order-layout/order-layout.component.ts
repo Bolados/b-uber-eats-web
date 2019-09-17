@@ -36,7 +36,7 @@ export class OrderLayoutComponent implements OnInit {
             Order,
             API_RESOURCES_ORDER,
             this.injector
-        ).setAdpter(new Order().adapter);
+        ).setAdapter(new Order().adapter);
 
     }
 

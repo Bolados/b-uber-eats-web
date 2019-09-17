@@ -254,8 +254,11 @@ export class DatastoreComponent implements OnInit, AfterViewInit {
                             datastore: relstore.datastore
                         };
                         const foundIndex = this.relatedData.findIndex(x => x.name === reldata.name);
-                        this.relatedData.splice(foundIndex, 1);
-                        this.relatedData.push(reldata);
+                        if (foundIndex >= 0) {
+                            this.relatedData[foundIndex] = reldata;
+                        } else {
+                            this.relatedData.push(reldata);
+                        }
                     });
                     relstore.datastore.initData();
                 }

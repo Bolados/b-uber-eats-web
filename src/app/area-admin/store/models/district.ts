@@ -159,7 +159,6 @@ export class District extends MetaEntity<District> {
                         type: 'input',
                         value: {
                             input: true,
-                            type: 'number',
                             validators: [
                                 // Validators.required,
                                 // Validators.minLength(2),
@@ -171,7 +170,6 @@ export class District extends MetaEntity<District> {
                         type: 'input',
                         value: {
                             input: true,
-                            type: 'number',
                             validators: [
                                 // Validators.required,
                                 // Validators.minLength(2),
@@ -211,7 +209,7 @@ export class District extends MetaEntity<District> {
                             validators: [
                                 Validators.required,
                                 Validators.minLength(2),
-                                Validators.maxLength(2)
+                                Validators.maxLength(5)
                             ],
                         }
                     },
@@ -222,7 +220,7 @@ export class District extends MetaEntity<District> {
                             validators: [
                                 Validators.required,
                                 Validators.minLength(2),
-                                Validators.maxLength(2)
+                                Validators.maxLength(5)
                             ],
                         },
                     },

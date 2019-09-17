@@ -36,7 +36,7 @@ export class PaymentLayoutComponent implements OnInit {
             Payment,
             API_RESOURCES_PAYMENT,
             this.injector
-        ).setAdpter(new Payment().adapter);
+        ).setAdapter(new Payment().adapter);
 
     }
 

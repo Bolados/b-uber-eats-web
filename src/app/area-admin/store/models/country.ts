@@ -17,8 +17,8 @@ export class Country extends MetaEntity<Country> {
     code3: string = null;
     phoneCode: string = null;
     domain: string = null;
-    population: number = 0;
-    density: number = 0;
+    population: string = '0';
+    density: string = '0';
     localRegion: Region = null;
     departments: Array<Department> = [];
 
@@ -385,7 +385,7 @@ export class Country extends MetaEntity<Country> {
                 def: 'population',
                 row: {
                     display: false,
-                    cell: (element: Country) => element.population.toString(),
+                    cell: (element: Country) => element.population,
                 },
                 el: {
                     add: {
@@ -434,7 +434,7 @@ export class Country extends MetaEntity<Country> {
                 def: 'density',
                 row: {
                     display: false,
-                    cell: (element: Country) => element.density.toString(),
+                    cell: (element: Country) => element.density,
                 },
                 el: {
                     add: {

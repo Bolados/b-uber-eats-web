@@ -33,7 +33,7 @@ export class DatastoreService<T extends Resource> extends RestService<T> {
 
     private adapter: (item: any) => T = null;
 
-    setAdpter(adapter: (item: any) => T): DatastoreService<T> {
+    setAdapter(adapter: (item: any) => T): DatastoreService<T> {
         this.adapter = adapter;
         return this;
     }

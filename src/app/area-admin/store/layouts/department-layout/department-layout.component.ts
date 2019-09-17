@@ -36,7 +36,7 @@ export class DepartmentLayoutComponent implements OnInit {
                     Country,
                     API_RESOURCES_COUNTRY,
                     this.injector
-                ).setAdpter(new Country().adapter),
+                ).setAdapter(new Country().adapter),
                 tableDefinition: new Country().table_definition(),
                 entity: Country,
                 subRelatedStore: [
@@ -46,7 +46,7 @@ export class DepartmentLayoutComponent implements OnInit {
                             Region,
                             API_RESOURCES_REGION,
                             this.injector
-                        ).setAdpter(new Region().adapter),
+                        ).setAdapter(new Region().adapter),
                         tableDefinition: new Region().table_definition(),
                         entity: Region
                     }
@@ -60,7 +60,7 @@ export class DepartmentLayoutComponent implements OnInit {
             Department,
             API_RESOURCES_DEPARTMENT,
             this.injector
-        ).setAdpter(new Department().adapter);
+        ).setAdapter(new Department().adapter);
 
     }
 

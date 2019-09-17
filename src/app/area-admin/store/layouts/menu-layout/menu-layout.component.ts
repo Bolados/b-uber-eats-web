@@ -36,7 +36,7 @@ export class MenuLayoutComponent implements OnInit {
             Menu,
             API_RESOURCES_MENU,
             this.injector
-        ).setAdpter(new Menu().adapter);
+        ).setAdapter(new Menu().adapter);
 
     }
 

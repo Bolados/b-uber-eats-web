@@ -1,6 +1,6 @@
 import {Component, Injector, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
-import {API_RESOURCES_REGION} from 'src/app/area-admin/configuration/api.configuration';
+import {API_RESOURCES_REGION} from 'src/app/_config/api.configuration';
 import {DatastoreService} from '../../services';
 import {Region} from '../../models';
 import {TableDefinition} from '../../models/meta/table-definition.model';

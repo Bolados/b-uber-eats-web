@@ -2,16 +2,7 @@ import {ChangeDetectorRef, Component, HostListener, Inject, OnInit} from '@angul
 import Swal from 'sweetalert2';
 import {FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
-import {
-    FieldDefinition,
-    FieldElementDefinitionType,
-    FieldTypeDefinition,
-    FieldTypeDefinitionEnum,
-    FileFile,
-    MetaEntity,
-    RelatedFieldDefinition,
-    validatorsOf
-} from '../../models';
+import {FieldDefinition, FieldTypeDefinition, FieldTypeDefinitionEnum, FileFile, MetaEntity, RelatedFieldDefinition} from '../../models';
 import {Overlay} from '@angular/cdk/overlay';
 import {DatastoreService} from '../../services';
 import {
@@ -80,13 +71,22 @@ export class DatastoreDialogComponent implements OnInit {
             const config = {};
             data.tableDefinition.table.forEach( field => {
                 let start = '';
-                // const relatedField: RelatedFieldDefinition | false = this.relatedFields(field);
-                // if (relatedField) {
-                //     start = this.safeRelatedData(data.data, relatedField);
-                // } else {
-                //     start = data.data[field.def];
-                // }
-                start = data.data[field.def];
+                const relatedField: RelatedFieldDefinition | false = this.relatedFields(field);
+                if (relatedField) {
+                    const relationData = this.relationsData(relatedField.name);
+                    const found = relationData.filter(v => (data.data[field.def] && (v.id === data.data[field.def].id)));
+                    if (found && found.length === 1) {
+                        start = found[0];
+                    }
+                    // start = this.safeRelatedData(data.data[field.def], relatedField);
+                    // console.log('start rel data', data.data[field.def]);
+                    // console.log('start rel data', relatedField);
+                    // console.log('start rel data', start);
+                    // start = data.data.id;
+                } else {
+                    start = data.data[field.def];
+                }
+                // start = data.data[field.def];
                 console.log(data.kind, field.def, start, this.validators(field));
                 config[field.def] = field.el.control(start, this.validators(field));
                 if (data.kind === DatastoreDialogType.DETAILS) {
@@ -517,7 +517,7 @@ export class DatastoreDialogComponent implements OnInit {
         return null;
     }
 
-    relationsData(fieldDef: string) {
+    relationsData(fieldDef: string): Array<any> {
         let values: Array<any> = [];
         if ( this.data && this.data.relatedData) {
             this.data.relatedData.forEach(rel => {
@@ -530,17 +530,7 @@ export class DatastoreDialogComponent implements OnInit {
     }
 
     validators(field: FieldDefinition<any>): Array<ValidatorFn> | false {
-        let validators: Array<ValidatorFn> | false = false;
-        if (field && field.el && this.isSaveDialog()) {
-            validators = validatorsOf(FieldElementDefinitionType.add, field.el);
-        }
-        if (field && field.el && this.isUpdateDialog()) {
-            validators = validatorsOf(FieldElementDefinitionType.update, field.el);
-        }
-        if (field && field.el && this.isDetailsDialog()) {
-            validators = validatorsOf(FieldElementDefinitionType.details, field.el);
-        }
-        return validators;
+        return this.el(field).value.validators;
     }
 
     ngOnInit() {
@@ -561,17 +551,23 @@ export class DatastoreDialogComponent implements OnInit {
             this.data.tableDefinition.table.forEach(field => {
 
                 if (field.def !== MetaEntity.idDef) {
-                    let current: string = this.data.data[field.def];
-                    const formData: string = this.formGroup.value[field.def];
+                    const current: any = this.data.data[field.def];
+                    const formData: any = this.formGroup.value[field.def];
                     if (this.isUpdateDialog() && current ) {
                         const relatedField: RelatedFieldDefinition | false = this.relatedFields(field);
-                        if (relatedField && current) {
-                            current = this.safeRelatedData(current, relatedField);
-                        }
-                        console.log('compare', field.def, current, formData);
-                        if (current !== formData) {
+                        if (relatedField) {
+                            const relationData = this.relationsData(relatedField.name);
+                            const found = relationData.filter(v => v.id === formData.id);
+                            if (found && found.length === 1) {
+                                if (current.id !== found[0].id) {
+                                    alert = true;
+                                }
+                            }
+                        } else if (current !== formData) {
                             alert = true;
                         }
+                        console.log('compare', field.def, current, formData);
+
                     }
                     if (this.isSaveDialog() && !current && formData) {
                         alert = true;
@@ -616,7 +612,7 @@ export class DatastoreDialogComponent implements OnInit {
                             value = this.resolveRelation(found[0], value);
                         }
                     }
-                    this.data.data[key] = formGroupValue[key];
+                    this.data.data[key] = value;
                 }
             }
         }

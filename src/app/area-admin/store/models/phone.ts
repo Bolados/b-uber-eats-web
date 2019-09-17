@@ -38,6 +38,7 @@ export class Phone extends MetaEntity<Phone> {
                         type: 'input',
                         value: {
                             input: true,
+                            type: 'number',
                             validators: [
                                 Validators.required,
                                 Validators.pattern(new RegExp('^[0-9]+$'))
@@ -48,6 +49,7 @@ export class Phone extends MetaEntity<Phone> {
                         type: 'input',
                         value: {
                             input: true,
+                            type: 'number',
                             validators: [
                                 Validators.required,
                                 Validators.pattern(new RegExp('^[0-9]+$'))
@@ -58,6 +60,7 @@ export class Phone extends MetaEntity<Phone> {
                         type: 'input',
                         value: {
                             input: true,
+                            type: 'number',
                             validators: false,
                         }
                     },

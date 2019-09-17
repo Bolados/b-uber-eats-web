@@ -10,10 +10,10 @@ export class Address extends MetaEntity<Address> {
     static entity = 'address';
     static relation = 'address';
 
-    static relationResidents = 'residents';
-    static relationLocation = 'locatedUsers';
-    static relationDeliveries = 'delyveryUsers';
-    static relationRestaurant = 'restaurants';
+    static relationResidents = ['residents'];
+    static relationLocation = ['locatedUsers'];
+    static relationDeliveries = ['delyveryUsers'];
+    static relationRestaurant = ['restaurants'];
 
     static fieldRelation = [
         'name',
@@ -29,6 +29,7 @@ export class Address extends MetaEntity<Address> {
     room: string = null;
     longitude: string = null;
     latitude: string = null;
+    accuracy: string = null;
     localTown: Town = null;
 
     residents: Array<User> = [];
@@ -241,7 +242,7 @@ export class Address extends MetaEntity<Address> {
             {
                 def: 'longitude',
                 row: {
-                    display: true,
+                    display: false,
                     cell: (element: Address) => element.longitude,
                 },
                 el: {
@@ -249,8 +250,9 @@ export class Address extends MetaEntity<Address> {
                         type: 'input',
                         value: {
                             input: true,
+                            type: 'number',
                             validators: [
-                                Validators.required
+                                // Validators.required
                             ],
                         }
                     },
@@ -258,8 +260,9 @@ export class Address extends MetaEntity<Address> {
                         type: 'input',
                         value: {
                             input: true,
+                            type: 'number',
                             validators: [
-                                Validators.required,
+                                // Validators.required,
                             ],
                         },
                     },
@@ -267,6 +270,7 @@ export class Address extends MetaEntity<Address> {
                         type: 'input',
                         value: {
                             input: true,
+                            type: 'number',
                             validators: false,
                         }
                     },
@@ -275,7 +279,7 @@ export class Address extends MetaEntity<Address> {
                         validators ? validators : [],
                     ),
                     error: {
-                        required: 'required',
+                        // required: 'required',
                     }
                 }
             },
@@ -290,8 +294,9 @@ export class Address extends MetaEntity<Address> {
                         type: 'input',
                         value: {
                             input: true,
+                            type: 'number',
                             validators: [
-                                Validators.required
+                                // Validators.required
                             ],
                         }
                     },
@@ -299,8 +304,9 @@ export class Address extends MetaEntity<Address> {
                         type: 'input',
                         value: {
                             input: true,
+                            type: 'number',
                             validators: [
-                                Validators.required,
+                                // Validators.required,
                             ],
                         },
                     },
@@ -308,6 +314,7 @@ export class Address extends MetaEntity<Address> {
                         type: 'input',
                         value: {
                             input: true,
+                            type: 'number',
                             validators: false,
                         }
                     },
@@ -317,6 +324,50 @@ export class Address extends MetaEntity<Address> {
                     ),
                     error: {
                         required: 'required',
+                    }
+                }
+            },
+            {
+                def: 'accuracy',
+                row: {
+                    display: false,
+                    cell: (element: Address) => element.accuracy,
+                },
+                el: {
+                    add: {
+                        type: 'input',
+                        value: {
+                            input: true,
+                            type: 'number',
+                            validators: [
+                                // Validators.required
+                            ],
+                        }
+                    },
+                    update: {
+                        type: 'input',
+                        value: {
+                            input: true,
+                            type: 'number',
+                            validators: [
+                                // Validators.required,
+                            ],
+                        },
+                    },
+                    details: {
+                        type: 'input',
+                        value: {
+                            input: true,
+                            type: 'number',
+                            validators: false,
+                        }
+                    },
+                    control: (start, validators, disabled = false) => new FormControl(
+                        {value: start, disabled},
+                        validators ? validators : [],
+                    ),
+                    error: {
+                        // required: 'required',
                     }
                 }
             },

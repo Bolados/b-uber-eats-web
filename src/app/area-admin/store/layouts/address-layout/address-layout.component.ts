@@ -45,7 +45,7 @@ export class AddressLayoutComponent implements OnInit {
                     Town,
                     API_RESOURCES_TOWN,
                     this.injector
-                ).setAdpter(new Town().adapter),
+                ).setAdapter(new Town().adapter),
                 tableDefinition: new Town().table_definition(),
                 entity: Town,
                 subRelatedStore: [
@@ -55,7 +55,7 @@ export class AddressLayoutComponent implements OnInit {
                             District,
                             API_RESOURCES_DISTRICT,
                             this.injector
-                        ).setAdpter(new District().adapter),
+                        ).setAdapter(new District().adapter),
                         tableDefinition: new District().table_definition(),
                         entity: District,
                         subRelatedStore: [
@@ -65,7 +65,7 @@ export class AddressLayoutComponent implements OnInit {
                                     Department,
                                     API_RESOURCES_DEPARTMENT,
                                     this.injector
-                                ).setAdpter(new Department().adapter),
+                                ).setAdapter(new Department().adapter),
                                 tableDefinition: new Department().table_definition(),
                                 entity: Department,
                                 subRelatedStore: [
@@ -75,7 +75,7 @@ export class AddressLayoutComponent implements OnInit {
                                             Country,
                                             API_RESOURCES_COUNTRY,
                                             this.injector
-                                        ).setAdpter(new Country().adapter),
+                                        ).setAdapter(new Country().adapter),
                                         tableDefinition: new Country().table_definition(),
                                         entity: Country,
                                         subRelatedStore: [
@@ -85,7 +85,7 @@ export class AddressLayoutComponent implements OnInit {
                                                     Region,
                                                     API_RESOURCES_REGION,
                                                     this.injector
-                                                ).setAdpter(new Region().adapter),
+                                                ).setAdapter(new Region().adapter),
                                                 tableDefinition: new Region().table_definition(),
                                                 entity: Region
                                             }
@@ -105,7 +105,7 @@ export class AddressLayoutComponent implements OnInit {
             Address,
             API_RESOURCES_ADDRESS,
             this.injector
-        ).setAdpter(new Address().adapter);
+        ).setAdapter(new Address().adapter);
 
     }
 

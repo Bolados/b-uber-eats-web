@@ -1,0 +1,103 @@
+<mat-card>
+    <mat-card-header></mat-card-header>
+    <mat-card-content>
+        <form
+            (ngSubmit)="onSubmit()"
+            [formGroup]="loginForm"
+            novalidate
+        >
+            <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+                <mat-form-field class="field">
+                    <input #input
+                           class="form-control"
+                           formControlName="application"
+                           matInput
+                           name="application"
+                           placeholder="application"
+                           type="text"
+                    >
+                    <mat-hint></mat-hint>
+                    <mat-error
+                        *ngIf="!f.application.valid && f.application.touched">
+                        {{
+                        getErrorMessage(
+                            "application"
+                        )
+                        }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="field">
+                    <input #input
+                           class="form-control"
+                           formControlName="role"
+                           matInput
+                           name="role"
+                           placeholder="role"
+                           type="text"
+                    >
+                    <mat-hint></mat-hint>
+                    <mat-error
+                        *ngIf="!f.role.valid && f.role.touched">
+                        {{
+                        getErrorMessage(
+                            "role"
+                        )
+                        }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="field">
+                    <input #input
+                           class="form-control"
+                           formControlName="username"
+                           matInput
+                           name="username"
+                           placeholder="username"
+                           type="text"
+                    >
+                    <mat-hint></mat-hint>
+                    <mat-error
+                        *ngIf="!f.username.valid && f.username.touched">
+                        {{
+                        getErrorMessage(
+                            "username"
+                        )
+                        }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="field">
+                    <input #input
+                           class="form-control"
+                           formControlName="password"
+                           matInput
+                           name="password"
+                           placeholder="password"
+                           type="password"
+                    >
+                    <mat-hint></mat-hint>
+                    <mat-error
+                        *ngIf="!f.password.valid && f.password.touched">
+                        {{
+                        getErrorMessage(
+                            "password"
+                        )
+                        }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-card-actions>
+                    <button
+                        [disabled]="!loginForm.valid"
+                        [mat-dialog-close]="1"
+                        color="accent"
+                        mat-raised-button
+                        type="submit"
+                    >
+                        Login
+                    </button>
+                </mat-card-actions>
+
+                <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+            </form>
+
+        </form>
+    </mat-card-content>
+</mat-card>

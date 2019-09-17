@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import {ExternalConfigurationHandlerInterface, ExternalConfiguration} from '@lagoshny/ngx-hal-client';
-import { API_URL } from '../area-admin/configuration/api.configuration';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {ExternalConfiguration, ExternalConfigurationHandlerInterface} from '@lagoshny/ngx-hal-client';
+import {API_URL} from '../_config/api.configuration';
 
 
 @Injectable()
