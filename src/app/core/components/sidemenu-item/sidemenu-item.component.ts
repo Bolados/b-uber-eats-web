@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {SidemenuService} from '../../services/sidemenu';
 import {SidebarService} from '../../services/sidebar';
+import {AuthenticationService} from '../../../authentication/services';
 
 @Component({
     selector: 'app-sidemenu-item',
@@ -15,9 +16,11 @@ export class SidemenuItemComponent implements OnInit, AfterViewInit {
     @Input() menu;
     @Input() iconOnly: boolean;
 
-    constructor(private el: ElementRef,
-                private sidemenuService: SidemenuService,
-                private sidebarService: SidebarService,
+    constructor(
+        private el: ElementRef,
+        private sidemenuService: SidemenuService,
+        private sidebarService: SidebarService,
+        private authenticationService: AuthenticationService,
     ) {
     }
 
@@ -30,6 +33,18 @@ export class SidemenuItemComponent implements OnInit, AfterViewInit {
     }
 
     openLink() {
+    }
+
+    link(url: string): string {
+        let link = '/';
+        const currentUser = this.authenticationService.currentUserValue;
+        if (this.authenticationService.currentUserValue) {
+            link += currentUser.user.application.name.toLowerCase()
+                + '/'
+                + currentUser.user.role.name.toString().toLowerCase()
+                + '/';
+        }
+        return link + url.toLowerCase();
     }
 
     openMenu() {

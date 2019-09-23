@@ -24,7 +24,7 @@
                        *ngIf="menu.link!=false"
                        [class.list-item-active]="routerLinkActiveInstance.isActive"
                        [ngClass]="routerLinkActiveInstance.isActive?'item-active':null"
-                       [routerLink]="[menu.link]"
+                       [routerLink]="[link(menu.link)]"
                        class="item"
                        routerLinkActive
         >

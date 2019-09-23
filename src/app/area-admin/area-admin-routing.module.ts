@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {DashboardLayoutComponent} from './dashboard/dashboard-layout/dashboard-layout.component';
 import {AuthenticationGuard} from '../authentication/guards';
-import {API_NAME} from '../_config/api.configuration';
 
 const routes: Routes = [
 
@@ -33,7 +32,10 @@ const routes: Routes = [
                 loadChildren: () => import('./store/store.module').then(m => m.StoreModule),
                 // canLoad: [AuthenticationGuard],
                 canActivate: [AuthenticationGuard],
-                data: {breadcrumb: 'Store'}
+                data: {
+                    breadcrumb: 'Store',
+                    // ['roles']: [RoleName.ADMIN.toString()].toString()
+                }
             },
             {
                 path: 'about',
@@ -69,11 +71,21 @@ const routes: Routes = [
 
 
         ].map(value => {
-            const data = <any> {};
-            data.application = API_NAME.toLowerCase();
-            data.baseLoginUrl = 'admin';
-            data.breadcrumb = value.data ? value.data.breadcrumb : null;
-            value.data = data;
+            // const data = <any> {};
+            // data.application = API_NAME.toLowerCase();
+            // data.roles = [RoleName.USER].toString();
+            // if (value.data) {
+            //     // if (value.data.roles) {
+            //     //     data.roles = [data.roles, value.data.roles].toString();
+            //     // }
+            //
+            //     if (value.data.breadcrumb) {
+            //         data.breadcrumb = value.data.breadcrumb;
+            //     }
+            // }
+            // value.data = data;
+            // const roles = data.roles.split(',');
+            // console.log(roles);
             return value;
         })
     }

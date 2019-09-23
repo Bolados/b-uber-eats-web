@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
 
     @Input() application: Application;
     @Input() as: Role = null;
-    @Input() home: null;
+    @Input() home: string = null;
 
 
     loginForm: FormGroup;
@@ -56,11 +56,8 @@ export class LoginComponent implements OnInit {
 
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) {
-            this.router.navigate([this.home]);
+            this.router.navigate([this.authenticationService.userHomeUrl]);
         }
-
-        // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams.returnUrl || this.home || this.application.name;
 
         this.loginForm = this.formBuilder.group({
             username: ['admin', Validators.required],
@@ -82,6 +79,25 @@ export class LoginComponent implements OnInit {
     }
 
     redirect() {
+        // get return url from route parameters or default to '/'
+        const user = this.authenticationService.currentUserValue.user;
+        let url: string = this.route.snapshot.queryParams.returnUrl as string;
+        if (url && user.role.name.toLowerCase() === RoleName.ADMIN.toString().toLowerCase()) {
+            if (url.startsWith('/')) {
+                url = url.slice(1);
+            }
+            let seg = url.split('/');
+            if (seg.length > 1 && user.role.name !== seg[1]) {
+                seg = seg.slice(1);
+                url = user.application.name.toLowerCase() + '/' +
+                    user.role.name.toString().toLowerCase() + '/' +
+                    seg.join('/');
+                console.log(url);
+            }
+        }
+        this.returnUrl = url
+            || this.home
+            || this.authenticationService.userHomeUrl;
         this.router.navigate([this.returnUrl]);
     }
 

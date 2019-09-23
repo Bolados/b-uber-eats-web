@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {AuthenticationRequest} from '../models';
+import {AuthenticationRequest, RoleName} from '../models';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {API_AUTHENTICATION_URL, API_KEY_URL} from '../../area-admin/configuration';
 import {map} from 'rxjs/operators';
@@ -8,7 +8,7 @@ import {AuthenticationUser} from '../models/authentication-user';
 import {AuthenticationApi} from '../models/authentication-api';
 import {InterceptorSkipHeader} from '../interceptors/skip-interceptor';
 import {Router} from '@angular/router';
-import {LOGIN_PATH} from '../authentication-routing.module';
+import {LOGIN_PATH} from '../_config/config';
 
 @Injectable({
     providedIn: 'root'
@@ -42,13 +42,26 @@ export class AuthenticationService {
         return this.apiKeySubject.value;
     }
 
-    get loginUrl() {
+    get userLoginUrl() {
+        let link = '/';
         if (this.currentUserValue) {
-            return this.currentUserValue.user.application.name.toLowerCase() + '/' +
-                this.currentUserValue.user.role.name.toString().toLowerCase() + '/' +
-                LOGIN_PATH;
+            link += this.currentUserValue.user.application.name.toLowerCase() + '/';
+            if (this.currentUserValue.user.role.name.toString().toLowerCase() !== RoleName.USER.toString().toLowerCase()) {
+                link += RoleName.ADMIN.toString().toLowerCase() + '/';
+            }
         }
-        return '/login';
+        return link + LOGIN_PATH;
+    }
+
+    get userHomeUrl() {
+        let link = '/';
+        if (this.currentUserValue) {
+            link += this.currentUserValue.user.application.name.toLowerCase() + '/';
+            if (this.currentUserValue.user.role.name.toString().toLowerCase() !== RoleName.USER.toString().toLowerCase()) {
+                link += RoleName.ADMIN.toString().toLowerCase() + '/';
+            }
+        }
+        return link;
     }
     async api() {
         const headers = new HttpHeaders().set(InterceptorSkipHeader, '');
@@ -78,9 +91,7 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
-        // const loginUrl = this.loginUrl;
+        // const userLoginUrl = this.userLoginUrl;
         this.currentUserSubject.next(null);
-        // // not logged in so redirect to login page with the return url
-        // this.router.navigate([loginUrl]);
     }
 }

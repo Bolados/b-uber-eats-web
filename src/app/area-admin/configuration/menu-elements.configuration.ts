@@ -9,7 +9,7 @@ const menuItems: MenuItem[] = [
             mat: 'dashboard',
             fa: false
         },
-        link: '/admin/dashboard',
+        link: '/dashboard',
         open: false,
         chip: false,
     },
@@ -30,7 +30,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Regions',
-                link: '/admin/store/regions',
+                link: '/store/regions',
                 icon: {
                     mat: false,
                     fa: 'globe'
@@ -42,7 +42,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Medias',
-                link: '/admin/store/medias',
+                link: '/store/medias',
                 icon: {
                     mat: false,
                     fa: 'image'
@@ -54,7 +54,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Orders Status',
-                link: '/admin/store/orders/status',
+                link: '/store/orders/status',
                 icon: {
                     mat: false,
                     fa: 'question-circle'
@@ -66,7 +66,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Payments Modes',
-                link: '/admin/store/payments/modes',
+                link: '/store/payments/modes',
                 icon: {
                     mat: false,
                     fa: 'money-check'
@@ -78,7 +78,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Phones',
-                link: '/admin/store/phones',
+                link: '/store/phones',
                 icon: {
                     mat: false,
                     fa: 'phone'
@@ -90,7 +90,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Users Roles',
-                link: '/admin/store/users/roles',
+                link: '/store/users/roles',
                 icon: {
                     mat: false,
                     fa: 'user-tag'
@@ -102,7 +102,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Countries',
-                link: '/admin/store/countries',
+                link: '/store/countries',
                 icon: {
                     mat: false,
                     fa: 'flag'
@@ -114,7 +114,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Departments',
-                link: '/admin/store/departments',
+                link: '/store/departments',
                 icon: {
                     mat: false,
                     fa: 'question-circle'
@@ -126,7 +126,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Districts',
-                link: '/admin/store/districts',
+                link: '/store/districts',
                 icon: {
                     mat: false,
                     fa: 'question-circle'
@@ -138,7 +138,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Towns',
-                link: '/admin/store/towns',
+                link: '/store/towns',
                 icon: {
                     mat: false,
                     fa: 'city'
@@ -150,7 +150,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Addresses',
-                link: '/admin/store/addresses',
+                link: '/store/addresses',
                 icon: {
                     mat: false,
                     fa: 'address_book'
@@ -162,7 +162,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Menus',
-                link: '/admin/store/menus',
+                link: '/store/menus',
                 icon: {
                     mat: false,
                     fa: 'question-circle'
@@ -174,7 +174,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Orders',
-                link: '/admin/store/orders',
+                link: '/store/orders',
                 icon: {
                     mat: false,
                     fa: 'question-circle'
@@ -186,7 +186,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Payments',
-                link: '/admin/store/payments',
+                link: '/store/payments',
                 icon: {
                     mat: false,
                     fa: 'question-circle'
@@ -198,7 +198,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Restaurant',
-                link: '/admin/store/restaurants',
+                link: '/store/restaurants',
                 icon: {
                     mat: false,
                     fa: 'question-circle'
@@ -210,7 +210,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'Restaurants Menus',
-                link: '/admin/store/restaurants/menus',
+                link: '/store/restaurants/menus',
                 icon: {
                     mat: false,
                     fa: 'question-circle'
@@ -222,7 +222,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.STORE',
                 name: 'User',
-                link: '/admin/store/users',
+                link: '/store/users',
                 icon: {
                     mat: false,
                     fa: 'users'
@@ -250,7 +250,7 @@ const menuItems: MenuItem[] = [
             {
                 translate: 'SIDEBAR.MENU.DASHBOARD',
                 name: 'Departments',
-                link: '/admin/store/departments',
+                link: '/store/departments',
                 icon: {
                     mat: 'indeterminate_check_box',
                     fa: false

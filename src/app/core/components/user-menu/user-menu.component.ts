@@ -4,6 +4,7 @@ import {Avatar} from '../../domains/models';
 import {AuthenticationService} from '../../../authentication/services';
 import {AuthenticationUser} from '../../../authentication/models/authentication-user';
 import {menu} from './user-menu-elements';
+import {RoleName} from '../../../authentication/models';
 
 @Component({
     selector: 'app-user-menu',
@@ -30,11 +31,13 @@ export class UserMenuComponent implements OnInit {
 
     link(item: string): string {
         let link = '/';
+        this.currentUser = this.authenticationService.currentUserValue;
         if (this.currentUser) {
-            link += this.currentUser.user.application.name.toLowerCase()
-                + '/'
-                + this.currentUser.user.role.name.toString().toLowerCase()
-                + '/';
+            link += this.currentUser.user.application.name.toLowerCase() + '/';
+
+            if (this.currentUser.user.role.name.toString().toLowerCase() !== RoleName.USER.toString().toLowerCase()) {
+                link += RoleName.ADMIN.toString().toLowerCase() + '/';
+            }
         }
         return link + item.toLowerCase();
     }

@@ -3,9 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './components/login';
 import {LogoutComponent} from './components/logout/logout.component';
 import {AuthenticationGuard} from './guards';
-
-export const LOGIN_PATH = 'login';
-export const LOGOUT_PATH = 'logout';
+import {LOGIN_PATH, LOGOUT_PATH} from './_config/config';
 
 export function authenticationRoutes(loginComponent: any): Routes {
     return [

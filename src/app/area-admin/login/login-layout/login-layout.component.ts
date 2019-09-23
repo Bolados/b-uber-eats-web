@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {API_NAME} from '../../../_config/api.configuration';
 import {Application, Role} from '../../../authentication/models';
+import {Router} from '@angular/router';
+import {LOGIN_PATH} from '../../../authentication/_config/config';
 
 @Component({
     selector: 'app-login-layout',
@@ -15,12 +17,15 @@ export class LoginLayoutComponent implements OnInit {
         type: 'API'
     };
     role: Role = null;
-    home = API_NAME + '/admin';
+    home = null;
 
-    constructor() {
+    constructor(
+        private router: Router,
+    ) {
     }
 
     ngOnInit() {
+        this.role = Role.FromLoginUrl(this.router.url, LOGIN_PATH);
     }
 
 }
