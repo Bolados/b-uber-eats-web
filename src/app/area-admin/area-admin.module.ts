@@ -7,6 +7,7 @@ import {CoreModule} from '../core';
 import {AreaAdminComponent} from './area-admin.component';
 import {DashboardModule} from './dashboard/dashboard.module';
 import {AreaAdminCommonsModule} from './area-admin-commons';
+import {LoginModule} from './login';
 
 @NgModule({
     declarations: [
@@ -16,6 +17,7 @@ import {AreaAdminCommonsModule} from './area-admin-commons';
         CommonModule,
         AreaAdminRoutingModule,
         DashboardModule,
+        LoginModule,
         SharedModule,
         CoreModule,
         AreaAdminCommonsModule,

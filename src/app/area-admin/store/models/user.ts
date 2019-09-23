@@ -1,9 +1,9 @@
-import {MetaEntity} from './meta/entitiy.meta';
+import {MetaEntity} from '../../../domains/models/meta/entitiy.meta';
 import {Phone} from './phone';
 import {Address} from './address';
 import {Order} from './order';
 import {Role} from './role';
-import {TableDefinition} from './meta/table-definition.model';
+import {TableDefinition} from '../../../domains/models/meta/table-definition.model';
 import {FormControl, Validators} from '@angular/forms';
 
 export class User extends MetaEntity<User> {

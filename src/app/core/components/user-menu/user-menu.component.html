@@ -5,8 +5,8 @@
             mat-button
     >
   		<span fxLayout="row" fxLayoutAlign="start center">
-    		<img [src]="currentUser?.photoURL || 'assets/images/avatars/noavatar.png'" class="avatar">
-    		<span class="name" fxHide fxShow.gt-xs>{{currentUser?.currentUserName || Hari}}</span>
+    		<img [src]="currentUserPicture || 'assets/images/avatars/noavatar.png'" class="avatar">
+    		<span class="name" fxHide fxShow.gt-xs>{{currentUser?.user?.identifier?.login || 'Anonymous'}}</span>
     		<mat-icon class="icon" fxHide fxShow.gt-xs>keyboard_arrow_down</mat-icon>
   		</span>
     </button>
@@ -14,33 +14,56 @@
     <div [class.open]="isOpen" class="dropdown mat-elevation-z1">
         <div class="content">
             <mat-nav-list>
-                <mat-list-item>
-                    <a matLine>Profile</a>
-                    <button mat-icon-button>
-                        <mat-icon>account_circle</mat-icon>
-                    </button>
-                </mat-list-item>
-                <mat-list-item>
-                    <a matLine>Settings</a>
-                    <button mat-icon-button>
-                        <mat-icon>settings</mat-icon>
-                    </button>
-                </mat-list-item>
-                <mat-list-item>
-                    <a matLine>Help</a>
-                    <button mat-icon-button>
-                        <mat-icon>help</mat-icon>
-                    </button>
-                </mat-list-item>
+                <mat-list-item
+                    *ngFor="let item of items"
+                    [ngClass]="item.divider?'divider':''"
+                    [routerLink]="[link(item.name)]"
+                >
 
-                <mat-divider></mat-divider>
-
-                <mat-list-item>
-                    <a matLine>Logout</a>
-                    <button mat-icon-button>
-                        <mat-icon>exit_to_app</mat-icon>
+                    <button
+                        [disableRipple]="true"
+                        class="user-menu-item"
+                        mat-button
+                    >
+                        <span class="text">{{item.name}}</span>
+                        <mat-icon class="icon">{{item.icon.mat}}</mat-icon>
                     </button>
                 </mat-list-item>
+                <!--                <mat-list-item>-->
+                <!--                    <a matLine>Profile</a>-->
+                <!--                    <button mat-icon-button>-->
+                <!--                        <mat-icon>account_circle</mat-icon>-->
+                <!--                    </button>-->
+                <!--                </mat-list-item>-->
+                <!--                <mat-list-item>-->
+                <!--                    <a matLine>Settings</a>-->
+                <!--                    <button mat-icon-button>-->
+                <!--                        <mat-icon>settings</mat-icon>-->
+                <!--                    </button>-->
+                <!--                </mat-list-item>-->
+                <!--                <mat-list-item>-->
+                <!--                    <button class="user-menu-item"-->
+                <!--                            mat-button-->
+                <!--                            [disableRipple]="true"-->
+                <!--                    >-->
+                <!--                        <span class="text">Help</span>-->
+                <!--                        <mat-icon class="icon">help</mat-icon>-->
+                <!--                    </button>-->
+                <!--                </mat-list-item>-->
+
+                <!--                <mat-divider></mat-divider>-->
+
+                <!--                <mat-list-item>-->
+                <!--                    <button class="user-menu-item"-->
+                <!--                        mat-button-->
+                <!--                        [disableRipple]="true"-->
+                <!--                        (click)="logout()"-->
+                <!--                    >-->
+                <!--                        <span class="text"> Logout </span>-->
+                <!--                        <mat-icon class="icon">exit_to_app</mat-icon>-->
+                <!--                    </button>-->
+
+                <!--                </mat-list-item>-->
             </mat-nav-list>
         </div>
     </div>

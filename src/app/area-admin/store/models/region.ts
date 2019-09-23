@@ -1,6 +1,6 @@
 import {FormControl, Validators} from '@angular/forms';
-import {TableDefinition} from './meta/table-definition.model';
-import {MetaEntity} from './meta/entitiy.meta';
+import {TableDefinition} from '../../../domains/models/meta/table-definition.model';
+import {MetaEntity} from '../../../domains/models/meta/entitiy.meta';
 import {Country} from './country';
 
 

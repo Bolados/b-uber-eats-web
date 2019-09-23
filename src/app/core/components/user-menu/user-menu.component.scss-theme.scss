@@ -10,4 +10,26 @@
         background: mat-color($primary, 400);
     }
 
+    .user-menu-item {
+        width: 100%;
+        padding: 0;
+        height: 100%;
+
+        .text {
+            float: left;
+        }
+
+        .icon {
+            float: right;
+            margin-top: 4px;
+        }
+    }
+
+    .content .divider {
+        border-top-width: 1.5px;
+        border-top-color: mat-color($primary);
+        border-top-style: solid;
+    }
+
+
 }

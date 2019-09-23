@@ -1,9 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService} from '../../services';
 import {first} from 'rxjs/operators';
-import {AuthenticationRequest} from '../../models';
+import {Application, AuthenticationRequest, Role, RoleName} from '../../models';
+
+const errors = {
+    required: 'required',
+    minlength: 'least than required',
+    maxlength: 'greater than required',
+    pattern: 'pattern error'
+};
 
 @Component({
     selector: 'app-login',
@@ -12,12 +19,16 @@ import {AuthenticationRequest} from '../../models';
 })
 export class LoginComponent implements OnInit {
 
+    @Input() application: Application;
+    @Input() as: Role = null;
+    @Input() home: null;
+
+
     loginForm: FormGroup;
-    authRequest: AuthenticationRequest;
-    loading = false;
     submitted = false;
-    returnUrl: string;
-    error = '';
+    loading = false;
+    error: string = null;
+    returnUrl: string = null;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -25,16 +36,6 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private authenticationService: AuthenticationService
     ) {
-        // redirect to home if already logged in
-        if (this.authenticationService.currentUserValue) {
-            this.router.navigate(['/']);
-        }
-        this.loginForm = this.formBuilder.group({
-            username: ['admin', Validators.required],
-            password: ['admin', Validators.required],
-            application: ['ubereats', Validators.required],
-            role: ['admin', Validators.required]
-        });
     }
 
     // convenience getter for easy access to form fields
@@ -42,11 +43,62 @@ export class LoginComponent implements OnInit {
         return this.loginForm.controls;
     }
 
+    getErrorMessage(el) {
+        for (const key in errors) {
+            if (errors.hasOwnProperty(key) && this.loginForm.get(el).hasError(key)) {
+                return errors[key];
+            }
+        }
+        return null;
+    }
+
     ngOnInit() {
 
+        // redirect to home if already logged in
+        if (this.authenticationService.currentUserValue) {
+            this.router.navigate([this.home]);
+        }
 
         // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/auth/home';
+        this.returnUrl = this.route.snapshot.queryParams.returnUrl || this.home || this.application.name;
+
+        this.loginForm = this.formBuilder.group({
+            username: ['admin', Validators.required],
+            password: ['admin', Validators.required],
+            rememberMe: false,
+        });
+    }
+
+    async authenticateAs(roleName: RoleName): Promise<any> {
+        const authRequest: AuthenticationRequest = new AuthenticationRequest(
+            this.f.username.value,
+            this.f.password.value,
+            this.application.name,
+            roleName.toString()
+        );
+        return this.authenticationService.login(authRequest)
+            .pipe(first())
+            .toPromise();
+    }
+
+    redirect() {
+        this.router.navigate([this.returnUrl]);
+    }
+
+    async authenticateAsAny() {
+        await this.authenticateAs(RoleName.ADMIN).then(
+            () => this.redirect(),
+            error => {
+                this.error = error;
+                this.authenticateAs(RoleName.ADMIN).then(
+                    () => this.redirect(),
+                    error1 => {
+                        this.error = error1;
+                        this.loading = false;
+                    }
+                );
+            }
+        );
     }
 
     onSubmit() {
@@ -58,22 +110,17 @@ export class LoginComponent implements OnInit {
         }
 
         this.loading = true;
-        const authRequest: AuthenticationRequest = new AuthenticationRequest(
-            this.f.username.value,
-            this.f.password.value,
-            this.f.application.value,
-            this.f.role.value
-        );
-        this.authenticationService.login(authRequest)
-            .pipe(first())
-            .subscribe(
-                data => {
-                    this.router.navigate([this.returnUrl]);
-                },
+        if (this.as === null || this.as.name === null) {
+            this.authenticateAsAny();
+        } else {
+            this.authenticateAs(this.as.name).then(
+                () => this.redirect(),
                 error => {
                     this.error = error;
                     this.loading = false;
-                });
+                }
+            );
+        }
     }
 
 }

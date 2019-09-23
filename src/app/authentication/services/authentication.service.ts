@@ -7,6 +7,8 @@ import {map} from 'rxjs/operators';
 import {AuthenticationUser} from '../models/authentication-user';
 import {AuthenticationApi} from '../models/authentication-api';
 import {InterceptorSkipHeader} from '../interceptors/skip-interceptor';
+import {Router} from '@angular/router';
+import {LOGIN_PATH} from '../authentication-routing.module';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +19,10 @@ export class AuthenticationService {
     private currentUserSubject: BehaviorSubject<AuthenticationUser>;
     private apiKeySubject: BehaviorSubject<AuthenticationApi>;
 
-    constructor(private http: HttpClient) {
+    constructor(
+        private http: HttpClient,
+        private router: Router,
+    ) {
         this.currentUserSubject =
             new BehaviorSubject<AuthenticationUser>(
                 JSON.parse(localStorage.getItem('currentUser'))
@@ -37,6 +42,14 @@ export class AuthenticationService {
         return this.apiKeySubject.value;
     }
 
+    get loginUrl() {
+        if (this.currentUserValue) {
+            return this.currentUserValue.user.application.name.toLowerCase() + '/' +
+                this.currentUserValue.user.role.name.toString().toLowerCase() + '/' +
+                LOGIN_PATH;
+        }
+        return '/login';
+    }
     async api() {
         const headers = new HttpHeaders().set(InterceptorSkipHeader, '');
         await this.http.get<any>(API_KEY_URL, {headers})
@@ -65,6 +78,9 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
+        // const loginUrl = this.loginUrl;
         this.currentUserSubject.next(null);
+        // // not logged in so redirect to login page with the return url
+        // this.router.navigate([loginUrl]);
     }
 }

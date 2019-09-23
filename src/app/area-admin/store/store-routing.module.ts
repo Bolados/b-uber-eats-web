@@ -21,11 +21,11 @@ import {RestaurantMenuLayoutComponent} from './layouts/restaurant-menu-layout';
 import {UserLayoutComponent} from './layouts/user-layout';
 
 const routes: Routes = [
-    {
-        path: '',
-        redirectTo: 'regions',
-        pathMatch: 'full'
-    },
+    // {
+    //     path: '',
+    //     redirectTo: 'regions',
+    //     pathMatch: 'full'
+    // },
     {
         path: 'regions',
         component: RegionLayoutComponent,

@@ -3,7 +3,7 @@ import {MatTableDataSource} from '@angular/material';
 import {API_RESOURCES_REGION} from 'src/app/_config/api.configuration';
 import {DatastoreService} from '../../services';
 import {Region} from '../../models';
-import {TableDefinition} from '../../models/meta/table-definition.model';
+import {TableDefinition} from '../../../../domains/models/meta/table-definition.model';
 
 @Component({
   selector: 'app-region-layout',

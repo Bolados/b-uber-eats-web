@@ -1,4 +1,5 @@
 export const API_URL = 'http://localhost:5002/';
+export const API_NAME = 'ubereats';
 
 export const KEY_API = '';
 

@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {DashboardLayoutComponent} from './dashboard/dashboard-layout/dashboard-layout.component';
+import {AuthenticationGuard} from '../authentication/guards';
+import {API_NAME} from '../_config/api.configuration';
 
 const routes: Routes = [
 
@@ -9,26 +11,28 @@ const routes: Routes = [
         redirectTo: 'dashboard',
         pathMatch: 'full'
     },
-
     {
         path: '',
         // component: AreaAdminComponent,
         children: [
             {
-                path: 'login',
-                loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
-                data: {breadcrumb: 'login'}
+                path: '',
+                loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
             },
             {
                 path: 'dashboard',
                 loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-                // canLoad: [AuthGuardService]
-                data: {breadcrumb: 'Dashboard'}
+                // canLoad: [AuthenticationGuard],
+                canActivate: [AuthenticationGuard],
+                data: {
+                    breadcrumb: 'Dashboard'
+                }
             },
             {
                 path: 'store',
                 loadChildren: () => import('./store/store.module').then(m => m.StoreModule),
-                // canLoad: [AuthGuardService]
+                // canLoad: [AuthenticationGuard],
+                canActivate: [AuthenticationGuard],
                 data: {breadcrumb: 'Store'}
             },
             {
@@ -64,7 +68,14 @@ const routes: Routes = [
             },
 
 
-        ]
+        ].map(value => {
+            const data = <any> {};
+            data.application = API_NAME.toLowerCase();
+            data.baseLoginUrl = 'admin';
+            data.breadcrumb = value.data ? value.data.breadcrumb : null;
+            value.data = data;
+            return value;
+        })
     }
 ];
 

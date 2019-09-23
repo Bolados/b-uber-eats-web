@@ -10,44 +10,6 @@
                 <mat-form-field class="field">
                     <input #input
                            class="form-control"
-                           formControlName="application"
-                           matInput
-                           name="application"
-                           placeholder="application"
-                           type="text"
-                    >
-                    <mat-hint></mat-hint>
-                    <mat-error
-                        *ngIf="!f.application.valid && f.application.touched">
-                        {{
-                        getErrorMessage(
-                            "application"
-                        )
-                        }}
-                    </mat-error>
-                </mat-form-field>
-                <mat-form-field class="field">
-                    <input #input
-                           class="form-control"
-                           formControlName="role"
-                           matInput
-                           name="role"
-                           placeholder="role"
-                           type="text"
-                    >
-                    <mat-hint></mat-hint>
-                    <mat-error
-                        *ngIf="!f.role.valid && f.role.touched">
-                        {{
-                        getErrorMessage(
-                            "role"
-                        )
-                        }}
-                    </mat-error>
-                </mat-form-field>
-                <mat-form-field class="field">
-                    <input #input
-                           class="form-control"
                            formControlName="username"
                            matInput
                            name="username"
@@ -86,7 +48,6 @@
                 <mat-card-actions>
                     <button
                         [disabled]="!loginForm.valid"
-                        [mat-dialog-close]="1"
                         color="accent"
                         mat-raised-button
                         type="submit"

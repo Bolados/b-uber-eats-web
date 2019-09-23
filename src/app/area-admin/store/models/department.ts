@@ -1,6 +1,6 @@
-import {TableDefinition} from './meta/table-definition.model';
+import {TableDefinition} from '../../../domains/models/meta/table-definition.model';
 import {FormControl, Validators} from '@angular/forms';
-import {MetaEntity} from './meta/entitiy.meta';
+import {MetaEntity} from '../../../domains/models/meta/entitiy.meta';
 import {District} from './district';
 import {Country} from './country';
 
