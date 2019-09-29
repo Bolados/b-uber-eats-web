@@ -10,7 +10,8 @@ import {LogoutComponent} from './components/logout/logout.component';
 @NgModule({
     declarations: [LoginComponent, LogoutComponent],
     exports: [
-        LoginComponent
+        LoginComponent,
+        LogoutComponent
     ],
     imports: [
         CommonModule,

@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './components/login';
-import {LogoutComponent} from './components/logout/logout.component';
+import {LogoutComponent} from './components/logout';
 import {AuthenticationGuard} from './guards';
 import {LOGIN_PATH, LOGOUT_PATH} from './_config/config';
 
-export function authenticationRoutes(loginComponent: any): Routes {
+export const authenticationRoutes = (loginComponent: any): Routes => {
     return [
         {
             path: '',
@@ -24,7 +24,7 @@ export function authenticationRoutes(loginComponent: any): Routes {
             data: {breadcrumb: 'Logout'}
         }
     ];
-}
+};
 
 const routes: Routes = authenticationRoutes(LoginComponent);
 

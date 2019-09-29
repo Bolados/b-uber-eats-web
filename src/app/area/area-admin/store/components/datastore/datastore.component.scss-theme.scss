@@ -1,0 +1,82 @@
+@import '../../../../../../../node_modules/@angular/material/theming';
+
+@mixin app-datastore-component-theme($theme) {
+
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+    .card {
+
+        .title {
+
+            margin: 0;
+
+            .iconbutton{
+                width: 85px;
+                top: 5px;
+            }
+
+            .form {
+                width: 100%;
+
+                .mat-form-field {
+                    width: 100%;
+                }
+            }
+
+        }
+
+    }
+
+    .action {
+        justify-content: center;
+    }
+
+    .mat-checkbox-layout{
+        background: white;
+    }
+
+    .mat-header-row {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: mat-color($accent, darker);
+    }
+
+    .mat-sort-header-arrow {
+        color: mat-color($primary, darker);
+    }
+
+    .mat-header-cell {
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+
+    .mat-table {
+        overflow: auto;
+    }
+
+    .mat-row:nth-child(even){
+        background-color: white;
+    }
+
+    .mat-row:nth-child(odd){
+        background-color: mat-color($accent, lighter);
+    }
+
+    .mat-row.hovered:nth-child(even) {
+        background: #eee;
+    }
+
+    .mat-row.hovered:nth-child(odd) {
+        background: mat-color($accent, lighter, 900);
+    }
+
+    .mat-row.highlighted {
+        background: #999;
+    }
+
+}

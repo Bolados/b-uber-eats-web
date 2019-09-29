@@ -1,0 +1,13 @@
+@import '../../../../../../node_modules/@angular/material/theming';
+@import 'datastore/datastore.component.scss-theme';
+@import 'datastore-actions/datastore-actions.component.scss-theme';
+@import '../dialogs/datastore-dialog/datastore-dialog.component.scss-theme';
+
+@mixin app-store-component-theme($theme) {
+    @include app-datastore-component-theme($theme);
+    @include app-datastore-actions-component-theme($theme);
+    @include app-datastore-dialog-component-theme($theme);
+
+
+
+}

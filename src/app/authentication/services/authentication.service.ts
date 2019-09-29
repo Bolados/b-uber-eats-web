@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AuthenticationRequest, RoleName} from '../models';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {API_AUTHENTICATION_URL, API_KEY_URL} from '../../area-admin/configuration';
+import {API_AUTHENTICATION_URL, API_KEY_URL} from '../../area/area-admin/configuration';
 import {map} from 'rxjs/operators';
 import {AuthenticationUser} from '../models/authentication-user';
 import {AuthenticationApi} from '../models/authentication-api';
