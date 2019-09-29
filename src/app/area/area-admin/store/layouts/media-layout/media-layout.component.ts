@@ -3,6 +3,7 @@ import {DatastoreService} from '../../services';
 import {Media, TableDefinition} from '../../models';
 import {MatTableDataSource} from '@angular/material';
 import {API_RESOURCES_MEDIA} from 'src/app/area/area-admin/configuration';
+import {RelatedStore} from '../../components/datastore';
 
 @Component({
   selector: 'app-media-layout',
@@ -19,6 +20,10 @@ export class MediaLayoutComponent implements OnInit {
     adapter: (item: any) => Media = new Media().adapter;
     tableDefinition: TableDefinition<Media> = new Media().table_definition();
     dataSource: MatTableDataSource<Media> | null ;
+
+    get relatedStores(): Array<RelatedStore<any>> {
+        return [];
+    }
 
     constructor(
         private injector: Injector,

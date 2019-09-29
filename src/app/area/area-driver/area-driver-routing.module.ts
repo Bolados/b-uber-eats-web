@@ -1,6 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthenticationGuard} from '../../authentication/guards';
+import {dataRouteMapper} from '../../_config/route.mapper';
+import {DRIVER_APPLICATION} from '../../_config/app.configuration';
+
 
 const routes: Routes = [
     {
@@ -26,7 +29,7 @@ const routes: Routes = [
                     breadcrumb: 'Dashboard'
                 }
             },
-        ]
+        ].map(value => dataRouteMapper(value, DRIVER_APPLICATION))
     }
 ];
 

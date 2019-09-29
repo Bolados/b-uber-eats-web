@@ -6,9 +6,9 @@ import {SharedModule} from '../../shared';
 import {CoreModule} from '../../core';
 import {AreaAdminComponent} from './area-admin.component';
 import {DashboardModule} from './dashboard/dashboard.module';
-import {AreaAdminCommonsModule} from './area-admin-commons';
 import {LoginModule} from './login';
 import {AuthenticationModule} from '../../authentication';
+import {AreaSharedModule} from '../area-shared';
 
 @NgModule({
     declarations: [
@@ -22,7 +22,7 @@ import {AuthenticationModule} from '../../authentication';
         AuthenticationModule,
         SharedModule,
         CoreModule,
-        AreaAdminCommonsModule,
+        AreaSharedModule,
     ],
     providers: [
 

@@ -4,6 +4,7 @@ import {DashboardLayoutComponent} from './dashboard/dashboard-layout/dashboard-l
 import {AuthenticationGuard} from '../../authentication/guards';
 import {API_NAME} from '../../_config/api.configuration';
 import {RoleName} from '../../authentication/models';
+import {dataRouteMapper} from '../../_config/route.mapper';
 
 const routes: Routes = [
 
@@ -23,23 +24,30 @@ const routes: Routes = [
             {
                 path: 'dashboard',
                 loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-                // canLoad: [AuthenticationGuard],
                 canActivate: [AuthenticationGuard],
-                // canActivateChild: [AuthenticationGuard],
-                data: {breadcrumb: 'Dashboard'}
+                canLoad: [AuthenticationGuard],
+                data: {
+                    breadcrumb: 'Dashboard',
+                    roles: [RoleName.USER, RoleName.ADMIN]
+                }
             },
             {
                 path: 'store',
                 loadChildren: () => import('./store/store.module').then(m => m.StoreModule),
-                // canLoad: [AuthenticationGuard],
+                canLoad: [AuthenticationGuard],
                 canActivate: [AuthenticationGuard],
-                canActivateChild: [AuthenticationGuard],
-                data: {breadcrumb: 'Store'}
+                data: {
+                    breadcrumb: 'Store',
+                    roles: [RoleName.ADMIN]
+                }
             },
             {
                 path: 'about',
                 component: DashboardLayoutComponent,
-                data: {breadcrumb: 'About'}
+                data: {
+                    breadcrumb: 'About',
+                    roles: [RoleName.USER, RoleName.ADMIN]
+                }
             },
             // {
             //     path: 'github',
@@ -69,24 +77,7 @@ const routes: Routes = [
             // },
 
 
-        ].map(value => {
-            const data = <any> {};
-            data.application = API_NAME.toLowerCase();
-            data.roles = [RoleName.USER].toString();
-            if (value.data) {
-                // if (value.data.roles) {
-                //     data.roles = [data.roles, value.data.roles].toString();
-                // }
-
-                if (value.data.breadcrumb) {
-                    data.breadcrumb = value.data.breadcrumb;
-                }
-            }
-            value.data = data;
-            const roles = data.roles.split(',');
-            console.log(roles);
-            return value;
-        })
+        ].map(value => dataRouteMapper(value, API_NAME))
     }
 ];
 

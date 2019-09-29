@@ -1,11 +1,12 @@
-<app-base-area-admin [title]="areaTitle">
+<app-area-template [title]="areaTitle">
     <app-datastore
-        [title]="storeTitle"
+        [adapter]="adapter"
         [dataSource]="dataSource"
         [datastore]="datastore"
         [entity]="entity"
-        [adapter]="adapter"
+        [relatedStores]="relatedStores"
         [tableDefinition]="tableDefinition"
+        [title]="storeTitle"
     >
     </app-datastore>
-</app-base-area-admin>
+</app-area-template>

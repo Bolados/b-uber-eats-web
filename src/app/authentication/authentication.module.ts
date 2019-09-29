@@ -17,7 +17,7 @@ import {LogoutComponent} from './components/logout/logout.component';
         CommonModule,
         AuthenticationRoutingModule,
         SharedModule,
-        CoreModule,
+        CoreModule
     ]
 })
 export class AuthenticationModule {

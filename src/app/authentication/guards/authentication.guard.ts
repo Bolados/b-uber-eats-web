@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Route, Router, RouterStateSnapshot, UrlSegment} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Data, Route, Router, RouterStateSnapshot, UrlSegment} from '@angular/router';
 import {AuthenticationService} from '../services';
 import {Observable} from 'rxjs';
-import {LOGIN_PATH} from '../_config/config';
-import {Role, RoleName} from '../models';
+import {AuthenticationUser, Role, RoleName} from '../models';
+import {LOGIN_PATH} from '../../_routes/path.routes';
 
 @Injectable({
     providedIn: 'root'
@@ -21,20 +21,9 @@ export class AuthenticationGuard implements CanActivate {
         const currentUser = this.authenticationService.currentUserValue;
         const application = route.data.application as string;
         if (currentUser) {
-            const userRole = currentUser.user.role;
-            // logged in so return true
-            if (RoleName.ADMIN.toString().toLowerCase() !== userRole.name.toString().toLowerCase()) {
-                console.log('can load');
-                console.log('can load');
-                if (route.data.roles) {
-                    const roles = route.data.roles.split(',');
-                    const size = roles.filter(
-                        value => value.toLowerCase() === userRole.name.toString().toLowerCase()
-                    ).length;
-                    return size === 1;
-                }
-            }
-            return true;
+            console.log(route.data);
+
+            return this.permissionRoles(route.data, currentUser);
         }
 
 
@@ -53,20 +42,23 @@ export class AuthenticationGuard implements CanActivate {
 
     canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
         const currentUser = this.authenticationService.currentUserValue;
-        const roles: Array<string> = route.data.roles.split(',');
-        if (currentUser) {
-            const userRole = currentUser.user.role;
-            // logged in so return true
-            if (RoleName.ADMIN.toString().toLowerCase() !== userRole.name.toString().toLowerCase()) {
-                console.log('can load');
-                console.log('can load');
-                const size = roles.filter(
-                    value => value.toLowerCase() === userRole.name.toString().toLowerCase()
-                ).length;
-                return size === 1;
-            }
-            return true;
-        }
-        return false;
+        console.log('can load');
+        return this.permissionRoles(route.data, currentUser);
     }
+
+    permissionRoles(data: Data, currentUser: AuthenticationUser) {
+        if (currentUser) {
+            const user = currentUser.user;
+            const userRole = user.role || null;
+            if (userRole && RoleName.ADMIN.toString().toLowerCase() !== userRole.name.toString().toLowerCase()) {
+                if (data.roles) {
+                    return data.roles.filter(
+                        value => value.toLowerCase() === userRole.name.toString().toLowerCase()
+                    ).length === 1;
+                }
+            }
+        }
+        return currentUser !== null;
+    }
+
 }

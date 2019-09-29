@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChil
 import {SidemenuService} from '../../services/sidemenu';
 import {SidebarService} from '../../services/sidebar';
 import {AuthenticationService} from '../../../authentication/services';
+import {RoleName} from '../../../authentication/models';
 
 @Component({
     selector: 'app-sidemenu-item',
@@ -38,11 +39,12 @@ export class SidemenuItemComponent implements OnInit, AfterViewInit {
     link(url: string): string {
         let link = '/';
         const currentUser = this.authenticationService.currentUserValue;
-        if (this.authenticationService.currentUserValue) {
-            link += currentUser.user.application.name.toLowerCase()
-                + '/'
-                + currentUser.user.role.name.toString().toLowerCase()
-                + '/';
+        if (currentUser) {
+            link += currentUser.user.application.name.toLowerCase() + '/';
+
+            if (currentUser.user.role.name.toString().toLowerCase() !== RoleName.USER.toString().toLowerCase()) {
+                link += currentUser.user.role.name.toString().toLowerCase() + '/';
+            }
         }
         return link + url.toLowerCase();
     }

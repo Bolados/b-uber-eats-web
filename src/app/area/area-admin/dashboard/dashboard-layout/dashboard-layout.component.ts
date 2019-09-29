@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-dashboard-layout',
@@ -9,8 +10,12 @@ export class DashboardLayoutComponent implements OnInit {
 
     title = ' Dashboard ';
 
-    ngOnInit() {
+    constructor(private router: Router) {
 
+    };
+
+    ngOnInit() {
+        console.log(this.router.config);
     }
 
 

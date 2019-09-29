@@ -8,7 +8,7 @@ import {AuthenticationUser} from '../models/authentication-user';
 import {AuthenticationApi} from '../models/authentication-api';
 import {InterceptorSkipHeader} from '../interceptors/skip-interceptor';
 import {Router} from '@angular/router';
-import {LOGIN_PATH} from '../_config/config';
+import {LOGIN_PATH} from '../../_routes/path.routes';
 
 @Injectable({
     providedIn: 'root'

@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 import {StoreRoutingModule} from './store-routing.module';
 import {SharedModule} from 'src/app/shared';
 import {CoreModule} from '@angular/flex-layout';
-import {AreaAdminCommonsModule} from '../area-admin-commons';
 import {DatastoreComponent} from './components/datastore';
 import {DatastoreDialogComponent} from './dialogs/datastore-dialog';
 import {RegionLayoutComponent} from './layouts/region-layout';
@@ -24,6 +23,7 @@ import {PaymentLayoutComponent} from './layouts/payment-layout/payment-layout.co
 import {RestaurantLayoutComponent} from './layouts/restaurant-layout/restaurant-layout.component';
 import {UserLayoutComponent} from './layouts/user-layout/user-layout.component';
 import {RestaurantMenuLayoutComponent} from './layouts/restaurant-menu-layout/restaurant-menu-layout.component';
+import {AreaSharedModule} from '../../area-shared';
 
 
 @NgModule({
@@ -59,7 +59,7 @@ import {RestaurantMenuLayoutComponent} from './layouts/restaurant-menu-layout/re
         SharedModule,
         CoreModule,
 
-        AreaAdminCommonsModule,
+        AreaSharedModule,
 
     ]
 })

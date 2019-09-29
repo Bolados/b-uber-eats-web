@@ -11,7 +11,6 @@ export class Role {
             }
             const appRole = urlLogin.split('/');
             if (appRole.length === 2) {
-                console.log(appRole[1]);
                 return {
                     name: RoleName[appRole[1].toLocaleUpperCase()]
                 };

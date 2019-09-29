@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {authenticationRoutes} from '../../../authentication/authentication-routing.module';
 import {AreaDriverLoginLayoutComponent} from './area-driver-login-layout/area-driver-login-layout.component';
+import {authenticationRoutes} from '../../../_routes/authentication.routes';
 
 
 const routes: Routes = authenticationRoutes(AreaDriverLoginLayoutComponent);

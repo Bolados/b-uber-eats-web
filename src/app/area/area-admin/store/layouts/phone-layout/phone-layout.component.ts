@@ -3,6 +3,7 @@ import {DatastoreService} from '../../services';
 import {Phone, TableDefinition} from '../../models';
 import {MatTableDataSource} from '@angular/material';
 import {API_RESOURCES_PHONE} from 'src/app/area/area-admin/configuration';
+import {RelatedStore} from '../../components/datastore';
 
 @Component({
   selector: 'app-phone-layout',
@@ -19,6 +20,11 @@ export class PhoneLayoutComponent implements OnInit {
     adapter: (item: any) => Phone = new Phone().adapter;
     tableDefinition: TableDefinition<Phone> = new Phone().table_definition();
     dataSource: MatTableDataSource<Phone> | null ;
+
+    get relatedStores(): Array<RelatedStore<any>> {
+        return [];
+    }
+
 
     constructor(
         private injector: Injector,
