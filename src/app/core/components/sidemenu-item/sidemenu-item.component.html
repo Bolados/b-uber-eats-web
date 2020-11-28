@@ -4,7 +4,8 @@
 
     >
 
-        <mat-list-item (click)="openMenu()" (mouseenter)="hoverMenuItem()" *ngIf="menu.link==false"
+        <mat-list-item (click)="openMenu()" (mouseenter)="hoverMenuItem()"
+                       *ngIf="menu.link==false"
                        class="item"
         >
 
@@ -20,7 +21,8 @@
             </mat-icon>
         </mat-list-item>
 
-        <mat-list-item #routerLinkActiveInstance="routerLinkActive" (click)="openLink()" (mouseenter)="hoverMenuItem()"
+        <mat-list-item #routerLinkActiveInstance="routerLinkActive"
+                       (click)="openLink()" (mouseenter)="hoverMenuItem()"
                        *ngIf="menu.link!=false"
                        [class.list-item-active]="routerLinkActiveInstance.isActive"
                        [ngClass]="routerLinkActiveInstance.isActive?'item-active':null"

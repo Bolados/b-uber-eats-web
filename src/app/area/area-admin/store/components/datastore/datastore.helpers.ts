@@ -80,7 +80,7 @@ export class DatastoreHelpers {
                     type: 'error',
                     showConfirmButton: true,
                 });
-            });
+            }) ;
     }
 
     static convertDataToFormData(data): FormData {
